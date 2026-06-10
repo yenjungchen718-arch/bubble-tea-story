@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一杯手搖飲的代價</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Serif TC', 'Georgia', serif;
+    background: #0a0a0a;
+    color: #f0ece4;
+    overflow-x: hidden;
+  }
+
+  /* ── 第一段：影片全螢幕 ── */
+  #hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #hero video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
+
+  #hero video.loaded {
+    opacity: 1;
+  }
+
+  /* 影片上方的漸層遮罩，讓標題文字易讀 */
+  #hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.1) 0%,
+      rgba(0,0,0,0.5) 60%,
+      rgba(0,0,0,0.85) 100%
+    );
+    z-index: 1;
+  }
+
+  /* 標題區塊 */
+  #hero-text {
+    position: absolute;
+    bottom: 10vh;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    text-align: center;
+    padding: 0 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.5s ease 1s, transform 1.5s ease 1s;
+  }
+
+  #hero-text.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #hero-text .label {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    letter-spacing: 0.25em;
+    color: #d4a843;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  #hero-text h1 {
+    font-size: clamp(1.8rem, 5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.3;
+    color: #f0ece4;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+  }
+
+  #hero-text h1 span {
+    color: #d4a843;
+  }
+
+  .scroll-hint {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(240,236,228,0.5);
+    letter-spacing: 0.15em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2rem;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(240,236,228,0.4), transparent);
+    animation: scrollDown 1.8s ease-in-out infinite;
+  }
+
+  @keyframes scrollDown {
+    0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+    50% { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+  }
+
+  /* 影片佔位背景（尚未載入時） */
+  .video-placeholder {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        #1a1208,
+        #1a1208 20px,
+        #150f06 20px,
+        #150f06 40px
+      );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    color: rgba(212,168,67,0.4);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+  }
+
+  .video-placeholder::before {
+    content: '▶';
+    font-size: 3rem;
+    opacity: 0.3;
+  }
+
+  /* ── 第二段：視差導言 ── */
+  #intro {
+    position: relative;
+    min-height: 200vh;
+    background: #0a0a0a;
+  }
+
+  /* 視差背景層 */
+  .parallax-bg {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .parallax-bg img,
+  .parallax-bg .bg-color {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 130%;   /* 多出 30% 供視差移動 */
+    top: -15%;
+    object-fit: cover;
+  }
+
+  .parallax-bg .bg-color {
+    background: radial-gradient(ellipse at 30% 40%, #2a1a05 0%, #0a0a0a 70%);
+    height: 100%;
+    top: 0;
+  }
+
+  .parallax-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1;
+  }
+
+  /* 漂浮糖分數字（視覺裝飾） */
+  .float-numbers {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .float-numbers span {
+    position: absolute;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 800;
+    color: rgba(212, 168, 67, 0.08);
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  /* 捲動文字內容 */
+  .intro-content {
+    position: relative;
+    z-index: 10;
+    margin-top: -100vh;       /* 疊在 sticky 背景上 */
+    padding: 40vh 0 20vh;
+  }
+
+  .intro-block {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 2rem 20vh;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  .intro-block.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .intro-block .eyebrow {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.8rem;
+    color: #d4a843;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .intro-block p {
+    font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+    line-height: 2;
+    color: #d9d3c8;
+    margin-bottom: 1.5rem;
+  }
+
+  .intro-block p strong {
+    color: #f0ece4;
+    border-bottom: 1px solid rgba(212,168,67,0.5);
+  }
+
+  .stat-inline {
+    display: inline-block;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #d4a843;
+    line-height: 1;
+    margin: 0 0.15em;
+    vertical-align: middle;
+  }
+
+  /* ── 第三段：Flourish 圖表 ── */
+  #chart-section {
+    position: relative;
+    background: #0f0d09;
+    padding: 6rem 0 8rem;
+  }
+
+  #chart-section::before {
+    content: '';
+    display: block;
+    height: 120px;
+    background: linear-gradient(to bottom, #0a0a0a, #0f0d09);
+    margin-top: -120px;
+  }
+
+  .section-header {
+    max-width: 680px;
+    margin: 0 auto 3rem;
+    padding: 0 2rem;
+    text-align: center;
+  }
+
+  .section-header .section-label {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.75rem;
+    color: #d4a843;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .section-header h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 600;
+    color: #f0ece4;
+    line-height: 1.5;
+  }
+
+  /* Flourish iframe 容器 */
+  .flourish-wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+
+  .flourish-wrapper.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ↓↓ 把這段換成你的 Flourish embed code ↓↓ */
+  .flourish-embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 60%;   /* 調整這個比例可改圖表高度 */
+    background: #1a1710;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(212,168,67,0.15);
+  }
+
+  .flourish-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* Flourish 尚未嵌入時的佔位提示 */
+  .flourish-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: rgba(212,168,67,0.35);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+  }
+
+  .flourish-placeholder .icon {
+    font-size: 2.5rem;
+    opacity: 0.4;
+  }
+
+  .chart-caption {
+    margin-top: 1.2rem;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(240,236,228,0.35);
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── 通用 Intersection 動畫 ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@400;600;800&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     第一段：Hero 影片 + 標題淡入
+════════════════════════════════════════ -->
+<section id="hero">
+
+  <!-- 影片佔位（替換 video src 後會消失） -->
+  <div class="video-placeholder" id="video-placeholder">
+    <span>請將飲料店影片上傳並替換 src</span>
+  </div>
+
+  <!--
+    ↓↓ 把 src 換成你的影片路徑或 URL ↓↓
+    建議：靜音自動播放、循環，解析度 1080p 以上
+  -->
+  <video
+    id="hero-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    src="YOUR_VIDEO_FILE.mp4"
+  ></video>
+
+  <!-- 標題文字 -->
+  <div id="hero-text">
+    <p class="label">深度報導</p>
+    <h1>一杯手搖飲的代價<br><span>台灣人糖分攝取超標的甜蜜危機</span></h1>
+    <div class="scroll-hint">向下捲動</div>
+  </div>
+
+</section>
+
+
+<!-- ════════════════════════════════════════
+     第二段：視差捲動導言
+════════════════════════════════════════ -->
+<section id="intro">
+
+  <!-- 視差背景（sticky 固定，內容往上疊） -->
+  <div class="parallax-bg">
+    <div class="bg-color"></div>
+
+    <!-- 裝飾性漂浮數字 -->
+    <div class="float-numbers">
+      <span style="top:10%; left:5%;">25g</span>
+      <span style="top:30%; right:8%;">100%</span>
+      <span style="top:55%; left:15%;">700萬</span>
+      <span style="top:70%; right:5%;">糖</span>
+      <span style="top:80%; left:40%;">超標</span>
+    </div>
+  </div>
+
+  <!-- 捲動文字（疊在 sticky 背景上） -->
+  <div class="intro-content">
+
+    <div class="intro-block" data-observe>
+      <p class="eyebrow">導言</p>
+      <p>
+        台灣街頭，每走幾步便是一家手搖飲料店。
+        從鹿港到基隆，從台北信義區到屏東市場旁的小巷，
+        <strong>珍珠奶茶、黑糖鮮奶、芋泥系列</strong>——它們是台灣人的日常，也是全球羨慕的「台灣之光」。
+      </p>
+    </div>
+
+    <div class="intro-block" data-observe>
+      <p>
+        然而，在甜蜜的背後，是一組讓營養師憂心的數字。
+        根據國民健康署最新調查，台灣成人每日平均添加糖攝取量已達
+        <span class="stat-inline">68g</span>，
+        超過世界衛生組織建議上限的
+        <span class="stat-inline">2.7倍</span>。
+      </p>
+    </div>
+
+    <div class="intro-block" data-observe>
+      <p>
+        一杯市售「全糖」700ml 手搖飲，含糖量動輒
+        <strong>60至90公克</strong>——相當於一個成年人一整天應攝取的糖分上限。
+        但許多人習慣「一天一杯起跳」，
+        從不覺得這有什麼問題。
+      </p>
+    </div>
+
+    <div class="intro-block" data-observe>
+      <p>
+        這篇報導試圖回答一個問題：<br>
+        我們的身體，究竟為這杯甜飲，付出了什麼代價？
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     第三段：Flourish 圖表區
+════════════════════════════════════════ -->
+<section id="chart-section">
+
+  <div class="section-header fade-up" data-observe>
+    <p class="section-label">數據</p>
+    <h2>台灣人的糖分攝取，在亞洲國家中處於什麼水準？</h2>
+  </div>
+
+  <div class="flourish-wrapper" data-observe>
+    <div class="flourish-embed">
+
+      <!--
+        ↓↓ 把這段換成你從 Flourish 複製的 embed code ↓↓
+        範例格式：
+        <iframe src="https://flo.uri.sh/visualisation/XXXXXXX/embed"
+                title="Interactive or visual content"
+                frameborder="0"
+                scrolling="no"
+                allowfullscreen>
+        </iframe>
+
+        注意：Flourish 的 embed 預設是 <div class="flourish-embed"> 包住 <script>
+        在純 HTML 頁面中，直接貼 iframe 版本比較穩定
+      -->
+
+      <!-- 佔位提示（嵌入 Flourish 後刪除這個 div） -->
+      <div class="flourish-placeholder">
+        <div class="icon">📊</div>
+        <span>請貼上 Flourish embed code 取代此區塊</span>
+      </div>
+
+    </div>
+    <p class="chart-caption">資料來源：WHO Global Sugar Intake Report 2023／國民健康署 2022 年國人膳食營養素參考攝取量</p>
+  </div>
+
+</section>
+
+
+<script>
+  /* ── 1. 影片淡入 ── */
+  const video = document.getElementById('hero-video');
+  const placeholder = document.getElementById('video-placeholder');
+
+  if (video.src && !video.src.includes('YOUR_VIDEO_FILE')) {
+    video.addEventListener('canplay', () => {
+      video.classList.add('loaded');
+      placeholder.style.display = 'none';
+    });
+  }
+
+  /* ── 2. 標題延遲淡入 ── */
+  setTimeout(() => {
+    document.getElementById('hero-text').classList.add('visible');
+  }, 400);
+
+  /* ── 3. Intersection Observer：所有 data-observe 元素捲動淡入 ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.15
+  });
+
+  document.querySelectorAll('[data-observe]').forEach(el => observer.observe(el));
+
+  /* ── 4. 視差：裝飾數字跟隨捲動位移 ── */
+  const floatNums = document.querySelectorAll('.float-numbers span');
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const introTop = document.getElementById('intro').offsetTop;
+    const progress = Math.max(0, scrollY - introTop);
+
+    floatNums.forEach((el, i) => {
+      const speed = 0.04 + i * 0.015;
+      el.style.transform = `translateY(${progress * speed}px)`;
+    });
+  }, { passive: true });
+</script>
+
+</body>
+</html>
