@@ -7,27 +7,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-/* ── Reset ── */
+/* ══════════════════════════════
+   RESET & ROOT
+══════════════════════════════ */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
-/* ── Palette ──
-   淺黃底 #FAF3E0
-   深茶褐 #3B2507
-   焦糖橘 #C97B2A
-   珍珠米 #E8D5A3
-   暖白   #FFFDF5
-*/
 :root {
-  --cream:   #FAF3E0;
-  --brown:   #3B2507;
-  --caramel: #C97B2A;
-  --pearl:   #E8D5A3;
+  --cream:      #FAF3E0;
+  --brown:      #3B2507;
+  --caramel:    #C97B2A;
+  --pearl:      #E8D5A3;
   --warm-white: #FFFDF5;
-  --text-body: #4A3320;
+  --text-body:  #4A3320;
   --text-muted: #8A7055;
-  --section-gap: 10vh;
-  --content-width: 720px;
+  --max-w:      740px;
+  --max-w-wide: 960px;
 }
 
 body {
@@ -35,574 +30,687 @@ body {
   color: var(--text-body);
   font-family: 'Noto Serif TC', serif;
   font-size: 18px;
-  line-height: 1.9;
+  line-height: 1.95;
   overflow-x: hidden;
 }
 
-/* ── HERO ── */
-#hero {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  min-height: 560px;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-#hero video {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 2.5s ease;
-}
-#hero video.ready { opacity: 1; }
-
-/* fallback background when no video */
-#hero-bg-fallback {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at 60% 40%, #d4972a44 0%, transparent 60%),
-    linear-gradient(160deg, #3B2507 0%, #5c3a10 50%, #2a1800 100%);
-}
-
-/* bubble decoration */
-.hero-bubbles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.hero-bubbles span {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(201,123,42,0.12);
-  animation: floatBubble linear infinite;
-}
-@keyframes floatBubble {
-  0%   { transform: translateY(0) scale(1); opacity: 0.6; }
-  100% { transform: translateY(-110vh) scale(0.4); opacity: 0; }
-}
-
-#hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom,
-    rgba(30,15,0,0.1) 0%,
-    rgba(30,15,0,0.45) 55%,
-    rgba(30,15,0,0.88) 100%
-  );
-  z-index: 1;
-}
-
-#hero-text {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 0 1.5rem 8vh;
-  max-width: 820px;
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 1.6s ease 0.6s, transform 1.6s ease 0.6s;
-}
-#hero-text.show { opacity: 1; transform: translateY(0); }
-
-.hero-kicker {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  color: var(--caramel);
-  text-transform: uppercase;
-  margin-bottom: 1.2rem;
-}
-
-#hero-text h1 {
-  font-size: clamp(1.9rem, 5.5vw, 4rem);
-  font-weight: 700;
-  line-height: 1.25;
-  color: #FAF3E0;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 24px rgba(0,0,0,0.5);
-}
-#hero-text h1 em {
-  font-style: normal;
-  color: var(--caramel);
-}
-
-.hero-sub {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.9rem;
-  color: rgba(250,243,224,0.6);
-  letter-spacing: 0.08em;
-}
-
-.scroll-cue {
-  margin-top: 2.2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.72rem;
-  color: rgba(250,243,224,0.4);
-  letter-spacing: 0.2em;
-}
-.scroll-cue::after {
-  content: '';
-  width: 1px; height: 44px;
-  background: linear-gradient(to bottom, rgba(201,123,42,0.7), transparent);
-  animation: drip 2s ease-in-out infinite;
-}
-@keyframes drip {
-  0%,100% { opacity: 0; transform: scaleY(0.2); transform-origin: top; }
-  50%      { opacity: 1; transform: scaleY(1); }
-}
-
-/* ── SECTION COMMON ── */
-.section {
-  padding: var(--section-gap) 1.5rem;
-  max-width: var(--content-width);
-  margin: 0 auto;
-}
-
-.section-wide {
-  padding: var(--section-gap) 1.5rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-/* ── DIVIDERS / CHAPTER HEADERS ── */
-.chapter-header {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 3rem;
-}
-.chapter-num {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  color: var(--caramel);
-  white-space: nowrap;
-}
-.chapter-title {
-  font-family: 'Noto Serif TC', serif;
-  font-size: clamp(1.3rem, 3vw, 1.8rem);
-  font-weight: 700;
-  color: var(--brown);
-  line-height: 1.3;
-}
-.chapter-line {
-  flex: 1;
-  height: 1px;
-  background: var(--pearl);
-}
-
-/* ── INTRO SECTION (parallax text) ── */
-#intro {
-  background: var(--warm-white);
-  padding: 8vh 1.5rem 6vh;
-  position: relative;
-  overflow: hidden;
-}
-#intro::before {
-  content: '糖';
-  position: absolute;
-  right: -0.1em;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 28vw;
-  font-weight: 900;
-  color: rgba(201,123,42,0.05);
-  line-height: 1;
-  pointer-events: none;
-  font-family: 'Noto Sans TC', sans-serif;
-}
-
-.intro-inner {
-  max-width: var(--content-width);
-  margin: 0 auto;
-}
-
-.intro-lead {
-  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-  line-height: 2.1;
-  color: var(--text-body);
-}
-
-.intro-lead p + p { margin-top: 1.6rem; }
-
-.intro-lead strong {
-  color: var(--brown);
-  font-weight: 600;
-  border-bottom: 2px solid var(--caramel);
-  padding-bottom: 1px;
-}
-
-.stat-pop {
-  display: block;
-  text-align: center;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 900;
-  color: var(--caramel);
-  line-height: 1;
-  margin: 2rem 0 0.4rem;
-}
-.stat-label {
-  display: block;
-  text-align: center;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  letter-spacing: 0.12em;
-  margin-bottom: 2rem;
-}
-
-/* ── FLOURISH EMBED ── */
-.chart-block {
-  margin: 3.5rem 0;
-}
-.chart-title {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--caramel);
-  text-transform: uppercase;
-  margin-bottom: 0.8rem;
-}
-.chart-desc {
-  font-family: 'Noto Serif TC', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--brown);
-  margin-bottom: 1.2rem;
-  line-height: 1.5;
-}
-.flourish-frame {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56%;
-  background: var(--warm-white);
-  border: 1px solid var(--pearl);
-  border-radius: 6px;
-  overflow: hidden;
-}
-.flourish-frame iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  border: none;
-}
-.chart-source {
-  margin-top: 0.6rem;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-}
-
-/* ── BODY COPY ── */
-.body-copy p { margin-bottom: 1.5rem; }
-.body-copy p:last-child { margin-bottom: 0; }
-
-/* ── PULL QUOTE ── */
-.pull-quote {
-  margin: 3rem 0;
-  padding: 1.8rem 2rem 1.8rem 2.4rem;
-  border-left: 4px solid var(--caramel);
-  background: rgba(201,123,42,0.06);
-  border-radius: 0 6px 6px 0;
-}
-.pull-quote p {
-  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
-  font-style: italic;
-  color: var(--brown);
-  line-height: 1.8;
-}
-.pull-quote cite {
-  display: block;
-  margin-top: 0.8rem;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.78rem;
-  font-style: normal;
-  color: var(--text-muted);
-  letter-spacing: 0.1em;
-}
-
-/* ── FACT BOX ── */
-.fact-box {
-  margin: 2.5rem 0;
-  padding: 1.5rem 1.8rem;
-  background: var(--brown);
-  color: var(--pearl);
-  border-radius: 6px;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.88rem;
-  line-height: 1.8;
-}
-.fact-box strong { color: var(--caramel); }
-
-/* ── PATH DIAGRAM (面向二) ── */
-.pathway {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin: 2.5rem 0;
-}
-.pathway-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.2rem;
-  padding: 1.4rem 0;
-  border-bottom: 1px solid var(--pearl);
-  opacity: 0;
-  transform: translateX(-20px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.pathway-step.show { opacity: 1; transform: translateX(0); }
-.pathway-step:last-child { border-bottom: none; }
-.step-icon {
-  flex-shrink: 0;
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  background: var(--caramel);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  margin-top: 0.1rem;
-}
-.step-body h4 {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: var(--brown);
-  margin-bottom: 0.4rem;
-}
-.step-body p {
-  font-size: 0.95rem;
-  color: var(--text-body);
-  line-height: 1.8;
-}
-
-/* ── SECTION SEPARATOR ── */
-.sep {
-  max-width: var(--content-width);
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.sep-line { flex: 1; height: 1px; background: var(--pearl); }
-.sep-icon {
-  font-size: 1.4rem;
-  color: var(--caramel);
-  line-height: 1;
-}
-
-/* ── COUNTRY COMPARE (面向四) ── */
-.country-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin: 2rem 0;
-}
-.country-card {
-  padding: 1.2rem 1.4rem;
-  background: var(--warm-white);
-  border: 1px solid var(--pearl);
-  border-radius: 6px;
-}
-.country-name {
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  letter-spacing: 0.1em;
-  margin-bottom: 0.4rem;
-}
-.country-policy {
-  font-family: 'Noto Serif TC', serif;
-  font-size: 0.92rem;
-  color: var(--brown);
-  line-height: 1.6;
-}
-.country-tag {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 3px;
-  background: rgba(201,123,42,0.12);
-  color: var(--caramel);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-}
-
-/* ── FOOTER ── */
-footer {
-  background: var(--brown);
-  color: var(--pearl);
-  text-align: center;
-  padding: 4rem 1.5rem 3rem;
-  font-family: 'Noto Sans TC', sans-serif;
-  font-size: 0.82rem;
-  line-height: 2;
-}
-footer .team { color: var(--caramel); font-weight: 700; margin-bottom: 0.4rem; }
-footer a { color: var(--caramel); text-decoration: none; }
-
-/* ── SCROLL FADE ── */
+/* ══════════════════════════════
+   SCROLL FADE (universal)
+══════════════════════════════ */
 .fade-up {
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.85s ease, transform 0.85s ease;
+  transform: translateY(28px);
+  transition: opacity .85s ease, transform .85s ease;
 }
 .fade-up.show { opacity: 1; transform: translateY(0); }
 
-/* ── RESPONSIVE ── */
-@media (max-width: 600px) {
-  body { font-size: 16px; }
-  .chapter-title { font-size: 1.2rem; }
+/* ══════════════════════════════
+   SECTION 0: LINE GROUP OPENING
+══════════════════════════════ */
+#opening {
+  min-height: 100vh;
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* phone frame */
+.phone-frame {
+  width: min(360px, 92vw);
+  background: #f0f0f0;
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  position: relative;
+}
+
+/* status bar */
+.phone-status {
+  background: #1c7c3b;
+  color: #fff;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.72rem;
+  padding: 6px 16px 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* chat header */
+.chat-header {
+  background: #1c7c3b;
+  color: #fff;
+  padding: 10px 16px 12px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.chat-header .group-name { font-size: 0.92rem; font-weight: 700; }
+.chat-header .member-count { font-size: 0.72rem; opacity: 0.75; margin-top: 1px; }
+
+/* chat body */
+.chat-body {
+  background: #e8e4dc url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8b89a' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  min-height: 420px;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+/* message bubbles */
+.msg { display: flex; align-items: flex-end; gap: 6px; opacity: 0; transform: translateY(10px); transition: opacity .3s ease, transform .3s ease; }
+.msg.show { opacity: 1; transform: translateY(0); }
+.msg.right { flex-direction: row-reverse; }
+
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.65rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: #fff;
+}
+
+.bubble-wrap { max-width: 72%; }
+.sender-name { font-family: 'Noto Sans TC', sans-serif; font-size: 0.65rem; color: #555; margin-bottom: 2px; padding-left: 2px; }
+.bubble {
+  padding: 8px 12px;
+  border-radius: 16px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  word-break: break-all;
+  position: relative;
+}
+.bubble.green { background: #b7eb8f; border-radius: 16px 16px 4px 16px; }
+.bubble.white { background: #fff; border-radius: 16px 16px 16px 4px; }
+.bubble.you   { background: #b7eb8f; border-radius: 16px 16px 4px 16px; }
+
+/* typing indicator */
+.typing-indicator {
+  display: flex; align-items: center; gap: 3px;
+  padding: 10px 14px;
+  background: #fff;
+  border-radius: 16px 16px 16px 4px;
+  width: fit-content;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.typing-indicator span {
+  width: 6px; height: 6px; background: #aaa; border-radius: 50%;
+  animation: typingDot 1.2s infinite ease-in-out;
+}
+.typing-indicator span:nth-child(2) { animation-delay: .2s; }
+.typing-indicator span:nth-child(3) { animation-delay: .4s; }
+@keyframes typingDot { 0%,80%,100% { transform: scale(0.6); opacity:.4; } 40% { transform: scale(1); opacity:1; } }
+
+/* input bar */
+.chat-input {
+  background: #f7f7f7;
+  border-top: 1px solid #ddd;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.input-box {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  color: #333;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+}
+.input-cursor { display: inline-block; width: 2px; height: 14px; background: #333; margin-left: 1px; animation: blink .8s infinite; vertical-align: middle; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* freeze overlay */
+#freeze-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  pointer-events: none;
+  transition: background .8s ease;
+  z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+}
+#freeze-overlay.active { background: rgba(0,0,0,0.45); pointer-events: all; }
+#freeze-overlay .freeze-text {
+  color: #fff;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.1rem;
+  text-align: center;
+  opacity: 0;
+  transition: opacity .6s ease .4s;
+  padding: 0 2rem;
+  line-height: 2;
+}
+#freeze-overlay.active .freeze-text { opacity: 1; }
+
+
+/* ══════════════════════════════
+   SECTION 1: SCROLLING INTRO
+   (背景圖隨捲動切換)
+══════════════════════════════ */
+#scroll-intro {
+  position: relative;
+}
+
+.sticky-bg {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.sticky-bg .bg-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.sticky-bg .bg-layer.active { opacity: 1; }
+.sticky-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.35) 0%, rgba(0,0,0,.6) 100%);
+  z-index: 1;
+}
+
+/* placeholder colours for bg layers (replace with actual images) */
+.bg-layer-1 { background-color: #2a1a05; }
+.bg-layer-2 { background-color: #1a2a10; }
+.bg-layer-3 { background-color: #0d1f2d; }
+
+.scroll-text-blocks {
+  position: relative;
+  z-index: 2;
+  margin-top: -100vh;
+  padding-bottom: 10vh;
+}
+
+.scroll-block {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding: 8vh 2rem;
+}
+.scroll-block .inner {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #f0ece4;
+  font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+  line-height: 2.1;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .9s ease, transform .9s ease;
+}
+.scroll-block .inner.show { opacity: 1; transform: translateY(0); }
+
+/* ── Title reveal block ── */
+#title-reveal {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10vh 2rem;
+  position: relative;
+  z-index: 2;
+  margin-top: 0;
+}
+.big-title {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+.big-title.show { opacity: 1; }
+.big-title .label {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: .28em;
+  color: var(--caramel);
+  text-transform: uppercase;
+  margin-bottom: 1.4rem;
+}
+.big-title h1 {
+  font-size: clamp(1.8rem, 5.5vw, 3.8rem);
+  font-weight: 700;
+  color: #f0ece4;
+  line-height: 1.3;
+  text-shadow: 0 2px 24px rgba(0,0,0,.5);
+}
+.big-title h1 em { font-style: normal; color: var(--caramel); }
+.big-title .byline {
+  margin-top: 1.4rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: .82rem;
+  color: rgba(240,236,228,.55);
+  letter-spacing: .1em;
+}
+.scroll-cue {
+  margin-top: 2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-family: 'Noto Sans TC', sans-serif; font-size: .72rem;
+  color: rgba(240,236,228,.4); letter-spacing: .2em;
+}
+.scroll-cue::after {
+  content:'';
+  width:1px; height:44px;
+  background: linear-gradient(to bottom, rgba(201,123,42,.7), transparent);
+  animation: drip 2s ease-in-out infinite;
+}
+@keyframes drip { 0%,100%{opacity:0;transform:scaleY(.2);transform-origin:top} 50%{opacity:1;transform:scaleY(1)} }
+
+/* ══════════════════════════════
+   COMMON SECTION STYLES
+══════════════════════════════ */
+.section { padding: 8vh 1.5rem; max-width: var(--max-w); margin: 0 auto; }
+.section-wide { padding: 8vh 1.5rem; max-width: var(--max-w-wide); margin: 0 auto; }
+
+.chapter-header { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 3rem; }
+.chapter-num { font-family: 'Noto Sans TC', sans-serif; font-size: .7rem; font-weight: 700; letter-spacing: .25em; color: var(--caramel); white-space: nowrap; }
+.chapter-title { font-family: 'Noto Serif TC', serif; font-size: clamp(1.2rem, 3vw, 1.75rem); font-weight: 700; color: var(--brown); line-height: 1.35; }
+.chapter-line { flex: 1; height: 1px; background: var(--pearl); }
+
+.body-copy p { margin-bottom: 2.2rem; }
+.body-copy p:last-child { margin-bottom: 0; }
+
+.pull-quote {
+  margin: 3rem 0;
+  padding: 1.6rem 2rem 1.6rem 2.2rem;
+  border-left: 4px solid var(--caramel);
+  background: rgba(201,123,42,.07);
+  border-radius: 0 6px 6px 0;
+}
+.pull-quote p { font-size: clamp(1rem, 2.2vw, 1.2rem); font-style: italic; color: var(--brown); line-height: 1.85; }
+.pull-quote cite { display:block; margin-top:.7rem; font-family:'Noto Sans TC',sans-serif; font-size:.76rem; font-style:normal; color:var(--text-muted); letter-spacing:.1em; }
+
+.fact-box { margin: 2.5rem 0; padding: 1.4rem 1.8rem; background: var(--brown); color: var(--pearl); border-radius: 6px; font-family: 'Noto Sans TC', sans-serif; font-size: .88rem; line-height: 1.85; }
+.fact-box strong { color: var(--caramel); }
+
+.sep { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem; }
+.sep-line { flex:1; height:1px; background:var(--pearl); }
+.sep-icon { font-size:1.4rem; color:var(--caramel); line-height:1; }
+
+/* ══════════════════════════════
+   FLOURISH FRAMES
+══════════════════════════════ */
+.chart-block { margin: 3rem 0; }
+.chart-label { font-family: 'Noto Sans TC', sans-serif; font-size: .75rem; font-weight: 700; letter-spacing: .18em; color: var(--caramel); text-transform: uppercase; margin-bottom: .5rem; }
+.chart-desc { font-family: 'Noto Serif TC', serif; font-size: 1.05rem; font-weight: 600; color: var(--brown); margin-bottom: 1rem; line-height: 1.5; }
+.flourish-frame { position: relative; width: 100%; background: var(--warm-white); border: 1px solid var(--pearl); border-radius: 6px; overflow: hidden; }
+.flourish-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.chart-source { margin-top: .5rem; font-family: 'Noto Sans TC', sans-serif; font-size: .7rem; color: var(--text-muted); }
+
+/* placeholder styling */
+.chart-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8rem;
+  font-family: 'Noto Sans TC', sans-serif; font-size: .82rem; color: rgba(201,123,42,.4);
+  border: 2px dashed rgba(201,123,42,.25); border-radius: 4px;
+}
+.chart-placeholder .ph-icon { font-size: 2.2rem; opacity: .35; }
+
+/* ══════════════════════════════
+   SIDE-BY-SIDE LAYOUT (文字 | 圖表)
+══════════════════════════════ */
+.split-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+  margin: 3.5rem 0;
+}
+@media(max-width:680px) { .split-row { grid-template-columns: 1fr; } }
+
+.split-text { font-size: 1rem; line-height: 2; }
+.split-text p { margin-bottom: 2rem; }
+.split-text p:last-child { margin-bottom: 0; }
+
+.expert-box {
+  margin-top: 1.2rem;
+  padding: 1rem 1.2rem;
+  background: rgba(59,37,7,.06);
+  border-left: 3px solid var(--caramel);
+  border-radius: 0 4px 4px 0;
+  font-size: .88rem;
+  font-family: 'Noto Sans TC', sans-serif;
+  line-height: 1.75;
+  color: var(--text-body);
+}
+.expert-box .expert-name { font-weight: 700; color: var(--brown); font-size: .8rem; margin-bottom: .3rem; }
+
+/* stacked charts in split column */
+.stacked-charts { display: flex; flex-direction: column; gap: 1rem; }
+.stacked-charts .flourish-frame { padding-bottom: 55%; }
+
+/* ══════════════════════════════
+   CARD FLIPPER (螞蟻人資料卡)
+══════════════════════════════ */
+.card-deck {
+  position: relative;
+  margin: 3rem 0;
+  min-height: 420px;
+}
+.card-slide {
+  display: none;
+  animation: slideIn .4s ease;
+}
+.card-slide.active { display: block; }
+@keyframes slideIn { from { opacity:0; transform:translateX(30px); } to { opacity:1; transform:translateX(0); } }
+
+.person-card {
+  background: var(--warm-white);
+  border: 1px solid var(--pearl);
+  border-radius: 10px;
+  padding: 2rem;
+  position: relative;
+}
+.person-card .card-num {
+  position: absolute; top: 1.2rem; right: 1.4rem;
+  font-family: 'Noto Sans TC', sans-serif; font-size: .72rem;
+  color: var(--text-muted); letter-spacing: .1em;
+}
+.person-card .person-name {
+  font-family: 'Noto Sans TC', sans-serif; font-size: .78rem; font-weight: 700;
+  color: var(--caramel); letter-spacing: .12em; margin-bottom: .5rem;
+}
+.person-card .person-quote {
+  font-size: 1.05rem; font-style: italic; color: var(--brown); line-height: 1.9;
+  margin-bottom: 1rem;
+}
+.person-card .person-bio {
+  font-family: 'Noto Sans TC', sans-serif; font-size: .85rem;
+  color: var(--text-body); line-height: 1.8;
+}
+
+.card-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 1.2rem;
+}
+.card-btn {
+  font-family: 'Noto Sans TC', sans-serif; font-size: .8rem; font-weight: 700;
+  color: var(--warm-white); background: var(--caramel);
+  border: none; border-radius: 20px; padding: .45rem 1.2rem;
+  cursor: pointer; transition: background .2s;
+}
+.card-btn:hover { background: var(--brown); }
+.card-btn:disabled { background: var(--pearl); color: var(--text-muted); cursor: default; }
+.card-dots { display: flex; gap: 6px; }
+.card-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pearl); transition: background .2s; }
+.card-dot.active { background: var(--caramel); }
+
+/* ══════════════════════════════
+   PATHWAY STEPS (獎勵機制)
+══════════════════════════════ */
+.pathway { display: flex; flex-direction: column; gap: 0; margin: 2.5rem 0; }
+.pathway-step {
+  display: flex; align-items: flex-start; gap: 1.2rem;
+  padding: 1.4rem 0; border-bottom: 1px solid var(--pearl);
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.pathway-step.show { opacity:1; transform:translateX(0); }
+.pathway-step:last-child { border-bottom: none; }
+.step-icon { flex-shrink:0; width:44px; height:44px; border-radius:50%; background:var(--caramel); display:flex; align-items:center; justify-content:center; font-size:1.3rem; }
+.step-body h4 { font-family:'Noto Sans TC',sans-serif; font-size:.9rem; font-weight:700; color:var(--brown); margin-bottom:.35rem; }
+.step-body p { font-size:.93rem; color:var(--text-body); line-height:1.8; font-family:'Noto Sans TC',sans-serif; }
+
+/* ══════════════════════════════
+   COUNTRY GRID
+══════════════════════════════ */
+.country-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin:2rem 0; }
+.country-card { padding:1.2rem 1.4rem; background:var(--warm-white); border:1px solid var(--pearl); border-radius:6px; }
+.country-name { font-family:'Noto Sans TC',sans-serif; font-size:.75rem; font-weight:700; color:var(--text-muted); letter-spacing:.1em; margin-bottom:.35rem; }
+.country-policy { font-family:'Noto Serif TC',serif; font-size:.9rem; color:var(--brown); line-height:1.65; }
+.country-tag { display:inline-block; margin-top:.45rem; font-family:'Noto Sans TC',sans-serif; font-size:.68rem; padding:2px 8px; border-radius:3px; background:rgba(201,123,42,.12); color:var(--caramel); font-weight:700; letter-spacing:.07em; }
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+footer { background:var(--brown); color:var(--pearl); text-align:center; padding:4rem 1.5rem 3rem; font-family:'Noto Sans TC',sans-serif; font-size:.82rem; line-height:2; }
+footer .team { color:var(--caramel); font-weight:700; margin-bottom:.3rem; }
+footer p + p { margin-top:.2rem; }
+footer .small { color:rgba(232,213,163,.35); font-size:.7rem; margin-top:1.2rem; }
+
+/* ══════════════════════════════
+   RESPONSIVE TWEAKS
+══════════════════════════════ */
+@media(max-width:600px) {
+  body { font-size:16px; }
+  .chapter-title { font-size:1.15rem; }
+  .split-row { gap:1.5rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- ════════════ HERO ════════════ -->
-<section id="hero">
-  <div id="hero-bg-fallback"></div>
-
-  <!-- 珍珠泡泡裝飾 -->
-  <div class="hero-bubbles" id="bubbles"></div>
-
-  <!--
-    ▼ 替換影片：把 src 換成你的影片路徑
-    建議：靜音、自動播放、循環，MP4格式
-  -->
-  <video id="hero-video" autoplay muted loop playsinline
-         src="YOUR_DRINK_VIDEO.mp4"></video>
-
-  <div id="hero-text">
-    <p class="hero-kicker">深度報導</p>
-    <h1>一杯手搖飲的代價<br><em>台灣人糖分攝取超標的甜蜜危機</em></h1>
-    <p class="hero-sub">文｜林岳雋　圖表｜林宸宇、陳彥蓉</p>
-    <div class="scroll-cue">向下閱讀</div>
+<!-- ════════════════════════════════════════
+     OPENING：LINE群組接龍動畫
+════════════════════════════════════════ -->
+<section id="opening">
+  <div class="phone-frame">
+    <div class="phone-status">
+      <span>16:25</span>
+      <span>📶 🔋</span>
+    </div>
+    <div class="chat-header">
+      <div class="group-name">＜ 專案企劃一組（10）</div>
+      <div class="member-count">10位成員</div>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <!-- messages injected by JS -->
+    </div>
+    <div class="chat-input">
+      <div class="input-box" id="input-box"><span id="input-text"></span><span class="input-cursor" id="cursor"></span></div>
+    </div>
+    <div id="freeze-overlay">
+      <div class="freeze-text">這樣的對話，<br>每天都在台灣的<br>辦公室群組裡上演。</div>
+    </div>
   </div>
 </section>
 
 
-<!-- ════════════ 導言：手搖文化崛起 ════════════ -->
-<section id="intro">
-  <div class="intro-inner">
+<!-- ════════════════════════════════════════
+     SCROLL INTRO：捲動換背景 + 標題淡入
+════════════════════════════════════════ -->
+<section id="scroll-intro">
+  <!-- 黏性背景 -->
+  <div class="sticky-bg" id="sticky-bg">
+    <div class="bg-layer bg-layer-1 active" id="bg1"
+         style="background-image:url('photo_bubble_tea_shop.jpg'); background-color:#2a1a05;"></div>
+    <div class="bg-layer bg-layer-2" id="bg2"
+         style="background-image:url('photo_tea_shop_row.jpg'); background-color:#1e280e;"></div>
+    <div class="bg-layer bg-layer-3" id="bg3"
+         style="background-image:url('photo_delivery_rider.jpg'); background-color:#0d1f2d;"></div>
+  </div>
 
-    <div class="chapter-header fade-up">
-      <span class="chapter-num">導言</span>
-      <h2 class="chapter-title">台灣的手搖文化是如何崛起的？</h2>
-      <div class="chapter-line"></div>
-    </div>
-
-    <div class="intro-lead fade-up">
-      <p>
-        從1980年代泡沫紅茶的誕生，到今天隨處可見的連鎖飲料店，<strong>手搖飲早已不只是「解渴飲料」</strong>，而是深深融入台灣人日常生活的一部分。從早期泡沫紅茶店，到1990年代珍珠奶茶風潮，再到如今走向全球的台灣之光，手搖飲文化在數十年間快速擴張，也悄悄改變了台灣人的飲食習慣。
-      </p>
-      <p>
-        而這股「手搖熱」背後，是一個驚人的市場規模。根據財政部統計，台灣手搖飲產業年營業額已突破新台幣560億元——
-      </p>
-    </div>
-
-    <span class="stat-pop fade-up">16,000+</span>
-    <span class="stat-label fade-up">2024年全台手搖飲店家數，已超越四大超商門市總數</span>
-
-    <!-- 圖表1：手搖飲超過超商 -->
-    <div class="chart-block fade-up">
-      <p class="chart-title">圖表一</p>
-      <p class="chart-desc">手搖飲店家數 vs. 四大超商門市數</p>
-      <div class="flourish-frame" style="padding-bottom:52%">
-        <!--
-          ▼ 替換：貼上 Flourish iframe
-          https://public.flourish.studio/visualisation/29171492/
-        -->
-        <iframe src="https://flo.uri.sh/visualisation/29171492/embed"
-                title="手搖飲店家數與超商比較"
-                frameborder="0" scrolling="no" allowfullscreen></iframe>
+  <!-- 捲動文字 -->
+  <div class="scroll-text-blocks">
+    <div class="scroll-block" data-bg="0">
+      <div class="inner" data-scroll-text>
+        從1980年代的泡沫紅茶開始，台灣逐漸發展出獨特的手搖飲文化。
       </div>
-      <p class="chart-source">資料來源：財政部統計資料庫・營利事業家數及銷售額（按稅務行業標準分類第7–9次修訂）。分類採計餐飲業冰果店、冷熱飲店、咖啡館、茶藝館加總；2023年起採用第九次標準。</p>
     </div>
+    <div class="scroll-block" data-bg="1">
+      <div class="inner" data-scroll-text>
+        四十多年後，從街頭巷尾林立的飲料店，到手機裡一鍵下單的外送平台，手搖飲早已深深融入台灣人的生活。
+      </div>
+    </div>
+    <div class="scroll-block" data-bg="2">
+      <div class="inner" data-scroll-text>
+        但我們喝下的，真的只有茶香、果香或奶香嗎？<br><br>還是還有那些看不見、卻持續累積在身體裡的糖分與健康代價？
+      </div>
+    </div>
+  </div>
 
+  <!-- 標題淡入區 -->
+  <div id="title-reveal">
+    <div class="big-title" id="big-title">
+      <p class="label">深度報導</p>
+      <h1>一杯手搖飲的代價<br><em>台灣人糖分攝取超標的甜蜜危機</em></h1>
+      <p class="byline">文｜林岳雋　圖表｜林宸宇・陳彥蓉</p>
+      <div class="scroll-cue">向下閱讀</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     面向一：台灣人到底喝了多少手搖？
+════════════════════════════════════════ -->
+<section class="section-wide">
+  <div class="chapter-header fade-up">
+    <span class="chapter-num">面向一</span>
+    <h2 class="chapter-title">台灣人到底喝了多少手搖？</h2>
+    <div class="chapter-line"></div>
+  </div>
+
+  <!-- 左圖表、右文字 並排 -->
+  <div class="split-row fade-up">
+    <!-- 左：圖表1（手搖超過超商） -->
+    <div>
+      <p class="chart-label">圖表一</p>
+      <p class="chart-desc">手搖飲店家數 vs. 四大超商門市數</p>
+      <div class="flourish-frame" style="padding-bottom:90%;">
+        <iframe src="https://flo.uri.sh/visualisation/29171492/embed"
+                title="手搖飲超過超商" frameborder="0" scrolling="no" allowfullscreen></iframe>
+      </div>
+      <p class="chart-source">資料來源：財政部統計資料庫。分類採計冰果店、冷熱飲店、咖啡館、茶藝館加總。</p>
+    </div>
+    <!-- 右：文字 -->
+    <div class="split-text">
+      <p>根據財政部最新統計，台灣手搖飲產業年營業額已突破新台幣560億元，展現驚人的消費動能。截至2024年，全台手搖飲店家數更超過1萬6千家，數量不僅逐年攀升，更已正式超越四大超商的門市總數。</p>
+      <p>立法委員郭昱晴形容這種街頭奇景：「幾乎走兩步就是一家飲料店，無論是下班時間還是中午休息，隨時隨地都能叫到飲料，這已經變成國人生活中的一種習慣。」</p>
+    </div>
+  </div>
+
+  <!-- 文字1（接數字鐘下方） -->
+  <div class="body-copy fade-up" style="max-width:var(--max-w); margin:0 auto;">
+    <p>這股「國民習慣」背後是龐大的飲用量。以2025年手搖飲店總營業額推估，台灣人一年可以喝掉超過<strong>12億杯手搖飲</strong>。這意味著全台2,300萬人，平均每人一年喝下超過50杯，幾乎達到「每週一杯」的頻率。</p>
+    <p>好食課執行長兼營養師林世航觀察到，這在年輕與上班族群中尤為明顯。曾在多家連鎖手搖飲店任職的店員王先生（匿名）也指出，生意好時一家店一天就能賣出三、四百杯，「即便有無糖選擇，大家對手搖飲的依賴依然很高。」</p>
+  </div>
+
+  <!-- 圖表1-1：數字鐘 -->
+  <div class="chart-block fade-up" style="max-width:var(--max-w); margin:2rem auto;">
+    <p class="chart-label">圖表 1–1</p>
+    <p class="chart-desc">台灣人一年喝掉多少杯手搖飲？</p>
+    <div class="flourish-frame" style="padding-bottom:48%;">
+      <iframe src="https://flo.uri.sh/visualisation/29236602/embed"
+              title="數字鐘" frameborder="0" scrolling="no" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- 圖表1-2 -->
+  <div class="chart-block fade-up" style="max-width:var(--max-w); margin:2rem auto;">
+    <p class="chart-label">圖表 1–2</p>
+    <div class="flourish-frame" style="padding-bottom:55%;">
+      <iframe src="https://flo.uri.sh/visualisation/29379181/embed"
+              title="換算圖表" frameborder="0" scrolling="no" allowfullscreen></iframe>
+    </div>
   </div>
 </section>
 
 <div class="sep"><div class="sep-line"></div><div class="sep-icon">🧋</div><div class="sep-line"></div></div>
 
 
-<!-- ════════════ 面向一：台灣人吃了多少糖 ════════════ -->
+<!-- ════════════════════════════════════════
+     面向二：為何越來越離不開手搖？
+════════════════════════════════════════ -->
 <section class="section">
-
-  <div class="chapter-header fade-up">
-    <span class="chapter-num">面向一</span>
-    <h2 class="chapter-title">台灣人到底吃了多少糖？</h2>
-    <div class="chapter-line"></div>
-  </div>
-
-  <div class="body-copy fade-up">
-    <p>以2025年的手搖飲店總營業額估算，台灣人一年可以喝掉超過<strong>12億杯手搖飲</strong>。光是這個數字，就已讓人難以想像背後隱含的糖分總量。</p>
-  </div>
-
-  <!-- 圖表1-1：數字鐘 -->
-  <div class="chart-block fade-up">
-    <p class="chart-title">圖表 1–1</p>
-    <p class="chart-desc">台灣人一年喝掉多少杯手搖飲？</p>
-    <div class="flourish-frame" style="padding-bottom:45%">
-      <!-- 佔位：待林岳雋確認數字鐘連結 -->
-      <iframe src="about:blank" title="數字鐘佔位" frameborder="0"></iframe>
-    </div>
-  </div>
-
-  <div class="body-copy fade-up">
-    <p>但台灣人愛喝的手搖飲，其實暗藏危機。世界衛生組織（WHO）建議糖的攝取量在總熱量的10%以下，若以成人每天攝取2000大卡計算，每天糖攝取量<strong>不可超過50克</strong>。如果攝取過多，就會增加罹患蛀牙、肥胖和心血管疾病的風險。</p>
-    <p>但以店家數前十名的熱賣品項來看，只要喝一杯8冰綠大杯全糖，每日糖攝取就會<strong>直接超標</strong>；即便喝半糖，也占每日攝取量50%以上。如果再加上其他飲食途徑攝取的糖份，依然可能超標。</p>
-  </div>
-
-  <!-- 圖表3：前10名散點圖 -->
-  <div class="chart-block fade-up">
-    <p class="chart-title">圖表 1–2</p>
-    <p class="chart-desc">熱門手搖飲品項含糖量散點圖（以成份分類）</p>
-    <div class="flourish-frame" style="padding-bottom:60%">
-      <iframe src="https://flo.uri.sh/visualisation/28595723/embed"
-              title="前10名飲料店品項散點圖"
-              frameborder="0" scrolling="no" allowfullscreen></iframe>
-    </div>
-    <p class="chart-source">虛線標示 WHO 每日建議上限（50g）。資料來源：各品牌官方營養標示。</p>
-  </div>
-
-</section>
-
-<div class="sep"><div class="sep-line"></div><div class="sep-icon">🍬</div><div class="sep-line"></div></div>
-
-
-<!-- ════════════ 面向二：為何愛吃糖 ════════════ -->
-<section class="section">
-
   <div class="chapter-header fade-up">
     <span class="chapter-num">面向二</span>
-    <h2 class="chapter-title">為何我們會這麼想吃糖？糖如何在體內發揮作用</h2>
+    <h2 class="chapter-title">為何我們越來越離不開手搖？</h2>
     <div class="chapter-line"></div>
   </div>
 
   <div class="body-copy fade-up">
-    <p>在討論吃糖的動機之前，要先釐清手搖飲業者常用的糖——是源自玉米澱粉的<strong>高果糖糖漿（HFS）</strong>。以HFS 55為例，它的甜度與蔗糖相當，但由55%果糖與42%葡萄糖組成，兩者都以單醣的形式存於糖漿中。單醣吸收較快，所以高果糖糖漿更容易造成血糖快速波動。</p>
-    <p>人體對糖分的反應，其實透過兩條不同的路徑影響我們的進食行為：</p>
+    <p>夏日炎炎、生活壓力大就想喝一杯手搖紓壓？這背後有科學依據。</p>
+  </div>
+
+  <!-- 螞蟻人資料卡 -->
+  <div class="fade-up">
+    <p class="chart-label" style="margin-bottom:1rem;">螞蟻人告白</p>
+    <div class="card-deck" id="ant-deck">
+      <!-- Card 1 -->
+      <div class="card-slide active" data-card="0">
+        <div class="person-card">
+          <span class="card-num">1 / 5</span>
+          <p class="person-name">李明峻</p>
+          <p class="person-quote">「從國中時習慣喝全糖，高中降至半糖，大學後因健康考量逐漸轉為無糖茶——但若當天沒喝，會感到生活有些無趣。」</p>
+          <p class="person-bio">自大學起改喝無糖茶，但偶爾仍無法抵抗。約2至3天喝一次，若當天沒喝，會感到生活有些無趣。</p>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div class="card-slide" data-card="1">
+        <div class="person-card">
+          <span class="card-num">2 / 5</span>
+          <p class="person-name">黃蓁言（21歲・大學生・來自澳門）</p>
+          <p class="person-quote">「喝的時候感覺很療癒，但喝完後會覺得蠻空虛的，那種快樂稍縱即逝。」</p>
+          <p class="person-bio">認為台灣的手搖飲價格便宜且極易取得，因而養成每日飲用的習慣，卻也深陷罪惡感，進而可能陷入為了追求短暫愉悅而增加攝取量的循環。</p>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="card-slide" data-card="2">
+        <div class="person-card">
+          <span class="card-num">3 / 5</span>
+          <p class="person-name">Rachel（化名）</p>
+          <p class="person-quote">「它對我來說不是獎勵，是壓力的出口。甜的東西會讓心情變好，可以在壓力中再撐一下，撐到下班的那種感覺。」</p>
+          <p class="person-bio">2025年3月入職後開始每日喝手搖飲，只要同事揪團就會跟著點。她發現攝取太多糖皮膚會變黃，這時就會改點無糖「洗一下」——但心情很差時，一定會點有糖的奶茶。</p>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="card-slide" data-card="3">
+        <div class="person-card">
+          <span class="card-num">4 / 5</span>
+          <p class="person-name">王家偉（27歲）</p>
+          <p class="person-quote">「每天就是會想要來一杯。如果一天不喝，會覺得好像缺少什麼，主要是想喝那個冰涼的口感跟味道。」</p>
+          <p class="person-bio">從高中起養成每天一杯的習慣。雖然自大學起改喝無糖茶為主，但若當天覺得糖分攝取不足，仍會想買含糖飲料補足。知道不健康，卻難以改變習慣。</p>
+        </div>
+      </div>
+      <!-- Card 5 -->
+      <div class="card-slide" data-card="4">
+        <div class="person-card">
+          <span class="card-num">5 / 5</span>
+          <p class="person-name">邱少宸</p>
+          <p class="person-quote">「第一口會有活過來的感覺，因為很冰、很甜。」</p>
+          <p class="person-bio">在大學讀了7年，期間完全是資深「螞蟻人」，每日飲用1至2杯，且完全以手搖飲代水。「我那時候基本上不喝水，覺得水有一種味道。」</p>
+        </div>
+      </div>
+      <!-- Nav -->
+      <div class="card-nav">
+        <button class="card-btn" id="ant-prev" disabled>← 上一位</button>
+        <div class="card-dots" id="ant-dots">
+          <div class="card-dot active"></div>
+          <div class="card-dot"></div>
+          <div class="card-dot"></div>
+          <div class="card-dot"></div>
+          <div class="card-dot"></div>
+        </div>
+        <button class="card-btn" id="ant-next">下一位 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文字2 -->
+  <div class="body-copy fade-up">
+    <p>「明明知道喝太多不好，但還是會想買。」這句話，幾乎是所有手搖飲愛好者共同的矛盾。</p>
+    <p>下班想喝一杯、壓力大想喝一杯、天氣熱想喝一杯，甚至沒有理由，也會習慣性點開外送平台看看新品。當手搖飲逐漸成為日常，有些人開始疑惑：為什麼明知道不太健康，我們卻總是戒不掉？</p>
+    <p>答案也許不只在意志力，而在大腦——因為手搖裡的糖有兩種獎勵機制。</p>
   </div>
 
   <!-- 兩條路徑 -->
@@ -611,168 +719,336 @@ footer a { color: var(--caramel); text-decoration: none; }
       <div class="step-icon">⚖️</div>
       <div class="step-body">
         <h4>恆定性調控路徑（能量管理系統）</h4>
-        <p>當糖分進入腸道後，會刺激腸道分泌多種荷爾蒙，透過神經系統告訴大腦目前身體已獲得多少能量，調節飽足感與飢餓感。這套系統的目的是維持身體能量平衡。</p>
+        <p>糖分進入腸道後，刺激腸道分泌荷爾蒙，透過神經系統調節飽足感與飢餓感。高雄醫學大學公共衛生學系教授李建宏解釋：「（糖）吸收完之後就會影響到腸泌素的分泌，腸泌素經過迷走神經會傳遞到腦部的獎賞相關路徑。」</p>
       </div>
     </div>
     <div class="pathway-step" data-observe-step>
       <div class="step-icon">🎯</div>
       <div class="step-body">
         <h4>享樂性調控路徑（獎賞系統）</h4>
-        <p>當人們品嚐甜食時，口腔感受到的甜味，以及糖分進入腸道後產生的訊號，會刺激大腦釋放<strong>多巴胺</strong>。久而久之，大腦會將特定食物、氣味、情緒狀態與這種愉悅感連結——即使身體不缺能量，仍會產生想吃甜食的衝動。</p>
+        <p>甜味訊號刺激舌頭上的味覺接受器，大腦便會產生愉悅感。日日營養營養師蔡佳穎觀察到：「大腦會把甜跟快樂做連結，覺得吃甜食就是會快樂，這也是為什麼我們在心情不好或壓力大時，會想去找甜的吃。」</p>
       </div>
     </div>
     <div class="pathway-step" data-observe-step>
       <div class="step-icon">🔄</div>
       <div class="step-body">
         <h4>液態糖的特殊危險性</h4>
-        <p>直接攝取添加高果糖糖漿的手搖飲，胃部被填滿及排空的速度快，且相較固體食物咀嚼感較少，<strong>難以誘發飽足感訊號</strong>，造成慢性且無意識的熱量攝取過量。</p>
+        <p>液體的手搖飲攝取時缺乏咀嚼過程。蔡佳穎說明：「液體的糖會吸收得比較快，也沒有纖維。你可能明明就喝了一杯500大卡的珍珠奶茶，但是它30分鐘就消化完了，然後你就會覺得好像沒有喝東西，飽足感比較低，就會讓你想要再進一步去攝取更多的糖量。」</p>
       </div>
     </div>
   </div>
 
+  <!-- 圖表2：人體獎勵機制（Canva圖，由陳彥蓉完成後補） -->
+  <div class="chart-block fade-up">
+    <p class="chart-label">圖表 2–1</p>
+    <p class="chart-desc">吃糖的人體獎勵機制路線</p>
+    <div class="flourish-frame" style="padding-bottom:55%;">
+      <div class="chart-placeholder">
+        <div class="ph-icon">🧠</div>
+        <span>待補：人體獎勵機制圖（Canva 轉換後嵌入）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文字：高果糖糖漿 -->
+  <div class="body-copy fade-up">
+    <p>與一般砂糖不同，手搖飲業者常使用的甜味來源，是由玉米或樹薯澱粉加工製成的<strong>高果糖糖漿（HFS）</strong>。以飲料業常見的HFS 55為例，主要由約55%的果糖與45%的葡萄糖組成。</p>
+    <p>好食課執行長兼營養師林世航指出，手搖飲業者偏好使用HFS是基於成本與操作便利性的考量：「因為它的價格比蔗糖便宜很多。而且它是液態，蔗糖（使用前）還要煮就很麻煩。」</p>
+  </div>
+
+  <!-- 圖表：一杯手搖的公式（待補） -->
+  <div class="chart-block fade-up">
+    <p class="chart-label">圖表 2–2</p>
+    <p class="chart-desc">一杯手搖的公式（以50嵐為例）</p>
+    <div class="flourish-frame" style="padding-bottom:50%;">
+      <div class="chart-placeholder">
+        <div class="ph-icon">🧪</div>
+        <span>待補：一杯手搖的公式圖（陳彥蓉製作中）</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文字3：含糖量超標 -->
+  <div class="body-copy fade-up">
+    <p>而且手搖飲的糖通常都嚴重超量。根據WHO建議，每日精緻糖攝取量應低於總熱量的10%，以成人每天攝取2000大卡計算，糖攝取量不應超過<strong>50克</strong>。然而，市售手搖飲的含糖量往往輕易突破這個健康紅線——例如一杯大杯（700ml）、全糖的四季春珍波椰，就大約含有65g的糖。</p>
+    <p>曾在50嵐等數家飲料店工作過的王先生（匿名）表示，大杯全糖飲料的基本添加糖量為「兩湯匙」，而每一湯匙的糖量約為27克，光是添加糖就占了54克。如果消費者改點半糖，實際上會喝下27克的添加糖（54g × 0.5）；即便選擇微糖，也含有約16.2克——光是這杯微糖飲料中的添加糖，就占了每日精緻糖建議攝取上限的<strong>32.4%</strong>。</p>
+    <p>林世航解釋，「口感上的半糖，跟全糖比起來是一半的甜度感。但甜度跟糖量並非完全正比，喝半糖其實糖分可能還有全糖的七成左右。」</p>
+  </div>
+
+  <!-- 圖表3：散點圖（全版寬） -->
+  <div class="chart-block fade-up" style="max-width:var(--max-w-wide); margin:3rem auto;">
+    <p class="chart-label">圖表 2–3</p>
+    <p class="chart-desc">全台八大連鎖手搖飲熱賣品項含糖量散點圖</p>
+    <div class="flourish-frame" style="padding-bottom:60%;">
+      <iframe src="https://flo.uri.sh/visualisation/28595723/embed"
+              title="散點圖" frameborder="0" scrolling="no" allowfullscreen></iframe>
+    </div>
+    <p class="chart-source">以全糖（正常甜）為標準計算。虛線標示WHO每日建議上限（50g）。資料來源：各品牌官方營養標示。</p>
+  </div>
+
+  <!-- 飲料店員資料卡 -->
+  <div class="fade-up">
+    <p class="chart-label" style="margin-bottom:1rem;">幕後現場｜飲料店員的見證</p>
+    <div class="card-deck" id="staff-deck">
+      <div class="card-slide active" data-card="0">
+        <div class="person-card">
+          <span class="card-num">1 / 3</span>
+          <p class="person-name">李明峻（化名A先生）・TEATOP 打工兩年</p>
+          <p class="person-quote">「在飲料店工作之後，你會發現糖量……會有一個客觀的指標去推算。看到全糖下那麼多糖，心裡會想：這杯飲料到底是要多甜？」</p>
+          <p class="person-bio">這段經歷打破了他過去僅憑「口感」判斷甜度的習慣，轉而以「比例」和「毫升數」來衡量含糖量。讓他決定改喝無糖飲料並減少攝取配料。</p>
+        </div>
+      </div>
+      <div class="card-slide" data-card="1">
+        <div class="person-card">
+          <span class="card-num">2 / 3</span>
+          <p class="person-name">王家偉（化名王先生）・曾任職50嵐、清心福全、五桐號</p>
+          <p class="person-quote">「50嵐一湯匙就是27克。大杯全糖基本就是兩湯匙（約54克添加糖）。雖然知道多糖很不健康，但客人要點，我們還是做給他。」</p>
+          <p class="person-bio">對50嵐標誌性的「手拉糖」比例瞭若指掌。店員每週需進行「拉糖」測量考試，誤差必須控制在正負1克內才能上台調製飲料。</p>
+        </div>
+      </div>
+      <div class="card-slide" data-card="2">
+        <div class="person-card">
+          <span class="card-num">3 / 3</span>
+          <p class="person-name">林正勛（化名Leo）・竹北飲料店約五六個月</p>
+          <p class="person-quote">「看到幕後的過程會有『夢幻破碎』的感覺。配料在煮的時候要加很多糖去炒，煮完又泡在糖漿裡。」</p>
+          <p class="person-bio">珍珠在烹煮時需加入大量黑糖炒製，煮完後還需泡在糖漿中，一萬克的珍珠約需用掉一整包家用黑糖。這讓他現在喝飲料時會擔心健康。</p>
+        </div>
+      </div>
+      <div class="card-nav">
+        <button class="card-btn" id="staff-prev" disabled>← 上一位</button>
+        <div class="card-dots" id="staff-dots">
+          <div class="card-dot active"></div>
+          <div class="card-dot"></div>
+          <div class="card-dot"></div>
+        </div>
+        <button class="card-btn" id="staff-next">下一位 →</button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <div class="sep"><div class="sep-line"></div><div class="sep-icon">🫀</div><div class="sep-line"></div></div>
 
 
-<!-- ════════════ 面向三：糖的健康危害 ════════════ -->
-<section class="section">
-
+<!-- ════════════════════════════════════════
+     面向三：糖對我們的生理影響
+════════════════════════════════════════ -->
+<section class="section-wide">
   <div class="chapter-header fade-up">
     <span class="chapter-num">面向三</span>
-    <h2 class="chapter-title">糖對我們的生理造成的影響</h2>
+    <h2 class="chapter-title">糖對我們的生、心理造成的影響</h2>
     <div class="chapter-line"></div>
   </div>
 
-  <div class="body-copy fade-up">
-    <p>吃這麼多會造成三大危害。除了增加熱量攝取之外，無論體型高矮胖瘦，一旦長期處在高添加糖攝取的狀態，對肝臟、血管與血壓都會產生直接的生理衝擊，並增加慢性疾病風險。</p>
+  <!-- 開場文字 -->
+  <div class="body-copy fade-up" style="max-width:var(--max-w); margin:0 auto;">
+    <p>長期攝取高糖，身體究竟會發生什麼變化？答案或許不只存在於健檢數字裡，也藏在一杯又一杯手搖飲累積的日常之中。</p>
+    <p>對許多人而言，甜，是一種安慰，也是一種習慣。但當糖分成為生活裡無法缺席的存在，它對身體的影響，往往是緩慢且不易察覺的。</p>
   </div>
 
-  <div class="pull-quote fade-up">
-    <p>喝進去的過量糖分，很可能最後變成囤積在肝臟和血管裡的脂肪。</p>
+  <div class="pull-quote fade-up" style="max-width:var(--max-w); margin:2.5rem auto;">
+    <p>「第一口會有活過來的感覺，因為很冰、很甜。」</p>
+    <cite>——邱少宸，資深螞蟻人</cite>
   </div>
 
-  <div class="body-copy fade-up">
-    <p><strong>第一條路徑是發炎反應。</strong>過量糖分會刺激身體釋放更多發炎物質，使血管長期處於輕微發炎的狀態。當血管內壁反覆受到刺激與損傷時，血管會逐漸失去原本的彈性與功能，變得比較脆弱。</p>
-    <p><strong>第二條路徑則是影響血壓調節。</strong>研究發現，過量糖分可能促使腎臟保留更多鈉離子。當身體留住過多鈉和水分時，血液量增加，血壓容易升高。所以不只是「吃太鹹」才會影響血壓，糖本身也可能成為高血壓的推手。</p>
-    <p><strong>第三條路徑是脂質新生（DNL）。</strong>當我們攝取過多添加糖，尤其是果糖會繞過身體原本控制糖分利用的重要關卡，直接進入肝臟代謝。肝臟來不及消耗這些多餘的糖分時，就會把它們轉換成脂肪儲存起來，長期下來形成脂肪肝。</p>
+  <div class="body-copy fade-up" style="max-width:var(--max-w); margin:0 auto 3rem;">
+    <p>八年間，邱少宸的體重從66公斤一路增加到77公斤。某次無意間的計算讓他震驚——自己一個月竟花費四、五千元在手搖飲上。從健康到荷包的雙重壓力，最終讓他決定採取近乎「斷崖式」的戒糖方式：改以冰水或黑咖啡取代，試著重新適應不依賴甜味的生活。</p>
+    <p>而這些故事，其實並不只是個人經驗。醫學專家提醒，長期處於高添加糖攝取狀態，即使外表看起來不胖，也不代表身體沒有受到影響。過量糖分會透過三條路徑，對肝臟代謝、血管健康與血壓調節造成負擔。</p>
   </div>
 
-  <!-- 圖表：肥胖率 -->
-  <div class="chart-block fade-up">
-    <p class="chart-title">圖表 3–1</p>
+  <!-- 路徑一：發炎 (左文右圖) -->
+  <div class="split-row fade-up">
+    <div class="split-text">
+      <p><strong>第一條路徑：發炎反應</strong></p>
+      <p>過量糖分會刺激身體釋放更多發炎物質，使血管長期處於輕微發炎的狀態。當血管內壁因發炎反覆受到刺激與損傷時，血管會逐漸失去原本的彈性與功能，變得比較脆弱。</p>
+      <div class="expert-box">
+        <p class="expert-name">中華民國糖尿病學會秘書長 嚴愛文</p>
+        <p>「細胞如果吃太飽就會壞死，讓免疫細胞釋出發炎物質來清除它們。釋出這些發炎物質後，全身的發炎指數都會提升。」</p>
+      </div>
+    </div>
+    <div>
+      <p class="chart-label">圖表 3–1</p>
+      <p class="chart-desc">吃太多糖會身體發炎</p>
+      <div class="flourish-frame" style="padding-bottom:100%;">
+        <div class="chart-placeholder">
+          <div class="ph-icon">🔥</div>
+          <span>待補：發炎路徑圖（陳彥蓉製作中）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 路徑二：血壓 (左文右圖) -->
+  <div class="split-row fade-up">
+    <div class="split-text">
+      <p><strong>第二條路徑：影響血壓調節</strong></p>
+      <p>研究發現，過量糖分可能促使腎臟保留更多鈉離子，也就是俗稱的鹽分。當身體留住過多鈉和水分時，血液量會增加，血壓自然容易升高。此外，糖分還可能刺激交感神經系統，使血管收縮、心跳加快，進一步提高血壓。</p>
+      <div class="expert-box">
+        <p class="expert-name">成大醫院糖尿病防治中心主任 歐弘毅</p>
+        <p>這些代謝問題最終可能連動到「冠狀動脈心臟病、中風、腎臟病」等嚴重併發症。</p>
+      </div>
+    </div>
+    <div>
+      <p class="chart-label">圖表 3–2</p>
+      <p class="chart-desc">吃太多糖會高血壓</p>
+      <div class="flourish-frame" style="padding-bottom:100%;">
+        <div class="chart-placeholder">
+          <div class="ph-icon">🩺</div>
+          <span>待補：血壓調節路徑圖（製作中）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 路徑三：脂肪堆積 (左文右圖) -->
+  <div class="split-row fade-up">
+    <div class="split-text">
+      <p><strong>第三條路徑：脂質新生（DNL）</strong></p>
+      <p>果糖會繞過身體原本控制糖分利用的重要關卡，直接進入肝臟代謝。當肝臟來不及消耗這些多餘的糖分時，就會把它們轉換成脂肪儲存起來。長期下來，脂肪會堆積在肝臟形成脂肪肝，同時血液中的三酸甘油酯也會升高，讓血脂異常。</p>
+      <div class="expert-box">
+        <p class="expert-name">日日營養營養師 蔡佳穎</p>
+        <p>「很多人不喝酒，但還是會有脂肪肝，就是因為攝取太多果糖。」</p>
+      </div>
+    </div>
+    <div>
+      <p class="chart-label">圖表 3–3</p>
+      <p class="chart-desc">吃太多糖會堆積脂肪、脂肪肝和血管粥狀化</p>
+      <div class="flourish-frame" style="padding-bottom:100%;">
+        <div class="chart-placeholder">
+          <div class="ph-icon">🫀</div>
+          <span>待補：脂肪堆積路徑圖（陳彥蓉製作中）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 肥胖統計 -->
+  <div class="body-copy fade-up" style="max-width:var(--max-w); margin:3rem auto 2rem;">
+    <p>這樣的健康風險，也逐漸反映在台灣民眾的體位變化上。2013至2016年間，台灣成人過重與肥胖率約為44.7%；到了2020至2024年間，比例已上升至<strong>51.3%</strong>——全台超過一半的成年人都有過重或肥胖問題。男性從51.9%一路上升到61.2%，代表平均每10位成年男性中，就有超過6人體重超標。</p>
+  </div>
+
+  <div class="chart-block fade-up" style="max-width:var(--max-w-wide); margin:0 auto 3rem;">
+    <p class="chart-label">圖表 3–4</p>
     <p class="chart-desc">台灣18歲以上人口過重及肥胖率趨勢</p>
-    <div class="flourish-frame" style="padding-bottom:55%">
+    <div class="flourish-frame" style="padding-bottom:55%;">
       <iframe src="https://flo.uri.sh/visualisation/29184527/embed"
-              title="台灣過重與肥胖率"
-              frameborder="0" scrolling="no" allowfullscreen></iframe>
+              title="過重肥胖率" frameborder="0" scrolling="no" allowfullscreen></iframe>
     </div>
     <p class="chart-source">資料來源：國民健康署。</p>
   </div>
 
-  <div class="body-copy fade-up">
-    <p>這樣的健康風險，也逐漸反映在台灣民眾的體位變化上。2013至2016年間，台灣成人過重與肥胖率約為44.7%；到了2020至2024年間，比例已上升至<strong>51.3%</strong>——全台超過一半的成年人都有過重或肥胖問題。</p>
-    <p>更值得警惕的是，糖尿病已不再只是中高齡族群的疾病。近年臨床上出現愈來愈多年輕患者，20多歲甚至青少年階段便出現糖尿病前期或高血糖問題。</p>
+  <!-- 糖尿病文字 -->
+  <div class="body-copy fade-up" style="max-width:var(--max-w); margin:0 auto 2rem;">
+    <p>而體內脂肪持續堆積，過度膨脹的脂肪細胞會引發免疫系統的修復機制，釋放發炎物質。長期下來，身體處於慢性低度發炎，導致「胰島素阻抗」。</p>
+    <p>歐弘毅生動地描述了胰臟的潰敗過程：「為了維持血糖正常，身體會分泌更多、更多的胰島素。長期負荷下，胰島細胞再也撐不住了，它『過勞』了、停擺了，糖尿病就跑出來了。」</p>
+    <p>目前全台約有超過200萬名糖尿病患者，且每年仍以約2萬5千人的速度持續增加。更值得警惕的是，歐弘毅觀察到：「在過去5年，我們統計健保資料庫發現，40歲以下發病之年輕人增加25%，這是非常可怕的。」</p>
   </div>
 
-  <!-- 圖表：糖尿病年輕化 -->
-  <div class="chart-block fade-up">
-    <p class="chart-title">圖表 3–2</p>
+  <div class="chart-block fade-up" style="max-width:var(--max-w-wide); margin:0 auto;">
+    <p class="chart-label">圖表 3–5</p>
     <p class="chart-desc">台灣糖尿病死亡人數趨勢（民國97–113年）</p>
-    <div class="flourish-frame" style="padding-bottom:55%">
+    <div class="flourish-frame" style="padding-bottom:55%;">
       <iframe src="https://flo.uri.sh/visualisation/28678688/embed"
-              title="糖尿病年輕化統計"
-              frameborder="0" scrolling="no" allowfullscreen></iframe>
+              title="糖尿病統計" frameborder="0" scrolling="no" allowfullscreen></iframe>
     </div>
     <p class="chart-source">資料來源：衛生福利部死因統計。</p>
   </div>
-
 </section>
 
 <div class="sep"><div class="sep-line"></div><div class="sep-icon">📋</div><div class="sep-line"></div></div>
 
 
-<!-- ════════════ 面向四：政策與解方 ════════════ -->
-<section class="section">
-
+<!-- ════════════════════════════════════════
+     面向四：如何解決？
+════════════════════════════════════════ -->
+<section class="section-wide">
   <div class="chapter-header fade-up">
     <span class="chapter-num">面向四</span>
     <h2 class="chapter-title">如何解決？政策面與實務面</h2>
     <div class="chapter-line"></div>
   </div>
 
-  <div class="body-copy fade-up">
-    <p>說了這麼多，那麼該怎麼從根源改善高糖攝取的飲食習慣？根據台灣健康聯盟2025年調查，約有<strong>66%</strong>的民眾在購買飲料時會注意熱量標示，但仍有28.2%的人不太特別留意。</p>
-    <p>在「每日建議糖攝取量」的認知上，約66.5%的受訪者知道WHO建議每日精製糖不超過50克；但仍有<strong>33.5%的人不知道</strong>這項建議。值得注意的是，有高達92.3%的受訪者認為含糖飲料對健康「有點危害」或「非常危害」——知道有害，卻不一定改變習慣。</p>
-  </div>
+  <!-- 文字1 + 圖表1（左右並排） -->
+  <div class="split-row fade-up">
+    <div class="split-text">
+      <p>說了這麼多，那麼該怎麼從根源改善高糖攝取的飲食習慣？要先了解民眾對「糖攝取量」與「含糖飲料危害」究竟了解多少。</p>
 
-  <!-- 圖表：糖認知調查 -->
-  <div class="chart-block fade-up">
-    <p class="chart-title">圖表 4–1</p>
-    <p class="chart-desc">民眾對糖攝取的認知與習慣調查</p>
-    <div class="flourish-frame" style="padding-bottom:50%">
-      <iframe src="https://flo.uri.sh/visualisation/29184687/embed"
-              title="是否注意標示"
-              frameborder="0" scrolling="no" allowfullscreen></iframe>
+      <p>根據調查結果，約有三分之二（66%）的民眾在購買飲料時會注意熱量標示，但仍有超過四分之一（28.2%）的人不太特別留意。</p>
+
+      <p>在「每日建議糖攝取量」的認知上，約66.5%的受訪者知道WHO建議每日精製糖攝取量不超過50公克；但仍有33.5%的人不知道這項建議，代表每三人中就有一人對糖攝取標準沒有概念。</p>
+
+      <p>值得注意的是，有高達92.3%的受訪者認為含糖飲料對健康「有點危害」或「非常危害」——大家其實知道喝太多糖飲不好，但「知道有害」不一定會直接改變飲食習慣。</p>
+    </div>
+    <div class="stacked-charts">
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–1a　是否注意標示？</p>
+        <div class="flourish-frame" style="padding-bottom:70%;">
+          <iframe src="https://flo.uri.sh/visualisation/29184687/embed" title="注意標示" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–1b　是否知道建議值？</p>
+        <div class="flourish-frame" style="padding-bottom:70%;">
+          <iframe src="https://flo.uri.sh/visualisation/29184800/embed" title="知道建議值" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–1c　含糖飲料危害程度認知</p>
+        <div class="flourish-frame" style="padding-bottom:70%;">
+          <iframe src="https://flo.uri.sh/visualisation/29188223/embed" title="危害認知" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
+      <p class="chart-source">資料來源：台灣健康聯盟 2025 食安五環 2.0 減糖新生活問卷（n=1,113）。</p>
     </div>
   </div>
 
-  <div class="chart-block fade-up">
-    <div class="flourish-frame" style="padding-bottom:50%">
-      <iframe src="https://flo.uri.sh/visualisation/29184800/embed"
-              title="是否知道建議值"
-              frameborder="0" scrolling="no" allowfullscreen></iframe>
+  <!-- 文字2 + 圖表2 -->
+  <div class="split-row fade-up">
+    <div class="split-text">
+      <p>根據台灣健康聯盟的2025年調查，有近40%的受訪者每週喝3次以上含糖飲料，且有57.2%的受訪者購買含糖飲料時偏好購買手搖飲。</p>
+
+      <p>在手搖飲料的甜度選擇上，選擇半糖或以上的受訪者有28.2%，可以說每四個人中，就有至少一個人習慣喝半糖或更甜。</p>
+    </div>
+    <div class="stacked-charts">
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–2a　飲用習慣</p>
+        <div class="flourish-frame" style="padding-bottom:70%;">
+          <iframe src="https://flo.uri.sh/visualisation/29191365/embed" title="飲用習慣" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–2b　每週飲用次數</p>
+        <div class="flourish-frame" style="padding-bottom:70%;">
+          <iframe src="https://flo.uri.sh/visualisation/29195349/embed" title="每週次數" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–2c　含糖飲料偏好</p>
+        <div class="flourish-frame" style="padding-bottom:70%;">
+          <iframe src="https://flo.uri.sh/visualisation/29195396/embed" title="偏好" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="chart-block fade-up">
-    <div class="flourish-frame" style="padding-bottom:50%">
-      <iframe src="https://flo.uri.sh/visualisation/29188223/embed"
-              title="危害程度認知"
-              frameborder="0" scrolling="no" allowfullscreen></iframe>
-    </div>
-    <p class="chart-source">資料來源：台灣健康聯盟 2025 食安五環 2.0 政策暨減糖新生活網路問卷調查（n=1,113）。</p>
+  <!-- 文字3：知道與做到 -->
+  <div class="body-copy fade-up" style="max-width:var(--max-w); margin:0 auto 3rem;">
+    <p><strong>知道與做到的鴻溝：罪惡感下的逃避心理</strong></p>
+    <p>黃蓁言的話語，道出了許多消費者的真實心聲：「我不會看（含糖量）標示，我都已經要喝了，我也知道它不健康，就覺得沒什麼看的必要了。」看了標示若發現糖量超標，只會讓喝飲料的快樂蒙上陰影，「在意的話，我就不會喝了。」</p>
+    <p>那麼是否要用政策強制改變？台灣健康聯盟理事長吳玉琴給出了肯定的答案：「個人的選擇卻對身體產生不好的影響，接下來就是公共衛生的問題，他的醫療支出、健康的支出就增加。如果是不健康的行為，政策是有責任要來導引的。」</p>
+    <p>郭昱晴立委引述數據警示，過量糖分攝取引發的疾病，每年造成台灣醫療支出高達約<strong>233億元</strong>。</p>
   </div>
 
-  <div class="body-copy fade-up">
-    <p>根據調查，有近40%的受訪者每週喝3次以上含糖飲料，且有57.2%的受訪者購買含糖飲料時偏好購買手搖飲。在甜度選擇上，選擇半糖或以上的受訪者有28.2%——每四個人中，就有至少一個人習慣喝半糖或更甜。</p>
+  <!-- 文字4：各國糖稅 -->
+  <div class="body-copy fade-up" style="max-width:var(--max-w); margin:0 auto 2rem;">
+    <p><strong>各國規管策略：從糖稅到分級標示</strong></p>
+    <p>近年來許多國家開始推動「糖稅」（含糖飲料稅），希望透過提高高糖飲料價格，降低民眾攝取量，同時促使業者調整配方、減少糖分。</p>
   </div>
 
-  <!-- 圖表：飲用習慣 -->
-  <div class="chart-block fade-up">
-    <p class="chart-title">圖表 4–2</p>
-    <p class="chart-desc">含糖飲料飲用習慣調查</p>
-    <div class="flourish-frame" style="padding-bottom:50%">
-      <iframe src="https://flo.uri.sh/visualisation/29191365/embed"
-              title="飲用習慣"
-              frameborder="0" scrolling="no" allowfullscreen></iframe>
-    </div>
-  </div>
-  <div class="chart-block fade-up">
-    <div class="flourish-frame" style="padding-bottom:50%">
-      <iframe src="https://flo.uri.sh/visualisation/29195349/embed"
-              title="每周飲用次數"
-              frameborder="0" scrolling="no" allowfullscreen></iframe>
-    </div>
-  </div>
-  <div class="chart-block fade-up">
-    <div class="flourish-frame" style="padding-bottom:50%">
-      <iframe src="https://flo.uri.sh/visualisation/29195396/embed"
-              title="含糖飲料偏好"
-              frameborder="0" scrolling="no" allowfullscreen></iframe>
-    </div>
-    <p class="chart-source">資料來源：台灣健康聯盟 2025 食安五環 2.0 政策暨減糖新生活網路問卷調查。</p>
-  </div>
-
-  <!-- 國際比較 -->
-  <div class="body-copy fade-up">
-    <p>那是不是該用政策強制？近年來，全球已有超過50個國家或城市實施「糖稅」（含糖飲料稅），希望透過提高高糖飲料價格，降低民眾攝取量，同時促使業者調整配方、減少糖分。</p>
-  </div>
-
-  <div class="country-grid fade-up">
+  <div class="country-grid fade-up" style="max-width:var(--max-w-wide); margin:0 auto 2rem;">
     <div class="country-card">
       <p class="country-name">英國・泰國</p>
-      <p class="country-policy">依照飲料含糖量高低分級課稅，糖越多、稅越高，鼓勵廠商降低糖含量。</p>
+      <p class="country-policy">依照飲料含糖量高低分級課稅，糖越多、稅越高，廠商為了避開最高稅率會主動調整配方減糖。</p>
       <span class="country-tag">分級糖稅</span>
     </div>
     <div class="country-card">
@@ -786,92 +1062,284 @@ footer a { color: var(--caramel); text-decoration: none; }
       <span class="country-tag">分級＋廣告限制</span>
     </div>
     <div class="country-card">
-      <p class="country-name">台灣</p>
-      <p class="country-policy">目前尚未正式開徵糖稅，以減免無糖飲品貨物稅的方式間接鼓勵健康選擇。</p>
+      <p class="country-name">台灣（現況）</p>
+      <p class="country-policy">尚未正式開徵糖稅，從2026年開始推行針對瓶裝飲料的「無糖飲品免徵貨物稅」政策。</p>
       <span class="country-tag">貨物稅減免</span>
     </div>
   </div>
 
-  <div class="fact-box fade-up">
-    <strong>價格真的有效嗎？</strong><br>
-    根據調查，若含糖飲料價格提高5至10元，有高達 <strong style="color:#FAF3E0">83.6%</strong> 的受訪者表示「一定會」或「可能會」減少購買。價格機制確實可能影響消費行為。
+  <!-- 文字5 + 圖表5（左右並排） -->
+  <div class="split-row fade-up">
+    <div class="split-text">
+      <p>除了健康教育之外，「價格」其實也是影響民眾飲食選擇的重要因素。從調查結果來看，如果含糖飲料價格提高5至10元，有高達<strong>83.6%</strong>的受訪者表示會「一定會」或「可能會」減少購買。</p>
+
+      <p>另一方面，若政府或店家改以「獎勵」方式鼓勵健康選擇，效果似乎也相當明顯。調查顯示，只要購買無糖飲料就能享有折扣，有高達<strong>89.2%</strong>的受訪者表示願意改買無糖飲品——超過一半的人認為，只要優惠3至5元，就足以提高選擇無糖飲料的意願。</p>
+
+      <p>這也說明，改善高糖飲食習慣未必只能依靠「限制」或「禁止」，若能搭配價格調整與健康誘因，或許才是台灣未來健康政策值得努力的方向。</p>
+    </div>
+    <div class="stacked-charts">
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–3a　有多少人支持糖稅？</p>
+        <div class="flourish-frame" style="padding-bottom:65%;">
+          <iframe src="https://flo.uri.sh/visualisation/29195589/embed" title="支持糖稅" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–3b　無糖飲料便宜一點，會更想買嗎？</p>
+        <div class="flourish-frame" style="padding-bottom:65%;">
+          <iframe src="https://flo.uri.sh/visualisation/29260191/embed" title="無糖優惠意願" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–3c　便宜多少錢會想改買無糖？</p>
+        <div class="flourish-frame" style="padding-bottom:65%;">
+          <iframe src="https://flo.uri.sh/visualisation/29234753/embed" title="折扣門檻" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div>
+        <p class="chart-label" style="font-size:.65rem;">圖表 4–3d　價格提高5–10元，會減少購買嗎？</p>
+        <div class="flourish-frame" style="padding-bottom:65%;">
+          <iframe src="https://flo.uri.sh/visualisation/29234593/embed" title="價格影響" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+      </div>
+      <p class="chart-source">資料來源：台灣健康聯盟 2025 食安五環 2.0 減糖新生活問卷（n=1,113）。</p>
+    </div>
   </div>
 
+  <!-- 技術高牆 -->
+  <div class="body-copy fade-up" style="max-width:var(--max-w); margin:3rem auto 0;">
+    <p><strong>手搖飲規管的技術高牆：客製化與隱形糖分</strong></p>
+    <p>然而，要限制台灣最大糖分來源——手搖飲，仍面臨技術上的困難。吳玉琴坦言：「手搖飲每一家店的配方、加的東西都不一樣，你怎麼課？很難稽查。」此外，即便茶湯無糖，配料（如珍珠、芋圓）多在蜜製過程中加入大量糖分，讓「無糖」的定義在手搖飲操作中顯得複雜。</p>
+    <p>因此，吳玉琴建議效法環保杯政策，推動「無糖減價」，以提高民眾的選擇意願：「如果無糖減5塊、10塊，民眾增加購買無糖的意願會提高，這是在手搖飲政策中我們可以持續倡議的。」</p>
+    <p>而李建宏強調，除了外部價格導引，個人認知的提升才是核心：「有了知識，一般民眾才有信心去戒掉糖或減少攝取，這個能力（效能）才是最重要的。」</p>
+  </div>
 </section>
 
 
-<!-- ════════════ FOOTER ════════════ -->
+<!-- ════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
 <footer>
   <p class="team">製作團隊</p>
   <p>文字｜林岳雋　圖表｜林宸宇・陳彥蓉</p>
-  <p>監製｜待補　網頁設計製作｜待補</p>
-  <br>
-  <p style="color:rgba(232,213,163,0.4); font-size:0.72rem;">
-    資料來源：財政部統計資料庫・國民健康署・台灣健康聯盟・WHO Global Sugar Report
-  </p>
+  <p>監製｜待補　網頁製作｜待補</p>
+  <p class="small">資料來源：財政部統計資料庫・國民健康署・台灣健康聯盟・WHO Global Sugar Report・衛生福利部死因統計</p>
 </footer>
 
 
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════ -->
 <script>
-/* ── 珍珠泡泡生成 ── */
-(function() {
-  const container = document.getElementById('bubbles');
-  const sizes = [14, 20, 28, 36, 44, 18, 24];
-  for (let i = 0; i < 18; i++) {
-    const s = document.createElement('span');
-    const sz = sizes[i % sizes.length];
-    const left = Math.random() * 100;
-    const dur = 8 + Math.random() * 14;
-    const delay = Math.random() * 12;
-    s.style.cssText = `
-      width:${sz}px; height:${sz}px;
-      left:${left}%;
-      bottom:-${sz}px;
-      animation-duration:${dur}s;
-      animation-delay:${delay}s;
-    `;
-    container.appendChild(s);
-  }
-})();
+/* ─────────────────────────────────
+   LINE CHAT ANIMATION
+───────────────────────────────── */
+const messages = [
+  { side:'left',  name:'主管小A', color:'#25a244', avatar:'A', text:'大家今天辛苦了！下午茶我請客！來點飲料！' },
+  { side:'left',  name:'主管小A', color:'#25a244', avatar:'A', text:'（菜單圖片）', isMenu: true },
+  { side:'left',  name:'小B',     color:'#d4520a', avatar:'B', text:'謝謝主管！我要招牌珍奶 大杯 半糖少冰🙏' },
+  { side:'left',  name:'小C',     color:'#6c3cbf', avatar:'C', text:'多多綠茶 L 微糖微冰❤️' },
+  { side:'left',  name:'小D',     color:'#0a7abf', avatar:'D', text:'奶蓋烏龍加珍珠 大杯 微糖少冰 謝謝~' },
+  { side:'left',  name:'小E',     color:'#b07a0a', avatar:'E', text:'紅茶拿鐵 半糖微冰 大杯 👍👍' },
+  { side:'right', name:'你',      color:'#25a244', avatar:'你', text:'翡翠檸檬 大杯 無糖微冰' },
+];
 
-/* ── 影片淡入 ── */
-const vid = document.getElementById('hero-video');
-if (vid && !vid.src.includes('YOUR_DRINK_VIDEO')) {
-  vid.addEventListener('canplay', () => vid.classList.add('ready'));
-  vid.load();
+const typingTarget = '翡翠檸檬 大杯 半糖微冰';
+const chatBody = document.getElementById('chat-body');
+const inputText = document.getElementById('input-text');
+
+function makeAvatar(msg) {
+  const el = document.createElement('div');
+  el.className = 'avatar';
+  el.style.background = msg.color;
+  el.textContent = msg.avatar;
+  return el;
 }
 
-/* ── 標題淡入 ── */
-setTimeout(() => document.getElementById('hero-text').classList.add('show'), 300);
+function makeBubble(msg) {
+  const wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap';
+  if (msg.side === 'left') {
+    const sn = document.createElement('div');
+    sn.className = 'sender-name';
+    sn.textContent = msg.name;
+    wrap.appendChild(sn);
+  }
+  const b = document.createElement('div');
+  b.className = `bubble ${msg.side === 'right' ? 'you' : 'white'}`;
+  if (msg.isMenu) {
+    b.style.cssText = 'background:#eee; color:#888; font-size:.75rem; padding:14px 16px;';
+    b.textContent = '📋 本日飲料菜單';
+  } else {
+    b.textContent = msg.text;
+  }
+  wrap.appendChild(b);
+  return wrap;
+}
 
-/* ── Intersection Observer：捲動淡入 ── */
-const io = new IntersectionObserver((entries) => {
+function addMessage(msg, delay) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const row = document.createElement('div');
+      row.className = `msg ${msg.side === 'right' ? 'right' : ''}`;
+      row.appendChild(makeAvatar(msg));
+      row.appendChild(makeBubble(msg));
+      chatBody.appendChild(row);
+      chatBody.scrollTop = chatBody.scrollHeight;
+      requestAnimationFrame(() => row.classList.add('show'));
+      resolve();
+    }, delay);
+  });
+}
+
+async function runChat() {
+  // show typing then each message
+  let t = 600;
+  for (let i = 0; i < messages.length - 1; i++) {
+    await addMessage(messages[i], t);
+    t += 900 + Math.random() * 400;
+  }
+
+  // user typing animation
+  setTimeout(() => {
+    const cursor = document.getElementById('cursor');
+    let typed = '';
+    const fullText = typingTarget;
+    let idx = 0;
+
+    // first type "無糖"
+    const firstPart = '翡翠檸檬 大杯 無糖微冰';
+    const typeInterval = setInterval(() => {
+      if (idx < firstPart.length) {
+        typed += firstPart[idx];
+        inputText.textContent = typed;
+        idx++;
+      } else {
+        clearInterval(typeInterval);
+        // pause then delete 無糖 and type 半糖
+        setTimeout(() => {
+          let del = typed;
+          const deleteInterval = setInterval(() => {
+            if (del.endsWith('無糖微冰')) {
+              del = del.slice(0, -4);
+              inputText.textContent = del;
+            } else {
+              clearInterval(deleteInterval);
+              // type 半糖微冰
+              let add = del;
+              const addInterval = setInterval(() => {
+                const remaining = '半糖微冰';
+                const pos = add.length - del.length;
+                if (pos < remaining.length) {
+                  add += remaining[pos];
+                  inputText.textContent = add;
+                } else {
+                  clearInterval(addInterval);
+                  // send
+                  setTimeout(async () => {
+                    inputText.textContent = '';
+                    await addMessage({ side:'right', name:'你', color:'#25a244', avatar:'你', text:'翡翠檸檬 大杯 半糖微冰' }, 0);
+                    // freeze
+                    setTimeout(() => {
+                      const overlay = document.getElementById('freeze-overlay');
+                      overlay.classList.add('active');
+                    }, 800);
+                  }, 400);
+                }
+              }, 80);
+            }
+          }, 60);
+        }, 600);
+      }
+    }, 60);
+  }, t);
+}
+
+window.addEventListener('load', () => setTimeout(runChat, 1200));
+
+
+/* ─────────────────────────────────
+   STICKY BG SWITCHER
+───────────────────────────────── */
+const bgLayers = document.querySelectorAll('.bg-layer');
+const scrollBlocks = document.querySelectorAll('.scroll-block');
+const bigTitle = document.getElementById('big-title');
+
+const bgObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
-      e.target.classList.add('show');
-      io.unobserve(e.target);
+      const idx = parseInt(e.target.dataset.bg || '0');
+      bgLayers.forEach((l,i) => l.classList.toggle('active', i === idx));
+      // text inside
+      e.target.querySelector('[data-scroll-text]')?.classList.add('show');
     }
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.5 });
 
-document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+scrollBlocks.forEach(b => bgObserver.observe(b));
 
-/* ── 路徑步驟依序淡入 ── */
-const stepIO = new IntersectionObserver((entries) => {
+// title reveal
+const titleObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) bigTitle.classList.add('show');
+  });
+}, { threshold: 0.3 });
+titleObserver.observe(document.getElementById('title-reveal'));
+
+
+/* ─────────────────────────────────
+   UNIVERSAL FADE-UP OBSERVER
+───────────────────────────────── */
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('show'); fadeObserver.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
+
+
+/* ─────────────────────────────────
+   PATHWAY STEPS
+───────────────────────────────── */
+const stepObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
-      const steps = e.target.closest('.pathway')?.querySelectorAll('.pathway-step') || [];
-      steps.forEach((s, i) => {
-        setTimeout(() => s.classList.add('show'), i * 180);
-      });
-      stepIO.unobserve(e.target);
+      const all = document.querySelectorAll('.pathway-step');
+      all.forEach((s,i) => setTimeout(() => s.classList.add('show'), i * 200));
+      stepObserver.disconnect();
     }
   });
 }, { threshold: 0.1 });
-
 const firstStep = document.querySelector('.pathway-step');
-if (firstStep) stepIO.observe(firstStep);
-</script>
+if (firstStep) stepObserver.observe(firstStep);
 
+
+/* ─────────────────────────────────
+   CARD DECKS (螞蟻人 + 店員)
+───────────────────────────────── */
+function initDeck(deckId, prevId, nextId, dotsId) {
+  const slides = document.querySelectorAll(`#${deckId} .card-slide`);
+  const dots   = document.querySelectorAll(`#${dotsId} .card-dot`);
+  const prev   = document.getElementById(prevId);
+  const next   = document.getElementById(nextId);
+  let cur = 0;
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur = n;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+    prev.disabled = cur === 0;
+    next.disabled = cur === slides.length - 1;
+  }
+
+  prev.addEventListener('click', () => { if (cur > 0) go(cur - 1); });
+  next.addEventListener('click', () => { if (cur < slides.length - 1) go(cur + 1); });
+}
+
+initDeck('ant-deck',   'ant-prev',   'ant-next',   'ant-dots');
+initDeck('staff-deck', 'staff-prev', 'staff-next', 'staff-dots');
+</script>
 </body>
 </html>
