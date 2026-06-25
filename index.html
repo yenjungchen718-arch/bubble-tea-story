@@ -16,7 +16,14 @@ html { scroll-behavior:smooth; }
   --max-w:740px; --max-w-wide:960px;
 }
 
-body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif TC',serif; font-size:18px; line-height:1.95; overflow-x:hidden; }
+body{
+  background-image:url('飲料.png');
+  background-size:cover;
+  background-position:center top;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  color:var(--text-body); font-family:'Noto Serif TC',serif; font-size:18px; line-height:1.95; overflow-x:hidden;
+}
 
 .fade-up{ opacity:0; transform:translateY(28px); transition:opacity .85s ease, transform .85s ease; }
 .fade-up.show{ opacity:1; transform:translateY(0); }
@@ -206,7 +213,7 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
 }
 
 /* 飲料街圖(左) + 文字/圖表(右)：同一捲動軸視差同步 */
-#street-and-content{ position:relative; background:var(--warm-white); }
+#street-and-content{ position:relative; background:transparent; }
 .sc-sticky{ position:sticky; top:0; height:100vh; display:flex; align-items:center; padding:0 5%; gap:3%; }
 
 /* 左側：飲料街圖（單純切換，無淡入淡出動畫） */
@@ -258,25 +265,16 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
 
 /* ════════════════════════════════════════
    PART 3：但是這些手搖飲健康嗎？
-   整章統一背景 #fcf9cd
+   背景統一繼承 body 的飲料.png（不額外設色、不視差位移）
 ════════════════════════════════════════ */
 #drink-health-chapter{
-  background:#fcf9cd;
+  background:transparent;
   position:relative;
 }
 
-/* 視差滑動子區（飲料1-7背景視差） */
+/* 視差滑動子區（已移除視差位移，純捲動內容切換） */
 #drink-parallax{
   position:relative;
-}
-.dp-bg-layer{
-  position:absolute;
-  top:-8%; left:-4%; right:-4%; bottom:-8%;
-  width:108%; height:116%;
-  background-image:url('飲料.png');
-  background-size:cover;
-  background-position:center;
-  will-change:transform;
 }
 
 .dp-sticky{
@@ -336,7 +334,7 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
    背景同上一章節（飲料.png 視差捲動）
 ════════════════════════════════════════ */
 #harm-chapter{
-  background:#fcf9cd;
+  background:transparent;
   position:relative;
 }
 
@@ -416,47 +414,39 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
 .hp-chart-block .flourish-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
 .hp-chart-block .chart-source{ margin-top:.5rem; font-family:'Noto Sans TC',sans-serif; font-size:.68rem; color:var(--text-muted); }
 
-/* 專家對話框：圓形頭像 + 對話泡泡 */
+/* 專家對話框：圓形頭像 + 對話泡泡（精緊卡片風格） */
 .expert-bubble-block{
-  display:flex; align-items:flex-start; gap:1.2rem;
-  max-width:680px; margin:0 auto;
+  display:flex; align-items:center; gap:.85rem;
+  max-width:520px; margin:0 auto;
+  background:#fff;
+  border:1px solid rgba(181,83,15,.35);
+  border-radius:10px;
+  padding:.9rem 1.1rem;
+  box-shadow:0 4px 16px rgba(59,37,7,.08);
 }
 .expert-avatar-wrap{
-  flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:.5rem;
+  flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:.35rem;
+  width:58px;
 }
-.expert-avatar-wrap svg{ width:84px; height:84px; }
+.expert-avatar-wrap svg{ width:52px; height:52px; }
 .expert-name-tag{
-  font-family:'Noto Sans TC',sans-serif; font-size:.66rem; font-weight:700;
-  color:var(--brown); text-align:center; line-height:1.4; white-space:nowrap;
+  font-family:'Noto Sans TC',sans-serif; font-size:.56rem; font-weight:700;
+  color:var(--text-muted); text-align:center; line-height:1.3;
 }
 .expert-bubble{
   position:relative;
-  background:#fff;
-  border:2px solid #b5530f;
-  border-radius:14px;
-  padding:1.1rem 1.4rem;
-  font-size:.95rem; line-height:1.85; color:var(--text-body);
+  background:rgba(181,83,15,.05);
+  border-left:2.5px solid #b5530f;
+  border-radius:0 8px 8px 0;
+  padding:.7rem .9rem;
+  font-size:.84rem; line-height:1.6; color:var(--text-body);
   flex:1;
 }
-.expert-bubble::before{
-  content:'';
-  position:absolute; left:-10px; top:22px;
-  width:0; height:0;
-  border-top:8px solid transparent;
-  border-bottom:8px solid transparent;
-  border-right:10px solid #b5530f;
-}
-.expert-bubble::after{
-  content:'';
-  position:absolute; left:-7px; top:22px;
-  width:0; height:0;
-  border-top:8px solid transparent;
-  border-bottom:8px solid transparent;
-  border-right:10px solid #fff;
-}
 @media(max-width:600px){
-  .expert-bubble-block{ flex-direction:column; align-items:center; text-align:center; }
-  .expert-bubble::before, .expert-bubble::after{ display:none; }
+  .expert-bubble-block{ padding:.8rem .9rem; gap:.7rem; }
+  .expert-avatar-wrap{ width:46px; }
+  .expert-avatar-wrap svg{ width:42px; height:42px; }
+  .expert-bubble{ font-size:.8rem; }
 }
 </style>
 </head>
@@ -593,7 +583,7 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
 
 <!-- ════════════════════════════════════════
      PART 3：但是這些手搖飲健康嗎？
-     整章統一背景 #fcf9cd，從飲料1-7視差區一路延伸到
+     背景統一繼承 body 的飲料.png，從視差區一路延伸到
      大標問句、散點圖、王先生資料卡
 ════════════════════════════════════════ -->
 <section id="drink-health-chapter">
@@ -601,9 +591,6 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
   <!-- 視差滑動子區：飲料(1)~(7)背景＋固定置中內容，依序切換 -->
   <div id="drink-parallax">
     <div class="dp-sticky">
-
-      <!-- 背景視差圖層：單張已排版好的飲料背景圖 -->
-      <div class="dp-bg-layer" id="dp-bg-layer"></div>
 
       <!-- 內容區1：大標問句 -->
       <div class="dp-text-fixed active" id="dp-text-1">
@@ -781,7 +768,7 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
               <circle cx="58" cy="44" r="2" fill="#3a2a1a"/>
               <path d="M 44 52 Q 50 56 56 52" stroke="#a06840" stroke-width="1.5" fill="none" stroke-linecap="round"/>
             </svg>
-            <p class="expert-name-tag">中華民國糖尿病學會<br>秘書長　嚴愛文</p>
+            <p class="expert-name-tag">糖尿病學會<br>秘書長<br>嚴愛文</p>
           </div>
           <div class="expert-bubble">
             「細胞如果吃太飽就會壞死，讓免疫細胞釋出發炎物質來清除它們。釋出這些發炎物質後，全身的發炎指數都會提升。」
@@ -817,7 +804,7 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
               <path d="M 44 54 Q 50 57 56 54" stroke="#8a5a3a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
               <rect x="38" y="30" width="24" height="8" rx="2" fill="#777" opacity="0.3"/>
             </svg>
-            <p class="expert-name-tag">成大醫院<br>糖尿病防治中心主任　歐弘毅</p>
+            <p class="expert-name-tag">成大醫院<br>防治中心主任<br>歐弘毅</p>
           </div>
           <div class="expert-bubble">
             這些代謝問題最終可能會連動到「冠狀動脈心臟病、中風、腎臟病」等嚴重併發症。
@@ -845,7 +832,7 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
               <circle cx="58" cy="44" r="2" fill="#3a2a1a"/>
               <path d="M 44 52 Q 50 56 56 52" stroke="#a06840" stroke-width="1.5" fill="none" stroke-linecap="round"/>
             </svg>
-            <p class="expert-name-tag">日日營養<br>營養師　蔡佳穎</p>
+            <p class="expert-name-tag">日日營養<br>營養師<br>蔡佳穎</p>
           </div>
           <div class="expert-bubble">
             「很多人不喝酒，但還是會有脂肪肝，就是因為攝取太多果糖。」也就是說，喝進去的過量糖分，最終很可能變成囤積在肝臟和血管裡的脂肪。
@@ -1189,13 +1176,12 @@ updateStreetAndContent();
 
 
 /* ════════════════════════════════════════
-   PART 3：但是這些手搖飲健康嗎？（視差滑動區）
-   - 背景：單張已排版好的飲料背景圖，隨捲動產生輕微整體視差位移
+   PART 3：但是這些手搖飲健康嗎？（捲動內容切換區）
+   - 背景：繼承 body 的飲料.png，固定不位移
    - 內容區：固定置中，依捲動進度（8段）依序切換
      順序：大標問句→品類統計→散點圖→WHO建議→拉糖公式→資料卡→半糖微糖→配料文字
 ════════════════════════════════════════ */
 const dpSection = document.getElementById('drink-parallax');
-const dpBgLayer = document.getElementById('dp-bg-layer');
 const dpTextBlocks = [
   document.getElementById('dp-text-1'),
   document.getElementById('dp-text-2'),
@@ -1213,10 +1199,6 @@ function updateDrinkParallax(){
   const scrolled = Math.min(Math.max(-rect.top, 0), total);
   const progress = total > 0 ? scrolled / total : 0; // 0~1
 
-  // 背景圖輕微整體視差位移（垂直方向，幅度控制在合理範圍內避免露出邊緣）
-  const parallaxOffset = progress * 60; // 位移幅度(px)，輕微即可
-  dpBgLayer.style.transform = `translateY(-${parallaxOffset}px)`;
-
   // 內容區：依進度切八段顯示對應內容（0~1平均分配）
   const segCount = dpTextBlocks.length;
   const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
@@ -1231,7 +1213,7 @@ updateDrinkParallax();
 
 /* ════════════════════════════════════════
    PART 4：所以手搖為何有害？
-   - 背景同上一章節（沿用 #fcf9cd，無額外視差圖層）
+   - 背景統一繼承 body 的飲料.png（不額外視差位移）
    - 內容區：固定置中，依捲動進度（31段）依序切換
 ════════════════════════════════════════ */
 const hpSection = document.getElementById('harm-parallax');
