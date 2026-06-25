@@ -256,7 +256,81 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
 .expert-box{ margin:1.5rem 0; padding:1rem 1.2rem; background:rgba(59,37,7,.06); border-left:3px solid var(--caramel); border-radius:0 4px 4px 0; font-size:.88rem; font-family:'Noto Sans TC',sans-serif; line-height:1.75; }
 .expert-box .expert-name{ font-weight:700; color:var(--brown); font-size:.8rem; margin-bottom:.3rem; }
 
-@media(max-width:600px){ body{ font-size:16px; } }
+/* ════════════════════════════════════════
+   PART 3：但是這些手搖飲健康嗎？
+   整章統一背景 #fcf9cd
+════════════════════════════════════════ */
+#drink-health-chapter{
+  background:#fcf9cd;
+  position:relative;
+}
+
+/* 視差滑動子區（飲料1-7背景視差） */
+#drink-parallax{
+  position:relative;
+}
+.dp-bg-layer{
+  position:absolute;
+  top:-8%; left:-4%; right:-4%; bottom:-8%;
+  width:108%; height:116%;
+  background-image:url('飲料.png');
+  background-size:cover;
+  background-position:center;
+  will-change:transform;
+}
+
+.dp-sticky{
+  position:sticky; top:0; height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:0 1.5rem;
+}
+
+/* 固定置中文字方塊 */
+.dp-text-fixed{
+  position:relative; z-index:5;
+  max-width:680px; width:100%;
+  display:none;
+  opacity:0; transition:opacity .4s ease;
+}
+.dp-text-fixed.active{ display:block; opacity:1; }
+.dp-textbox{
+  border:2.5px solid #b5530f;
+  border-radius:4px;
+  background:rgba(255,253,245,.94);
+  padding:1.6rem 1.8rem;
+  text-align:left;
+  font-size:clamp(.92rem,1.8vw,1.1rem);
+  line-height:1.95;
+  color:var(--text-body);
+}
+.dp-textbox strong{ color:#b5530f; }
+
+.dp-spacer{ height:960vh; }
+
+/* 大標問句（內容區1，與其他文字方塊一樣置中） */
+.dp-question{
+  font-weight:700; color:#111; font-size:clamp(1.3rem,3.2vw,1.9rem);
+  font-family:'Noto Serif TC',serif;
+  text-align:center;
+}
+
+/* 散點圖卡片（內容區3）：完整比例呈現，不可切到 */
+.dp-chart-block{
+  background:rgba(255,253,245,.96);
+  border:2.5px solid #b5530f;
+  border-radius:4px;
+  padding:1.6rem 1.8rem;
+  max-width:760px;
+}
+.dp-chart-block .chart-label{ font-family:'Noto Sans TC',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.16em; color:#b5530f; text-transform:uppercase; margin-bottom:.6rem; }
+.dp-chart-block .chart-desc{ font-family:'Noto Serif TC',serif; font-size:1.05rem; font-weight:700; color:var(--brown); margin-bottom:.8rem; }
+.dp-chart-block .flourish-frame{ position:relative; width:100%; padding-bottom:62%; background:var(--warm-white); border:1px solid var(--pearl); border-radius:6px; overflow:hidden; }
+.dp-chart-block .flourish-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+.dp-chart-block .chart-source{ margin-top:.5rem; font-family:'Noto Sans TC',sans-serif; font-size:.68rem; color:var(--text-muted); }
+
+/* 王先生資料卡（內容區6）：完整比例呈現，不可切到 */
+.dp-card-block{ max-width:560px; text-align:center; }
+.dp-card-block img{ width:100%; height:auto; display:block; border-radius:8px; box-shadow:0 12px 40px rgba(0,0,0,.12); }
 </style>
 </head>
 <body>
@@ -387,6 +461,82 @@ body{ background:var(--cream); color:var(--text-body); font-family:'Noto Serif T
       </div>
     </div>
   </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     PART 3：但是這些手搖飲健康嗎？
+     整章統一背景 #fcf9cd，從飲料1-7視差區一路延伸到
+     大標問句、散點圖、王先生資料卡
+════════════════════════════════════════ -->
+<section id="drink-health-chapter">
+
+  <!-- 視差滑動子區：飲料(1)~(7)背景＋固定置中內容，依序切換 -->
+  <div id="drink-parallax">
+    <div class="dp-sticky">
+
+      <!-- 背景視差圖層：單張已排版好的飲料背景圖 -->
+      <div class="dp-bg-layer" id="dp-bg-layer"></div>
+
+      <!-- 內容區1：大標問句 -->
+      <div class="dp-text-fixed active" id="dp-text-1">
+        <p class="dp-question">但是這些手搖飲健康嗎？</p>
+      </div>
+
+      <!-- 內容區2：品類統計文字 -->
+      <div class="dp-text-fixed" id="dp-text-2">
+        <div class="dp-textbox">
+          統計全台八大連鎖手搖飲品牌的熱賣前五名品項，共計 40 款熱門飲品。從品類分布來看，果茶與調味茶類占 <strong>35%</strong>，奶類飲品（包含奶茶與鮮奶拿鐵類）占 <strong>30%</strong>，加入珍珠、粉粿等配料的特調類飲品占 <strong>17.5%</strong>，其餘則為原茶類飲品。
+        </div>
+      </div>
+
+      <!-- 內容區3：散點圖（完整比例呈現，不可切到） -->
+      <div class="dp-text-fixed dp-chart-block" id="dp-text-3">
+        <p class="chart-label">圖表二</p>
+        <p class="chart-desc">前10名飲料店品項散點圖</p>
+        <div class="flourish-frame">
+          <iframe src="https://flo.uri.sh/visualisation/28595723/embed" title="前10名飲料店品項散點圖" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+        <p class="chart-source">資料來源：各品牌官方營養標示。</p>
+      </div>
+
+      <!-- 內容區4：WHO建議文字 -->
+      <div class="dp-text-fixed" id="dp-text-4">
+        <div class="dp-textbox">
+          根據世界衛生組織（WHO）建議，每日精緻糖攝取量應低於總熱量的 10%。以成人每天攝取 2000 大卡計算，則糖攝取量不應超過 <strong>50 克</strong>。然而，市售手搖飲的含糖量往往輕易突破這個健康紅線，例如50嵐的大杯全糖的四季春珍波椰，就大約含有<strong>65g</strong>的糖。
+        </div>
+      </div>
+
+      <!-- 內容區5：拉糖公式文字 -->
+      <div class="dp-text-fixed" id="dp-text-5">
+        <div class="dp-textbox">
+          有多年飲料店打工經驗的王先生（匿名）表示，以50嵐訓練員工量測糖量的「拉糖」邏輯與甜度級距計算方式推估，大杯全糖飲料的基本添加糖量為「兩湯匙」，以每匙約 <strong>27 克</strong>計算，光是添加糖就佔了 <strong>54 克</strong>，另外 <strong>11 克</strong>則是來自珍珠、波霸與椰果等配料在蜜製與浸泡過程中所吸附的糖分。
+        </div>
+      </div>
+
+      <!-- 內容區6：王先生店員資料卡（完整比例呈現，不可切到） -->
+      <div class="dp-text-fixed dp-card-block" id="dp-text-6">
+        <img src="王先生店員資料卡.jpg" alt="王先生店員資料卡">
+      </div>
+
+      <!-- 內容區7：半糖微糖文字 -->
+      <div class="dp-text-fixed" id="dp-text-7">
+        <div class="dp-textbox">
+          那如果消費者是點半糖或微糖呢？根據店內以基本單數乘以甜度比例（半糖為 0.5，微糖為 0.3）的公式推估，半糖實際上仍會喝下 <strong>27 克</strong>添加糖，即便選擇微糖也含有約 <strong>16.2 克</strong>。而光是這杯微糖飲料的糖分，就已經佔掉每日精緻糖建議攝取上限（50克）的 <strong>32.4%</strong>，幾乎耗盡了一餐正餐應有的糖分配額，如果又攝取了含糖的麵包、醬料或甜點，糖分攝取便會立刻超標。
+        </div>
+      </div>
+
+      <!-- 內容區8：配料文字 -->
+      <div class="dp-text-fixed" id="dp-text-8">
+        <div class="dp-textbox">
+          成大醫院糖尿病防治中心主任歐弘毅也提醒，手搖飲點微糖就幾乎不甜的迷思常讓消費者放鬆戒心，因為除了茶湯本身添加的糖漿，手搖飲中的配料更堆疊了額外的糖量。蔡佳穎也指出，配料也是影響糖分含量的關鍵因素：「像是珍珠本身在製作與烹煮過程中就會用到糖，有些店家更標榜用黑糖去炒，糖量會一直往上堆疊。」
+        </div>
+      </div>
+
+    </div>
+    <div class="dp-spacer"></div>
+  </div>
+
 </section>
 
 
@@ -602,6 +752,47 @@ function updateStreetAndContent(){
 }
 window.addEventListener('scroll', updateStreetAndContent, { passive:true });
 updateStreetAndContent();
+
+
+/* ════════════════════════════════════════
+   PART 3：但是這些手搖飲健康嗎？（視差滑動區）
+   - 背景：單張已排版好的飲料背景圖，隨捲動產生輕微整體視差位移
+   - 內容區：固定置中，依捲動進度（8段）依序切換
+     順序：大標問句→品類統計→散點圖→WHO建議→拉糖公式→資料卡→半糖微糖→配料文字
+════════════════════════════════════════ */
+const dpSection = document.getElementById('drink-parallax');
+const dpBgLayer = document.getElementById('dp-bg-layer');
+const dpTextBlocks = [
+  document.getElementById('dp-text-1'),
+  document.getElementById('dp-text-2'),
+  document.getElementById('dp-text-3'),
+  document.getElementById('dp-text-4'),
+  document.getElementById('dp-text-5'),
+  document.getElementById('dp-text-6'),
+  document.getElementById('dp-text-7'),
+  document.getElementById('dp-text-8'),
+];
+
+function updateDrinkParallax(){
+  const rect = dpSection.getBoundingClientRect();
+  const total = dpSection.offsetHeight - window.innerHeight;
+  const scrolled = Math.min(Math.max(-rect.top, 0), total);
+  const progress = total > 0 ? scrolled / total : 0; // 0~1
+
+  // 背景圖輕微整體視差位移（垂直方向，幅度控制在合理範圍內避免露出邊緣）
+  const parallaxOffset = progress * 60; // 位移幅度(px)，輕微即可
+  dpBgLayer.style.transform = `translateY(-${parallaxOffset}px)`;
+
+  // 內容區：依進度切八段顯示對應內容（0~1平均分配）
+  const segCount = dpTextBlocks.length;
+  const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
+  dpTextBlocks.forEach((block, i)=>{
+    if(i === currentSeg) block.classList.add('active');
+    else block.classList.remove('active');
+  });
+}
+window.addEventListener('scroll', updateDrinkParallax, { passive:true });
+updateDrinkParallax();
 
 
 </script>
