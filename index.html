@@ -448,6 +448,100 @@ body{
   .expert-avatar-wrap svg{ width:42px; height:42px; }
   .expert-bubble{ font-size:.8rem; }
 }
+
+/* ════════════════════════════════════════
+   PART 5：為何戒不掉手搖？／戒掉解方？
+   背景統一繼承 body 的飲料.png（沿用Part4視覺風格）
+════════════════════════════════════════ */
+#quit-chapter, #solution-chapter{
+  background:transparent;
+  position:relative;
+}
+
+#quit-parallax, #solution-parallax{ position:relative; }
+.qd-sticky{
+  position:sticky; top:0; height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:0 1.5rem;
+}
+.qd-spacer{ height:1400vh; } /* 預設值，個別章節由下方覆寫 */
+#quit-parallax .qd-spacer{ height:1400vh; }  /* 對應25段內容，每段約56vh */
+#solution-parallax .qd-spacer{ height:1800vh; }  /* 對應32段內容，每段約56vh */
+
+/* 內容文字方塊：沿用深橘框線置左文字風格 */
+.qd-block{
+  position:relative; z-index:5;
+  max-width:680px; width:100%;
+  display:none;
+  opacity:0; transition:opacity .4s ease;
+}
+.qd-block.active{ display:block; opacity:1; }
+.qd-textbox{
+  border:2.5px solid #b5530f;
+  border-radius:4px;
+  background:rgba(255,253,245,.94);
+  padding:1.6rem 1.8rem;
+  text-align:left;
+  font-size:clamp(.92rem,1.8vw,1.1rem);
+  line-height:1.95;
+  color:var(--text-body);
+}
+.qd-textbox strong{ color:#b5530f; }
+
+/* 大標問句／子標 */
+.qd-question{
+  font-weight:700; color:#111; font-size:clamp(1.3rem,3.2vw,1.9rem);
+  font-family:'Noto Serif TC',serif; text-align:center;
+}
+.qd-subheading{
+  font-weight:700; color:#555; font-size:clamp(1.1rem,2.6vw,1.5rem);
+  font-family:'Noto Serif TC',serif; text-align:center;
+}
+
+/* 資料卡：固定顯示在畫面左邊，跟隨其所屬文字段一起出現 */
+.qd-with-card{
+  display:flex; align-items:center; gap:2rem; justify-content:center;
+  max-width:960px; margin:0 auto;
+}
+.qd-card-side{ flex-shrink:0; width:240px; }
+.qd-card-side img{
+  width:100%; height:auto; display:block;
+  border-radius:8px; box-shadow:0 12px 36px rgba(0,0,0,.14);
+}
+.qd-with-card .qd-textbox{ flex:1; max-width:480px; }
+@media(max-width:760px){
+  .qd-with-card{ flex-direction:column; }
+  .qd-card-side{ width:180px; }
+}
+
+/* 完整圖片呈現（不可切到） */
+.qd-fullimg{ max-width:560px; text-align:center; }
+.qd-fullimg img{ width:100%; height:auto; display:block; border-radius:8px; }
+
+/* Flourish圖表卡（不可切到，完整比例） */
+.qd-chart-block{
+  background:rgba(255,253,245,.96);
+  border:2.5px solid #b5530f;
+  border-radius:4px;
+  padding:1.6rem 1.8rem;
+  max-width:760px;
+}
+.qd-chart-block .chart-label{ font-family:'Noto Sans TC',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.16em; color:#b5530f; text-transform:uppercase; margin-bottom:.6rem; }
+.qd-chart-block .chart-desc{ font-family:'Noto Serif TC',serif; font-size:1.05rem; font-weight:700; color:var(--brown); margin-bottom:.8rem; }
+.qd-chart-block .flourish-frame{ position:relative; width:100%; padding-bottom:62%; background:var(--warm-white); border:1px solid var(--pearl); border-radius:6px; overflow:hidden; }
+.qd-chart-block .flourish-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+.qd-chart-block .chart-source{ margin-top:.5rem; font-family:'Noto Sans TC',sans-serif; font-size:.68rem; color:var(--text-muted); }
+
+/* 多圖表切換按鈕（tab） */
+.qd-tab-buttons{ display:flex; gap:.5rem; margin-bottom:1rem; flex-wrap:wrap; justify-content:center; }
+.qd-tab-btn{
+  font-family:'Noto Sans TC',sans-serif; font-size:.74rem; font-weight:700;
+  padding:.4rem .9rem; border-radius:18px; border:1.5px solid #b5530f;
+  background:#fff; color:#b5530f; cursor:pointer; transition:all .2s;
+}
+.qd-tab-btn.active{ background:#b5530f; color:#fff; }
+.qd-tab-panel{ display:none; }
+.qd-tab-panel.active{ display:block; }
 </style>
 </head>
 <body>
@@ -970,6 +1064,544 @@ body{
 
 
 
+<!-- ════════════════════════════════════════
+     PART 5：為何戒不掉手搖？
+     背景統一繼承 body 的飲料.png
+════════════════════════════════════════ -->
+<section id="quit-chapter">
+  <div id="quit-parallax">
+    <div class="qd-sticky">
+
+      <!-- 內容區1：大標問句 -->
+      <div class="qd-block active" id="qd-1">
+        <p class="qd-question">為何戒不掉手搖？</p>
+      </div>
+
+      <!-- 內容區2：黃蓁言開場引言 -->
+      <div class="qd-block" id="qd-2">
+        <div class="qd-textbox">
+          「明明知道喝太多不好，但還是會很想買。」21歲的大學生黃蓁言的一句話，道出許多手搖飲愛好者共同的矛盾。
+        </div>
+      </div>
+
+      <!-- 內容區3：黃蓁言背景說明（含資料卡） -->
+      <div class="qd-block" id="qd-3">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="黃蓁言資料卡.png" alt="黃蓁言資料卡">
+          </div>
+          <div class="qd-textbox">
+            對她而言，手搖飲早已不只是解渴飲料。課業壓力繁重，飲料店又在校園周邊隨處可見，一杯手搖飲便成為生活中唾手可得的慰藉。從偶爾買來犒賞自己，到幾乎每天一杯，喝手搖飲已經成為她面對壓力時的固定儀式。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區4：黃蓁言罪惡感（含資料卡） -->
+      <div class="qd-block" id="qd-4">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="黃蓁言資料卡.png" alt="黃蓁言資料卡">
+          </div>
+          <div class="qd-textbox">
+            黃蓁言覺得喝飲料的快樂，往往也伴隨著罪惡感。「喝的時候真的很療癒，但喝完之後又會覺得有點空虛，好像那種快樂一下子就不見了。」
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區5：Rachel背景介紹 -->
+      <div class="qd-block" id="qd-5">
+        <div class="qd-textbox">
+          類似的情況，也出現在29歲的上班族Rachel（化名）身上。<br><br>一年前轉職到電商產業後，她每天都得面對源源不絕的企劃提案與業績壓力。高強度的工作節奏，讓她逐漸養成每天一杯手搖飲的習慣。
+        </div>
+      </div>
+
+      <!-- 內容區6：Rachel辦公室文化 -->
+      <div class="qd-block" id="qd-6">
+        <div class="qd-textbox">
+          每天上午11點左右，Rachel（化名）的辦公室群組總會出現同事分享的Uber Eats團購連結。對Rachel（化名）來說，點飲料更像是一種辦公室文化中的社交儀式。<br><br>「大家都在點，如果自己不跟，好像少了什麼。」她笑著說。
+        </div>
+      </div>
+
+      <!-- 內容區7：Rachel續命水引言（含資料卡） -->
+      <div class="qd-block" id="qd-7">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="Rachel資料卡.png" alt="Rachel資料卡">
+          </div>
+          <div class="qd-textbox">
+            除了社交因素外，手搖飲也是她面對工作壓力時的重要出口。Rachel（化名）形容，手搖飲就像自己的「續命水」。「甜的東西真的會讓心情變比較好，尤其工作壓力很大的時候，喝下去會有一種被安慰到的感覺。」她說，「有時候就是靠那一杯飲料，讓自己可以再撐一下，撐到下班。」
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區8：糖操控大腦的轉折句 -->
+      <div class="qd-block" id="qd-8">
+        <div class="qd-textbox">
+          許多人都明白含糖飲料喝太多對健康不好，但當情緒低落時，為什麼還是難以抗拒「想買一杯」的衝動？這並非意志力薄弱，而是我們的大腦被糖操控了。
+        </div>
+      </div>
+
+      <!-- 內容區9：兩種獎勵機制子標 -->
+      <div class="qd-block" id="qd-9">
+        <p class="qd-subheading">手搖裡的糖有兩種獎勵機制</p>
+      </div>
+
+      <!-- 內容區10：李建宏-能量管理系統 -->
+      <div class="qd-block" id="qd-10">
+        <div class="qd-textbox">
+          高雄醫學大學公共衛生學系教授李建宏指出，糖分會透過不同生理機制影響人的進食行為。<br><br>李建宏解釋，糖進入人體後，首先會啟動身體的「能量管理系統」，糖分進入腸道後，除了作為能量來源被吸收外，也會刺激腸道分泌相關激素。
+        </div>
+      </div>
+
+      <!-- 內容區11：李建宏-腸泌素引言 -->
+      <div class="qd-block" id="qd-11">
+        <div class="qd-textbox">
+          「（糖）吸收完之後就會影響到腸泌素的分泌，腸泌素經過迷走神經會傳遞到腦部的獎賞相關路徑。像是葡萄糖的訊號會告訴大腦：『這個已經有能量攝取了，你不要再多吃了』，藉此控制食慾。」李建宏詳細說明，這種機制能協助調節飽足感與飢餓感，讓身體維持正常的能量平衡，避免攝取過多或過少的食物。
+        </div>
+      </div>
+
+      <!-- 內容區12：獎賞系統說明 -->
+      <div class="qd-block" id="qd-12">
+        <div class="qd-textbox">
+          但糖分不只能讓我們的身體產生能量。李建宏進一步表示，糖同時也會刺激人體的「獎賞系統」。當甜味刺激舌頭上的味蕾，大腦會釋放多巴胺產生愉悅感。而糖分來到腸道後，也會觸發的多巴胺釋放，「多巴胺除了讓人愉悅外，也具有所謂的『訓練』作用，也就是腦部的獎賞反應訓練。」，李建宏說。
+        </div>
+      </div>
+
+      <!-- 內容區13：蔡佳穎-情緒連結引言 -->
+      <div class="qd-block" id="qd-13">
+        <div class="qd-textbox">
+          久而久之，即便身體的能量攝取已經足夠，大腦還是會將特定的情緒狀態與攝取糖分的愉悅經驗連結。日日營養的營養師蔡佳穎說：「大腦會覺得吃甜食就是會快樂，這也是為什麼我們在心情不好或壓力大時，會想去找甜的吃，因為大腦會告訴自己『上次吃了這個之後心情很好』。」
+        </div>
+      </div>
+
+      <!-- 內容區14：惡性循環警示 -->
+      <div class="qd-block" id="qd-14">
+        <div class="qd-textbox">
+          但若長期讓高糖食物持續刺激大腦獎賞系統，便容易形成惡性循環。李建宏指出，即便不等同於毒品成癮，但這種依賴模式，會讓人在無意識中攝取過多糖分，成為健康的一大隱憂。
+        </div>
+      </div>
+
+      <!-- 內容區15：人體獎勵機制路線圖 -->
+      <div class="qd-block" id="qd-15">
+        <div class="qd-fullimg">
+          <img src="吃糖的人體獎勵機制路線圖.png" alt="吃糖的人體獎勵機制路線圖">
+        </div>
+      </div>
+
+      <!-- 內容區16：你注意過糖嗎？轉折句 -->
+      <div class="qd-block" id="qd-16">
+        <div class="qd-textbox">
+          但你在點手搖的時候會注意喝下什麼糖嗎？<br><br>然而，一般人在喝飲料的時後，很少思考自己喝下多少糖。<br><br>曾在連鎖手搖飲店工作兩年的A先生（化名），便是在親眼看見加入糖漿的過程後，對手搖飲徹底改觀。
+        </div>
+      </div>
+
+      <!-- 內容區17：A先生背景（含資料卡） -->
+      <div class="qd-block" id="qd-17">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="A先生資料卡.png" alt="A先生資料卡">
+          </div>
+          <div class="qd-textbox">
+            當時正值碩士一年級的A先生（化名），因為愛喝手搖飲，便決定到手搖飲店打工。但這段經歷最讓他印象深刻的並不是茶香，而是手搖飲的果糖添加量。「培訓的時候第一次看到全糖的糖量，真的很震撼，那感覺根本就是在喝糖水。」他說。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區18：A先生果糖機聲音衝擊（含資料卡） -->
+      <div class="qd-block" id="qd-18">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="A先生資料卡.png" alt="A先生資料卡">
+          </div>
+          <div class="qd-textbox">
+            這種來自第一線的視覺衝擊，徹底改變了他對甜度的認知，「在搖茶的時候，你會聽果糖機出來的聲音，只要按到全糖或少糖（七分糖），糖漿流下的時間長到心裡發毛。」A先生（匿名）回憶，「我常想，這杯飲料到底是要多甜，才能下這麼多糖量？」
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區19：A先生改變飲食習慣（含資料卡） -->
+      <div class="qd-block" id="qd-19">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="A先生資料卡.png" alt="A先生資料卡">
+          </div>
+          <div class="qd-textbox">
+            兩年的工作經驗，讓A先生（匿名）逐漸改變自己的飲食習慣。他發現，即使只加一分糖，對現在的自己來說都顯得過於甜膩。「親眼看到糖漿進去『哇那麼多』，你真的會被嚇到，以後就不敢再點那麼多糖。」
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區20：高果糖糖漿介紹 -->
+      <div class="qd-block" id="qd-20">
+        <div class="qd-textbox">
+          A先生所看到的糖漿，其實正是目前手搖飲產業最常使用的甜味來源高果糖糖漿（High Fructose Syrup, HFS）。
+        </div>
+      </div>
+
+      <!-- 內容區21：成本與效率考量 -->
+      <div class="qd-block" id="qd-21">
+        <div class="qd-textbox">
+          大部分手搖飲業者捨棄傳統砂糖，使用由玉米或樹薯澱粉製成的高果糖糖漿，背後有成本與效率考量。好食課執行長兼營養師林世航指出，高果糖糖漿價格比蔗糖便宜，且本身為液態，不需要額外熬煮即可直接使用，因此成為飲料業最常見的甜味來源之一。
+        </div>
+      </div>
+
+      <!-- 內容區22：HFS55成分說明 -->
+      <div class="qd-block" id="qd-22">
+        <div class="qd-textbox">
+          以飲料業常見的HFS 55為例，其甜度與一般蔗糖相近，但主要由約55%的果糖與42%的葡萄糖組成，兩者皆以單醣形式存在於糖漿中。
+        </div>
+      </div>
+
+      <!-- 內容區23：單醣吸收速度 -->
+      <div class="qd-block" id="qd-23">
+        <div class="qd-textbox">
+          李建宏分析，相較於需要時間消化分解的醣類，單醣在人體內不需要再經過分解即可直接吸收，因此進入體內的吸收速度極快。尤其飲料中的糖屬於液態糖，在缺乏纖維緩衝的情況下，會導致血糖在短時間內迅速飆升，引發身體生理機制的劇烈反應。李建宏還進一步指出，果糖與葡萄糖在體內的代謝路徑完全不同，果糖對肝臟的負擔尤其沉重：「果糖就比較不好一點，因為果糖不是能量，它主要代謝是在肝臟，會產生肝臟新生的脂質（DNL），這就跟TG（三酸甘油酯）有關。」
+        </div>
+      </div>
+
+      <!-- 內容區24：果糖繞過管控機制 -->
+      <div class="qd-block" id="qd-24">
+        <div class="qd-textbox">
+          他解釋，葡萄糖會進入循環系統供給全身細胞能量，並向大腦發出「已有能量攝取」的訊號以控制食慾；但果糖卻會繞過這些管控機制，直接在肝臟進行代謝並轉化為脂肪儲存。這不僅容易形成脂肪肝，還會導致血液中的三酸甘油酯升高，並產生尿酸，進而增加痛風與胰島素阻抗的風險。
+        </div>
+      </div>
+
+      <!-- 內容區25：液態糖無感攝取 -->
+      <div class="qd-block" id="qd-25">
+        <div class="qd-textbox">
+          且液體的手搖飲攝取時缺乏咀嚼過程，這種「無感」的攝取方式，就容易讓人體在短時間內攝入大量糖分卻不自知。蔡佳穎補充說明：「像是喝了一杯500大卡的飲料，但是30分鐘就消化完了，你就會覺得好像沒有喝東西，飽足感比較低，就會讓你想要再進一步的去攝取更多的糖量。」
+        </div>
+      </div>
+
+    </div>
+    <div class="qd-spacer"></div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     PART 6：戒掉解方？
+     背景統一繼承 body 的飲料.png
+════════════════════════════════════════ -->
+<section id="solution-chapter">
+  <div id="solution-parallax">
+    <div class="qd-sticky">
+
+      <!-- 內容區1：大標問句 -->
+      <div class="qd-block active" id="sol-1">
+        <p class="qd-question">戒掉解方？</p>
+      </div>
+
+      <!-- 內容區2：根源改善的疑問 -->
+      <div class="qd-block" id="sol-2">
+        <div class="qd-textbox">
+          說了這麼多高糖飲食的危害，我們究竟該如何從根源改善台灣人愛喝高糖手搖飲的飲食習慣？<br><br>答案比想像中更複雜。
+        </div>
+      </div>
+
+      <!-- 內容區3：知道與做到的鴻溝 -->
+      <div class="qd-block" id="sol-3">
+        <div class="qd-textbox">
+          在台灣，幾乎沒有人不知道喝太多手搖飲對身體不好。從飲料杯上的熱量標示、新聞媒體的健康報導，到學校與醫院的衛教宣導，多數民眾都聽過「少糖比較健康」這句話。然而，知道與做到之間，卻存在一道難以跨越的鴻溝。
+        </div>
+      </div>
+
+      <!-- 內容區4：92.3%危害認知調查 -->
+      <div class="qd-block" id="sol-4">
+        <div class="qd-textbox">
+          根據台灣健康聯盟2025年「食安五環2.0政策暨減糖新生活」網路問卷調查，在全國22縣市、1113位年滿20歲以上受訪者中，高達<strong>92.3%</strong>的受訪者認為含糖飲料對健康「有點危害」或「非常危害」，代表大多數民眾其實已經意識到含糖飲料可能帶來的健康風險。
+        </div>
+      </div>
+
+      <!-- 內容區5：標示注意度與建議值認知 -->
+      <div class="qd-block" id="sol-5">
+        <div class="qd-textbox">
+          手搖飲標示的部分，則約有三分之二（<strong>66%</strong>）的民眾表示購買飲料時會注意熱量標示。<br><br>在糖攝取知識方面，也有約<strong>66.5%</strong>的受訪者知道世界衛生組織（WHO）建議每日精製糖攝取量不應超過50公克，大約一杯全糖手搖飲的含糖量。
+        </div>
+      </div>
+
+      <!-- 內容區6：認知調查Flourish三圖切換 -->
+      <div class="qd-block" id="sol-6">
+        <div class="qd-chart-block">
+          <p class="chart-label">圖表五</p>
+          <p class="chart-desc">民眾對糖分危害的認知調查</p>
+          <div class="qd-tab-buttons" data-tabgroup="sol-tab1">
+            <button class="qd-tab-btn active" data-tab="sol-tab1-a">是否看標示</button>
+            <button class="qd-tab-btn" data-tab="sol-tab1-b">是否知道建議值</button>
+            <button class="qd-tab-btn" data-tab="sol-tab1-c">危害程度</button>
+          </div>
+          <div class="qd-tab-panel active" id="sol-tab1-a">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29184687/embed" title="是否看標示" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="qd-tab-panel" id="sol-tab1-b">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29184800/embed" title="是否知道建議值" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="qd-tab-panel" id="sol-tab1-c">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29188223/embed" title="危害程度" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <p class="chart-source">資料來源：台灣健康聯盟 2025 食安五環 2.0 減糖新生活問卷（n=1,113）。</p>
+        </div>
+      </div>
+
+      <!-- 內容區7：飲用習慣與半糖偏好統計 -->
+      <div class="qd-block" id="sol-7">
+        <div class="qd-textbox">
+          但還是有近<strong>40%</strong>的受訪者每週喝3次以上含糖飲料，且有<strong>57.2%</strong>的受訪者購買含糖飲料時偏好購買手搖飲。<br><br>且在手搖飲料的甜度選擇上，選擇半糖或以上的受訪者有<strong>28.2%</strong>，可以說每四個人中，就有至少一個人習慣喝半糖或更甜。<br><br>代表民眾即使知道糖的危害，也未必能因此改變既有的飲食習慣。
+        </div>
+      </div>
+
+      <!-- 內容區8：飲用習慣Flourish三圖切換 -->
+      <div class="qd-block" id="sol-8">
+        <div class="qd-chart-block">
+          <p class="chart-label">圖表六</p>
+          <p class="chart-desc">含糖飲料飲用習慣</p>
+          <div class="qd-tab-buttons" data-tabgroup="sol-tab2">
+            <button class="qd-tab-btn active" data-tab="sol-tab2-a">飲用習慣</button>
+            <button class="qd-tab-btn" data-tab="sol-tab2-b">每週飲用次數</button>
+            <button class="qd-tab-btn" data-tab="sol-tab2-c">含糖飲料偏好</button>
+          </div>
+          <div class="qd-tab-panel active" id="sol-tab2-a">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29191365/embed" title="飲用習慣" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="qd-tab-panel" id="sol-tab2-b">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29195349/embed" title="每週飲用次數" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="qd-tab-panel" id="sol-tab2-c">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29195396/embed" title="含糖飲料偏好" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <p class="chart-source">資料來源：台灣健康聯盟 2025 食安五環 2.0 減糖新生活問卷（n=1,113）。</p>
+        </div>
+      </div>
+
+      <!-- 內容區9：知道與做到的鴻溝子標 -->
+      <div class="qd-block" id="sol-9">
+        <p class="qd-subheading">知道與做到的鴻溝：罪惡感下的逃避心理</p>
+      </div>
+
+      <!-- 內容區10：店員視角開場 -->
+      <div class="qd-block" id="sol-10">
+        <div class="qd-textbox">
+          這種知道有害但選擇忽視的矛盾，那些每天與客人們打交道的手搖飲店員，有著最深刻的體會。
+        </div>
+      </div>
+
+      <!-- 內容區11：王先生的多糖客人 -->
+      <div class="qd-block" id="sol-11">
+        <div class="qd-textbox">
+          王先生（化名）就提及，在他工作過的幾家飲料店，都經常遇到顧客選擇高甜度的飲料。最讓他印象深刻的是一些工廠作業員常客，經常點名要喝比全糖更甜的「多糖」紅茶。「雖然知道多糖很不健康，但客人要點，我們還是做給他。」他說。
+        </div>
+      </div>
+
+      <!-- 內容區12：Leo背景介紹（含資料卡） -->
+      <div class="qd-block" id="sol-12">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="Leo資料卡.png" alt="Leo資料卡">
+          </div>
+          <div class="qd-textbox">
+            同樣曾在飲料店工作約半年的Leo（化名）也有相同的經驗。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區13：Leo的奶奶顧客故事（含資料卡） -->
+      <div class="qd-block" id="sol-13">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="Leo資料卡.png" alt="Leo資料卡">
+          </div>
+          <div class="qd-textbox">
+            他最難忘的是一位年約60歲，身材豐腴且膚況欠佳的奶奶，每天固定上門購買「雙倍全糖珍珠奶茶」。他曾試圖婉轉提醒對方減少糖量，卻遭到不滿回應，「有善意提醒過，但她會生氣罵人，後來我甚至會假裝加糖給她看，畢竟喝這麼甜真的對身體不好，而且感覺她心理對糖也有一種依賴。」他說。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區14：Leo的震撼畫面（含資料卡） -->
+      <div class="qd-block" id="sol-14">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="Leo資料卡.png" alt="Leo資料卡">
+          </div>
+          <div class="qd-textbox">
+            這份「偷偷減糖」的舉動，來自Leo（化名）在手搖飲店看見的震撼畫面。「珍珠在煮的時候要加很多糖去炒，煮完又泡在糖漿裡，以一次煮一萬克珍珠來說，大約就要用掉一整包家用黑糖。這讓我現在喝飲料時會擔心健康。」他說。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區15：Leo觀察消費者忽視標示（含資料卡） -->
+      <div class="qd-block" id="sol-15">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="Leo資料卡.png" alt="Leo資料卡">
+          </div>
+          <div class="qd-textbox">
+            儘管Leo（化名）在吧台後看見了健康的威脅，他還是觀察到大多數消費者在購買手搖飲時，仍傾向忽視成分標示：「店裡雖然有標示，但幾乎沒人在看，大家選選就走，不看熱量也不看糖量。」反映出多數消費者知道有害，卻還是選擇忽略的心理狀態，而黃蓁言便是其中之一。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區16：黃蓁言的逃避心理（含資料卡） -->
+      <div class="qd-block" id="sol-16">
+        <div class="qd-with-card">
+          <div class="qd-card-side">
+            <img src="黃蓁言資料卡.png" alt="黃蓁言資料卡">
+          </div>
+          <div class="qd-textbox">
+            她坦言自己知道手搖飲不健康，也知道飲料杯上標示著熱量與糖量，但從來不會主動去看。「我都已經決定要喝了，知道它不健康也還是會喝，所以覺得沒什麼看的必要。」黃蓁言說，如果真的在意那些數字，自己可能一開始就不會購買飲料。這種矛盾心態也顯示問題從來不只是資訊不足，而是人們在面對誘惑時，往往會優先選擇眼前的滿足感。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區17：個人自由還是公共負擔子標 -->
+      <div class="qd-block" id="sol-17">
+        <p class="qd-subheading">個人自由還是公共負擔？政策介入的正當性</p>
+      </div>
+
+      <!-- 內容區18：吳玉琴-公共衛生議題引言 -->
+      <div class="qd-block" id="sol-18">
+        <div class="qd-textbox">
+          既然手搖飲的甜蜜誘惑讓人如此難以抗拒，那麼是否要用政策強制改變民眾高添加糖攝取的飲食習慣呢？台灣健康聯盟理事長吳玉琴給出了肯定的答案。她認為高添加糖飲食不只是個人自由，更是公共衛生議題，「個人的選擇卻對身體產生不好的影響，接下來就是公共衛生的問題，社會的醫療支出、健康的支出就增加。如果是不健康的行為，政策是有責任要來導引的。」
+        </div>
+      </div>
+
+      <!-- 內容區19：郭昱晴-233億元醫療支出 -->
+      <div class="qd-block" id="sol-19">
+        <div class="qd-textbox">
+          這並非危言聳聽，郭昱晴引述數據警示，過量糖分攝取引發的疾病，每年造成台灣醫療支出高達約<strong>233億元</strong>。她特別強調液體糖吸收極快，對身體的風險甚至高於固體甜食，因此含糖飲料應成為政策控管的重中之重。
+        </div>
+      </div>
+
+      <!-- 內容區20：各國管制策略子標 -->
+      <div class="qd-block" id="sol-20">
+        <p class="qd-subheading">各國管制策略：從糖稅到分級標示</p>
+      </div>
+
+      <!-- 內容區21：各國糖稅做法 -->
+      <div class="qd-block" id="sol-21">
+        <div class="qd-textbox">
+          而如果要限制民眾攝取添加糖，政策該如何設計？近年來許多國家開始推動「糖稅」（含糖飲料稅），希望透過提高含糖飲料價格，降低民眾的購買量，同時促使業者調整配方、減少糖分。吳玉琴指出，英國的經驗證明課稅能有效改變廠商行為：「英國依含糖量課稅，廠商為了避開最高稅率，會主動調整配方減糖。」。除了英國與泰國的分級課稅，墨西哥採取固定比例稅，新加坡則透過飲料健康分級與廣告限制，都試圖降低高糖飲品的市場吸引力。
+        </div>
+      </div>
+
+      <!-- 內容區22：台灣現狀子標 -->
+      <div class="qd-block" id="sol-22">
+        <p class="qd-subheading">台灣的現狀：無糖免稅的誘因與侷限</p>
+      </div>
+
+      <!-- 內容區23：台灣無糖免稅政策 -->
+      <div class="qd-block" id="sol-23">
+        <div class="qd-textbox">
+          相較之下，台灣目前尚未正式開徵針對手搖飲或市售含糖飲料的「糖稅」，而是從2026年開始，先推行針對包裝飲料的「無糖飲品免徵貨物稅」政策。郭昱晴解釋，「先用所謂的無糖飲料免稅的方向，可能會比較溫和，大家比較不會有心理上的抗拒。」希望透過無糖飲料免稅的價格誘因，能引導民眾逐步改變選擇。
+        </div>
+      </div>
+
+      <!-- 內容區24：吳玉琴對成效的觀察態度 -->
+      <div class="qd-block" id="sol-24">
+        <div class="qd-textbox">
+          然而，吳玉琴則對成效抱持觀察態度：「免稅利益是不是會真的轉化成銷售端的降價回饋給消費者，還是有待觀察。」目前的政策對瓶裝飲料降幅有限（如25元飲料僅降約3元），民眾往往對降價根本沒有感覺。好食課執行長林世航營養師也認為，除非價差大到足以影響需求，否則難以改變消費習慣；但若降價過猛，又會對產業造成劇烈衝擊。此外，針對連鎖店與非連鎖店課稅的公平性，也常引發產業端的抗拒。
+        </div>
+      </div>
+
+      <!-- 內容區25：價格提高83.6%減購意願 -->
+      <div class="qd-block" id="sol-25">
+        <div class="qd-textbox">
+          除了健康教育之外，「價格」其實也是影響民眾飲食選擇的重要因素。從調查結果來看，如果含糖飲料價格提高5至10元，有高達<strong>83.6%</strong>的受訪者表示會「一定會」或「可能會」減少購買，代表價格調整確實可能影響消費行為，也顯示透過糖稅或價格機制來降低含糖飲料攝取，具有一定可行性。
+        </div>
+      </div>
+
+      <!-- 內容區26：無糖折扣89.2%意願 -->
+      <div class="qd-block" id="sol-26">
+        <div class="qd-textbox">
+          另外，若政府或店家改以「獎勵」方式鼓勵健康選擇，效果似乎也相當明顯。調查顯示，若比照環保杯優惠模式，只要購買無糖飲料就能享有折扣，有高達<strong>89.2%</strong>的受訪者表示願意改買無糖飲品。其中，超過一半的人認為，只要優惠3至5元，就足以提高自己選擇無糖飲料的意願，顯示小額誘因其實就可能帶來飲食行為改變。
+        </div>
+      </div>
+
+      <!-- 內容區27：未來政策方向總結 -->
+      <div class="qd-block" id="sol-27">
+        <div class="qd-textbox">
+          改善高糖飲食習慣未必只能依靠「限制」或「禁止」，若能搭配價格調整與健康誘因，例如提高高糖飲料成本、提供無糖飲品優惠，或增加清楚的糖分標示，都可能讓民眾在日常生活中更自然地做出較健康的選擇。面對糖尿病與肥胖問題，如何讓「少糖」變得更容易、更有誘因，或許正是台灣未來健康政策值得努力的方向。
+        </div>
+      </div>
+
+      <!-- 內容區28：糖稅購買意願Flourish四圖切換 -->
+      <div class="qd-block" id="sol-28">
+        <div class="qd-chart-block">
+          <p class="chart-label">圖表七</p>
+          <p class="chart-desc">糖稅、購買意願</p>
+          <div class="qd-tab-buttons" data-tabgroup="sol-tab3">
+            <button class="qd-tab-btn active" data-tab="sol-tab3-a">支持糖稅？</button>
+            <button class="qd-tab-btn" data-tab="sol-tab3-b">便宜會更想買？</button>
+            <button class="qd-tab-btn" data-tab="sol-tab3-c">便宜多少會改買？</button>
+            <button class="qd-tab-btn" data-tab="sol-tab3-d">漲價5-10元會減購？</button>
+          </div>
+          <div class="qd-tab-panel active" id="sol-tab3-a">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29195589/embed" title="有多少人支持糖稅" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="qd-tab-panel" id="sol-tab3-b">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29260191/embed" title="無糖飲料便宜會更想買嗎" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="qd-tab-panel" id="sol-tab3-c">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29234753/embed" title="便宜多少錢會想改買無糖" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="qd-tab-panel" id="sol-tab3-d">
+            <div class="flourish-frame" style="padding-bottom:62%;">
+              <iframe src="https://flo.uri.sh/visualisation/29234593/embed" title="價格提高5-10元會減少購買嗎" frameborder="0" scrolling="no" allowfullscreen></iframe>
+            </div>
+          </div>
+          <p class="chart-source">資料來源：台灣健康聯盟 2025 食安五環 2.0 減糖新生活問卷（n=1,113）。</p>
+        </div>
+      </div>
+
+      <!-- 內容區29：技術高牆子標 -->
+      <div class="qd-block" id="sol-29">
+        <p class="qd-subheading">手搖飲規管的技術高牆：客製化與隱形糖分</p>
+      </div>
+
+      <!-- 內容區30：限制手搖飲的困難 -->
+      <div class="qd-block" id="sol-30">
+        <div class="qd-textbox">
+          然而，要限制手搖飲的購買，仍面臨技術上的困難。<br><br>林世航與吳玉琴皆指出，瓶裝飲料有標準生產線，但手搖飲每家店的配方、甜度分級（全糖、半糖、微糖）皆高度客製化。這導致政府在稽查是否「真的無糖」時，行政成本極高。
+        </div>
+      </div>
+
+      <!-- 內容區31：吳玉琴-課稅困難引言 -->
+      <div class="qd-block" id="sol-31">
+        <div class="qd-textbox">
+          吳玉琴坦言：「手搖飲每一家店的配方、加的東西都不一樣，你怎麼課稅？很難稽查。」此外，即便茶湯無糖，配料（如珍珠、芋圓）多在蜜製過程中加入大量糖分。這讓「無糖」的定義在手搖飲操作中顯得複雜。
+        </div>
+      </div>
+
+      <!-- 內容區32：無糖減價建議收尾 -->
+      <div class="qd-block" id="sol-32">
+        <div class="qd-textbox">
+          因此在強制課稅到位前，吳玉琴建議效法環保杯政策，推動「無糖減價」，以提高民眾的選擇意願：「如果無糖減5塊、10塊，民眾增加購買無糖的意願會提高，這是在手搖飲政策中我們可以持續倡議的。」這不僅能給予消費者實質誘因，也能在充滿挑戰的規管環境中，開闢出一條相對溫和且具社會共識的減糖之路。
+        </div>
+      </div>
+
+    </div>
+    <div class="qd-spacer"></div>
+  </div>
+</section>
+
+
 <script>
 /* ════════════════════════════════════════
    LINE 群組動畫：3秒內完成
@@ -1246,6 +1878,78 @@ function updateHarmParallax(){
 }
 window.addEventListener('scroll', updateHarmParallax, { passive:true });
 updateHarmParallax();
+
+
+/* ════════════════════════════════════════
+   PART 5：為何戒不掉手搖？
+   - 內容區：固定置中，依捲動進度（25段）依序切換
+════════════════════════════════════════ */
+const qdSection = document.getElementById('quit-parallax');
+const qdBlocks = [];
+for(let i=1;i<=25;i++){
+  qdBlocks.push(document.getElementById('qd-'+i));
+}
+
+function updateQuitParallax(){
+  const rect = qdSection.getBoundingClientRect();
+  const total = qdSection.offsetHeight - window.innerHeight;
+  const scrolled = Math.min(Math.max(-rect.top, 0), total);
+  const progress = total > 0 ? scrolled / total : 0;
+
+  const segCount = qdBlocks.length;
+  const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
+  qdBlocks.forEach((block, i)=>{
+    if(i === currentSeg) block.classList.add('active');
+    else block.classList.remove('active');
+  });
+}
+window.addEventListener('scroll', updateQuitParallax, { passive:true });
+updateQuitParallax();
+
+
+/* ════════════════════════════════════════
+   PART 6：戒掉解方？
+   - 內容區：固定置中，依捲動進度（32段）依序切換
+════════════════════════════════════════ */
+const solSection = document.getElementById('solution-parallax');
+const solBlocks = [];
+for(let i=1;i<=32;i++){
+  solBlocks.push(document.getElementById('sol-'+i));
+}
+
+function updateSolutionParallax(){
+  const rect = solSection.getBoundingClientRect();
+  const total = solSection.offsetHeight - window.innerHeight;
+  const scrolled = Math.min(Math.max(-rect.top, 0), total);
+  const progress = total > 0 ? scrolled / total : 0;
+
+  const segCount = solBlocks.length;
+  const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
+  solBlocks.forEach((block, i)=>{
+    if(i === currentSeg) block.classList.add('active');
+    else block.classList.remove('active');
+  });
+}
+window.addEventListener('scroll', updateSolutionParallax, { passive:true });
+updateSolutionParallax();
+
+
+/* ════════════════════════════════════════
+   多圖表切換按鈕（tab）：圖表五、六、七共用此邏輯
+════════════════════════════════════════ */
+document.querySelectorAll('.qd-tab-buttons').forEach(group=>{
+  const btns = group.querySelectorAll('.qd-tab-btn');
+  const chartBlock = group.closest('.qd-chart-block');
+  const panels = chartBlock.querySelectorAll('.qd-tab-panel');
+  btns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      btns.forEach(b=>b.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      chartBlock.querySelector('#'+btn.dataset.tab).classList.add('active');
+    });
+  });
+});
 
 
 </script>
