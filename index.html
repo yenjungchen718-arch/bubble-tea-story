@@ -344,7 +344,7 @@ body{
   display:flex; align-items:center; justify-content:center;
   padding:0 1.5rem;
 }
-.hp-spacer{ height:1740vh; } /* 對應內容區段數，每段約120vh捲動距離 */
+.hp-spacer{ height:1800vh; } /* 對應32個內容區段，每段約56vh捲動距離 */
 
 /* 內容文字方塊：跟Part3共用視覺風格（深橘框線置左文字） */
 .hp-block{
@@ -656,7 +656,7 @@ body{
 
 <!-- ════════════════════════════════════════
      PART 4：所以手搖為何有害？
-     背景同上一章節（飲料.png 視差捲動）
+     背景統一繼承 body 的飲料.png（不額外視差位移）
 ════════════════════════════════════════ -->
 <section id="harm-chapter">
   <div id="harm-parallax">
@@ -746,15 +746,22 @@ body{
         <p class="hp-subheading">長期高糖攝取的三大危害</p>
       </div>
 
-      <!-- 內容區10：發炎反應文字 -->
+      <!-- 內容區10：吃太多糖會身體發炎圖片 -->
       <div class="hp-block" id="hp-10">
+        <div class="hp-fullimg">
+          <img src="吃太多糖會身體發炎圖片.png" alt="吃太多糖會身體發炎圖片">
+        </div>
+      </div>
+
+      <!-- 內容區11：發炎反應文字 -->
+      <div class="hp-block" id="hp-11">
         <div class="hp-textbox">
           第一條路徑是發炎反應。過量糖分會刺激身體釋放更多發炎物質，使血管長期處於輕微發炎的狀態。當血管內壁因發炎反覆受到刺激與損傷時，血管會逐漸失去原本的彈性與功能，變得比較脆弱。這種慢性發炎雖然平時不容易察覺，卻被認為是許多心血管疾病的重要根源之一。
         </div>
       </div>
 
-      <!-- 內容區11：嚴愛文專家對話框 -->
-      <div class="hp-block" id="hp-11">
+      <!-- 內容區12：嚴愛文專家對話框 -->
+      <div class="hp-block" id="hp-12">
         <div class="expert-bubble-block">
           <div class="expert-avatar-wrap">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -776,22 +783,22 @@ body{
         </div>
       </div>
 
-      <!-- 內容區12：吃太多糖會身體發炎圖片 -->
-      <div class="hp-block" id="hp-12">
+      <!-- 內容區13：吃太多糖會血壓調節圖片 -->
+      <div class="hp-block" id="hp-13">
         <div class="hp-fullimg">
-          <img src="吃太多糖會身體發炎圖片.png" alt="吃太多糖會身體發炎圖片">
+          <img src="吃太多糖會血壓調節圖片.png" alt="吃太多糖會血壓調節圖片">
         </div>
       </div>
 
-      <!-- 內容區13：血壓調節文字 -->
-      <div class="hp-block" id="hp-13">
+      <!-- 內容區14：血壓調節文字 -->
+      <div class="hp-block" id="hp-14">
         <div class="hp-textbox">
           第二條路徑則是影響血壓調節。研究發現，過量糖分可能促使腎臟保留更多鈉離子，也就是俗稱的鹽分。當身體留住過多鈉和水分時，血液量會增加，血壓自然容易升高。此外，糖分還可能刺激交感神經系統，使血管收縮、心跳加快，進一步提高血壓。所以不只是「吃太鹹」才會影響血壓，糖本身也可能成為高血壓的推手。
         </div>
       </div>
 
-      <!-- 內容區14：歐弘毅專家對話框 -->
-      <div class="hp-block" id="hp-14">
+      <!-- 內容區15：歐弘毅專家對話框 -->
+      <div class="hp-block" id="hp-15">
         <div class="expert-bubble-block">
           <div class="expert-avatar-wrap">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -812,15 +819,22 @@ body{
         </div>
       </div>
 
-      <!-- 內容區15：脂質新生文字 -->
-      <div class="hp-block" id="hp-15">
+      <!-- 內容區15：吃太多糖會脂質新生圖片 -->
+      <div class="hp-block" id="hp-16">
+        <div class="hp-fullimg">
+          <img src="吃太多糖會脂質新生圖片.png" alt="吃太多糖會脂質新生圖片">
+        </div>
+      </div>
+
+      <!-- 內容區16：脂質新生文字 -->
+      <div class="hp-block" id="hp-17">
         <div class="hp-textbox">
           第三條路徑是脂質新生（DNL）。果糖會繞過身體原本控制糖分利用的重要關卡，直接進入肝臟代謝。當肝臟來不及消耗這些多餘的糖分時，就會把它們轉換成脂肪儲存起來。長期下來，脂肪會堆積在肝臟形成脂肪肝，同時血液中的三酸甘油酯也會升高，讓血脂異常，增加肥胖、動脈粥狀硬化與心血管疾病的風險。
         </div>
       </div>
 
-      <!-- 內容區16：蔡佳穎專家對話框 -->
-      <div class="hp-block" id="hp-16">
+      <!-- 內容區17：蔡佳穎專家對話框 -->
+      <div class="hp-block" id="hp-18">
         <div class="expert-bubble-block">
           <div class="expert-avatar-wrap">
             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -840,50 +854,43 @@ body{
         </div>
       </div>
 
-      <!-- 內容區17：脂肪堆積圖片 -->
-      <div class="hp-block" id="hp-17">
+      <!-- 內容區18：脂肪堆積圖片 -->
+      <div class="hp-block" id="hp-19">
         <div class="hp-fullimg">
           <img src="脂肪堆積圖片.png" alt="脂肪堆積圖片">
         </div>
       </div>
 
-      <!-- 內容區18：脂肪肝血管粥硬化圖片 -->
-      <div class="hp-block" id="hp-18">
-        <div class="hp-fullimg">
-          <img src="脂肪肝血管粥硬化圖片.png" alt="脂肪肝血管粥硬化圖片">
-        </div>
-      </div>
-
-      <!-- 內容區19：體位變化開場 -->
-      <div class="hp-block" id="hp-19">
+      <!-- 內容區20：體位變化開場 -->
+      <div class="hp-block" id="hp-20">
         <div class="hp-textbox">
           這樣的健康風險，其實也逐漸反映在台灣民眾的體位變化上。從近十年的統計來看，台灣18歲以上人口的過重與肥胖率呈現明顯上升趨勢，而且幾乎是一路增加。
         </div>
       </div>
 
-      <!-- 內容區20：肥胖率數據① -->
-      <div class="hp-block" id="hp-20">
+      <!-- 內容區21：肥胖率數據① -->
+      <div class="hp-block" id="hp-21">
         <div class="hp-textbox">
           2013至2016年間，台灣成人過重與肥胖率約為44.7%，代表不到兩人就有一人體重超標；但到了2020至2024年間，比例已上升至51.3%，等於全台超過一半的成年人都有過重或肥胖問題。<br><br>如果觀察性別差異，可以發現男性的過重與肥胖情況比女性更明顯。男性從2013至2016年的51.9%，一路上升到2020至2024年的61.2%，代表平均每10位成年男性中，就有超過6人體重超標。
         </div>
       </div>
 
-      <!-- 內容區21：肥胖率數據② -->
-      <div class="hp-block" id="hp-21">
+      <!-- 內容區22：肥胖率數據② -->
+      <div class="hp-block" id="hp-22">
         <div class="hp-textbox">
           女性雖然比例相對比較低，但也從37.5%上升到41.5%，仍呈現增加趨勢。顯示肥胖不只是個人生活習慣問題，而是逐漸成為全民健康議題。
         </div>
       </div>
 
-      <!-- 內容區22：惡性循環文字 -->
-      <div class="hp-block" id="hp-22">
+      <!-- 內容區23：惡性循環文字 -->
+      <div class="hp-block" id="hp-23">
         <div class="hp-textbox">
           當高糖飲食、含糖飲料攝取增加，再加上久坐、外食比例提高與運動不足等生活型態改變，身體便更容易進入「脂肪堆積、慢性發炎、代謝異常」的惡性循環。
         </div>
       </div>
 
-      <!-- 內容區23：肥胖率Flourish圖表 -->
-      <div class="hp-block" id="hp-23">
+      <!-- 內容區24：肥胖率Flourish圖表 -->
+      <div class="hp-block" id="hp-24">
         <div class="hp-chart-block">
           <p class="chart-label">圖表三</p>
           <p class="chart-desc">台灣18歲以上人口的過重及肥胖率</p>
@@ -894,50 +901,50 @@ body{
         </div>
       </div>
 
-      <!-- 內容區24：胰島素阻抗文字 -->
-      <div class="hp-block" id="hp-24">
+      <!-- 內容區25：胰島素阻抗文字 -->
+      <div class="hp-block" id="hp-25">
         <div class="hp-textbox">
           而體內脂肪持續堆積，除了會造成肥胖外，過度膨脹的脂肪細胞還會引發免疫系統的修復機制，釋放發炎物質。長期下來，身體處於慢性低度發炎，導致細胞對胰島素的反應變差，就容易形成「胰島素阻抗」。
         </div>
       </div>
 
-      <!-- 內容區25：歐弘毅引言（胰臟潰敗過程） -->
-      <div class="hp-block" id="hp-25">
+      <!-- 內容區26：歐弘毅引言（胰臟潰敗過程） -->
+      <div class="hp-block" id="hp-26">
         <div class="hp-textbox">
           歐弘毅生動地描述胰臟的潰敗過程：「為了維持血糖正常，身體會分泌更多、更多的胰島素。長期負荷下，胰島細胞再也撐不住了，它『過勞』了、停擺了，糖尿病就跑出來了。」。這也是為什麼即便年輕時體感無礙，長期的高糖習慣仍會加速細胞老化，增加罹患第二型糖尿病的風險。
         </div>
       </div>
 
-      <!-- 內容區26：歐弘毅引言（無症狀風險） -->
-      <div class="hp-block" id="hp-26">
+      <!-- 內容區27：歐弘毅引言（無症狀風險） -->
+      <div class="hp-block" id="hp-27">
         <div class="hp-textbox">
           另外許多高血糖患者在初期並無明顯症狀。歐弘毅指出，正常人分泌胰島素是立即反應，但糖尿病前期患者的第一段反應已經消失，血糖會持續在高檔波動。「身體包在糖水裡面，對所有的組織器官都產生傷害。」他說。如果患者因缺乏明顯症狀而不知道自己血糖過高，就會錯失早期治療的機會，進而增加心血管疾病、腎臟病甚至失明的風險。
         </div>
       </div>
 
-      <!-- 內容區27：年輕化趨勢① -->
-      <div class="hp-block" id="hp-27">
+      <!-- 內容區28：年輕化趨勢① -->
+      <div class="hp-block" id="hp-28">
         <div class="hp-textbox">
           值得注意的是，糖尿病已不再只是專屬中高齡族群的疾病。過去第2型糖尿病因多發生於40歲以上成人，曾被稱為「成年型糖尿病」，但近年臨床上卻出現愈來愈多年輕患者。歐弘毅就觀察到一個令人憂心的趨勢：「在過去 5 年，我們統計健保資料庫發現，40 歲以下發病之年輕人增加 25%，這是非常可怕的。」。他進一步指出，這群年輕患者通常在工作場域中動得少、吃得多，且對添加糖的攝取缺乏自覺。
         </div>
       </div>
 
-      <!-- 內容區28：蔡佳穎引言（手搖飲推波助瀾） -->
-      <div class="hp-block" id="hp-28">
+      <!-- 內容區29：蔡佳穎引言（手搖飲推波助瀾） -->
+      <div class="hp-block" id="hp-29">
         <div class="hp-textbox">
           蔡佳穎則分析了手搖飲的推波助瀾作用：「手搖飲佔台灣人精緻糖來源可能有到四、五十趴，它是一個攝取進去很『無感』的食物，讓人沒有意識到自己在超量攝取。」。這種液態糖的快速吸收，導致血糖劇烈波動，也加速了糖尿病年輕化的進程。
         </div>
       </div>
 
-      <!-- 內容區29：糖尿病統計數字 -->
-      <div class="hp-block" id="hp-29">
+      <!-- 內容區30：糖尿病統計數字 -->
+      <div class="hp-block" id="hp-30">
         <div class="hp-textbox">
           從糖尿病死亡統計人數來看，過量糖分所造成的肥胖問題，也進一步推升了糖尿病的發生風險。根據國民健康署統計，目前全台約有超過200萬名糖尿病患者，且每年仍以約2萬5千人的速度持續增加，其中九成以上屬於與肥胖、飲食及生活型態密切相關的第二型糖尿病。
         </div>
       </div>
 
-      <!-- 內容區30：糖尿病死亡趨勢Flourish圖表 -->
-      <div class="hp-block" id="hp-30">
+      <!-- 內容區31：糖尿病死亡趨勢Flourish圖表 -->
+      <div class="hp-block" id="hp-31">
         <div class="hp-chart-block">
           <p class="chart-label">圖表四</p>
           <p class="chart-desc">台灣糖尿病死亡人數趨勢</p>
@@ -948,8 +955,8 @@ body{
         </div>
       </div>
 
-      <!-- 內容區31：死亡趨勢結尾文字 -->
-      <div class="hp-block" id="hp-31">
+      <!-- 內容區32：死亡趨勢結尾文字 -->
+      <div class="hp-block" id="hp-32">
         <div class="hp-textbox">
           民國97年至113年間，台灣糖尿病死亡人數整體呈現上升趨勢，且男性死亡人數長期略高於女性。97年糖尿病死亡人數約8千餘人，至111年已攀升至超過1萬2千人，創下近年高峰，即使後續略有下降，整體死亡規模仍明顯高於十多年前。
         </div>
@@ -959,6 +966,8 @@ body{
     <div class="hp-spacer"></div>
   </div>
 </section>
+
+
 
 
 <script>
@@ -1218,7 +1227,7 @@ updateDrinkParallax();
 ════════════════════════════════════════ */
 const hpSection = document.getElementById('harm-parallax');
 const hpBlocks = [];
-for(let i=1;i<=31;i++){
+for(let i=1;i<=32;i++){
   hpBlocks.push(document.getElementById('hp-'+i));
 }
 
