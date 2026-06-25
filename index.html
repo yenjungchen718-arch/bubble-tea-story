@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一杯手搖飲的代價｜台灣人糖分攝取超標的甜蜜危機</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+:root{
+  --cream:#FAF3E0; --brown:#3B2507; --caramel:#C97B2A;
+  --pearl:#E8D5A3; --warm-white:#FFFDF5; --text-body:#4A3320; --text-muted:#8A7055;
+  --max-w:740px; --max-w-wide:960px;
+}
+
+body{
+  background-image:url('飲料.png');
+  background-size:cover;
+  background-position:center top;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  color:var(--text-body); font-family:'Noto Serif TC',serif; font-size:18px; line-height:1.95; overflow-x:hidden;
+}
+
+.fade-up{ opacity:0; transform:translateY(28px); transition:opacity .85s ease, transform .85s ease; }
+.fade-up.show{ opacity:1; transform:translateY(0); }
+
+/* ════════════════════════════════════════
+   PART 0 — OPENING：LINE 群組動畫
+   3秒內完成、寬高固定、訊息上滑沒入群組名稱列
+════════════════════════════════════════ */
+#opening{
+  min-height:100vh;
+  background:#1a1a1a;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:3rem 1rem;
+  position:relative; overflow:hidden;
+}
+
+/* 寬高固定不變 */
+.phone-frame{
+  width:360px; height:640px;
+  max-width:92vw;
+  background:#f0f0f0;
+  border-radius:36px;
+  overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  position:relative;
+  display:flex; flex-direction:column;
+}
+
+.phone-status{ background:#1c7c3b; color:#fff; font-family:'Noto Sans TC',sans-serif; font-size:.7rem; padding:6px 16px 4px; display:flex; justify-content:space-between; flex-shrink:0; }
+
+.chat-header{
+  background:#1c7c3b; color:#fff; padding:9px 16px 11px;
+  font-family:'Noto Sans TC',sans-serif; flex-shrink:0;
+  overflow:hidden; position:relative; height:46px;
+}
+.chat-header .group-name{ font-size:.9rem; font-weight:700; transition:transform .35s ease, opacity .35s ease; }
+.chat-header .member-count{ font-size:.7rem; opacity:.75; margin-top:1px; }
+.chat-header.scrolled .group-name{ transform:translateY(-30px); opacity:0; }
+
+/* 訊息區：固定高度，內容超出時整體往上位移（模擬群組名稱被推走的效果） */
+.chat-body-wrap{ flex:1; overflow:hidden; position:relative; background:#e8e4dc; }
+.chat-body{
+  position:absolute; left:0; right:0; bottom:0;
+  padding:10px 10px 6px;
+  display:flex; flex-direction:column; gap:6px;
+  transition:transform .45s cubic-bezier(.4,0,.2,1);
+}
+
+.msg{ display:flex; align-items:flex-end; gap:6px; opacity:0; transform:translateY(10px); transition:opacity .55s ease, transform .55s ease; flex-shrink:0; }
+.msg.show{ opacity:1; transform:translateY(0); }
+.msg.right{ flex-direction:row-reverse; }
+
+.bubble-wrap{ max-width:74%; }
+.sender-name{ font-family:'Noto Sans TC',sans-serif; font-size:.62rem; color:#666; margin-bottom:2px; padding-left:2px; }
+.bubble{ padding:7px 12px; border-radius:16px; font-family:'Noto Sans TC',sans-serif; font-size:.8rem; line-height:1.45; }
+.bubble.white{ background:#fff; border-radius:16px 16px 16px 4px; }
+.bubble.you{ background:#b7eb8f; border-radius:16px 16px 4px 16px; }
+.bubble.menu-img{ background:#ddd6c4; color:#7a6a4a; font-size:.72rem; padding:14px 16px; }
+
+/* 輸入列 + 鍵盤 */
+.chat-input{ background:#f7f7f7; border-top:1px solid #ddd; padding:7px 12px; display:flex; align-items:center; gap:8px; font-family:'Noto Sans TC',sans-serif; flex-shrink:0; }
+.input-box{ flex:1; background:#fff; border:1px solid #ddd; border-radius:20px; padding:6px 14px; font-size:.8rem; color:#333; min-height:32px; display:flex; align-items:center; }
+.input-cursor{ display:inline-block; width:2px; height:13px; background:#333; margin-left:1px; animation:blink .8s infinite; }
+@keyframes blink{ 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* 選字列（候選字） */
+.candidate-bar{
+  background:#cfcfcf; display:flex; gap:0; padding:0;
+  height:0; overflow:hidden;
+  transition:height .15s ease;
+  flex-shrink:0;
+}
+.candidate-bar.show{ height:30px; }
+.candidate-bar span{
+  flex:1; display:flex; align-items:center; justify-content:center;
+  font-family:'Noto Sans TC',sans-serif; font-size:.74rem; color:#333;
+  border-right:1px solid #b8b8b8;
+}
+.candidate-bar span:last-child{ border-right:none; }
+.candidate-bar span.selected{ background:#fff; font-weight:700; }
+
+/* 注音/拼音輸入提示列 */
+.compose-bar{
+  background:#e2e2e2; height:0; overflow:hidden;
+  display:flex; align-items:center; padding:0 10px;
+  font-family:'Noto Sans TC',sans-serif; font-size:.78rem; color:#555;
+  transition:height .15s ease; flex-shrink:0;
+}
+.compose-bar.show{ height:24px; }
+
+/* 模擬手機注音鍵盤 */
+.keyboard{
+  background:#1c1c1e;
+  flex-shrink:0;
+  height:0; overflow:hidden;
+  transition:height .35s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column;
+  padding:0 4px;
+}
+.keyboard.show{ height:200px; padding:6px 4px; transition:height .55s cubic-bezier(.4,0,.2,1); }
+.kb-row{ display:flex; gap:4px; flex:1; margin-bottom:4px; }
+.kb-row:last-child{ margin-bottom:0; }
+.kb-key{
+  flex:1; background:#3a3a3c; border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-family:'Noto Sans TC',sans-serif; font-size:.68rem;
+  transition:background .08s;
+}
+.kb-key.active-key{ background:#6a6a6c; }
+.kb-key.wide{ flex:1.8; }
+.kb-key.space{ flex:5; }
+.kb-key.func{ background:#2a2a2c; color:#aaa; font-size:.6rem; }
+
+/* 凝結畫面遮罩 */
+#freeze-overlay{
+  position:absolute; inset:0; background:rgba(0,0,0,0);
+  pointer-events:none; transition:background .8s ease; z-index:10;
+  display:flex; align-items:center; justify-content:center;
+}
+#freeze-overlay.active{ background:rgba(0,0,0,.5); pointer-events:all; }
+#freeze-overlay .freeze-text{
+  color:#fff; font-family:'Noto Serif TC',serif; font-size:1rem; text-align:center;
+  opacity:0; transition:opacity .6s ease .4s; padding:0 2rem; line-height:2;
+}
+#freeze-overlay.active .freeze-text{ opacity:1; }
+
+/* ════════════════════════════════════════
+   PART 0.5 — 黑底白字過場句
+════════════════════════════════════════ */
+#bridge-text{
+  min-height:60vh;
+  background:#000;
+  display:flex; align-items:center; justify-content:center;
+  padding:6vh 2rem;
+}
+#bridge-text p{
+  color:#fff; font-family:'Noto Serif TC',serif;
+  font-size:clamp(1.1rem,3vw,1.6rem); text-align:center; line-height:2;
+  opacity:0; transition:opacity 1.4s ease;
+  max-width:600px;
+}
+#bridge-text p.show{ opacity:1; }
+
+/* ════════════════════════════════════════
+   PART 1 — 標題淡入（兩行固定）
+════════════════════════════════════════ */
+#title-reveal{
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:8vh 2rem;
+  background:linear-gradient(160deg,#3B2507 0%,#5c3a10 60%,#2a1800 100%);
+}
+.big-title{ text-align:center; max-width:100%; width:100%; margin:0 auto; opacity:0; transition:opacity 1.8s ease; padding:0 1rem; }
+.big-title.show{ opacity:1; }
+.big-title h1{
+  font-weight:700; color:#f0ece4;
+  line-height:1.65; text-shadow:0 2px 24px rgba(0,0,0,.5);
+}
+.big-title h1 .line1{
+  display:block;
+  font-size:clamp(1.05rem,6.2vw,3.2rem);
+  white-space:nowrap;
+}
+.big-title h1 .line2{
+  color:var(--caramel); display:block;
+  font-size:clamp(0.68rem,3.6vw,2rem);
+  margin-top:0.5em;
+  white-space:nowrap;
+}
+
+.scroll-cue{
+  margin-top:2.4rem; display:flex; flex-direction:column; align-items:center; gap:6px;
+  font-family:'Noto Sans TC',sans-serif; font-size:.7rem; color:rgba(240,236,228,.4); letter-spacing:.2em;
+}
+.scroll-cue::after{ content:''; width:1px; height:44px; background:linear-gradient(to bottom, rgba(201,123,42,.7), transparent); animation:drip 2s ease-in-out infinite; }
+@keyframes drip{ 0%,100%{opacity:0;transform:scaleY(.2);transform-origin:top} 50%{opacity:1;transform:scaleY(1)} }
+
+/* ════════════════════════════════════════
+   PART 2 — 台灣人常喝手搖
+════════════════════════════════════════ */
+.section{ padding:8vh 1.5rem; max-width:var(--max-w); margin:0 auto; }
+.section-wide{ padding:8vh 1.5rem; max-width:var(--max-w-wide); margin:0 auto; }
+
+.bold-question{
+  font-weight:700; color:#111; font-size:clamp(1.3rem,3.2vw,1.9rem);
+  text-align:center; margin-bottom:0; font-family:'Noto Serif TC',serif;
+}
+
+/* 飲料街圖(左) + 文字/圖表(右)：同一捲動軸視差同步 */
+#street-and-content{ position:relative; background:transparent; }
+.sc-sticky{ position:sticky; top:0; height:100vh; display:flex; align-items:center; padding:0 5%; gap:3%; }
+
+/* 左側：飲料街圖（單純切換，無淡入淡出動畫） */
+.sc-left{ flex:1; max-width:48%; position:relative; height:65vh; }
+.sc-left .street-img{
+  position:absolute; left:0; top:0; width:100%; height:100%;
+  background-size:cover; background-position:center;
+  border-radius:8px;
+  display:none;
+  box-shadow:0 20px 50px rgba(0,0,0,.15);
+}
+.sc-left .street-img.show{ display:block; }
+.sc-left .img-placeholder-label{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:'Noto Sans TC',sans-serif; font-size:.8rem; color:rgba(201,123,42,.5);
+  border:2px dashed rgba(201,123,42,.3); border-radius:8px; background:rgba(250,243,224,.7);
+  text-align:center; padding:1rem;
+}
+
+/* 右側：文字→圖表 */
+.sc-right{ flex:1; max-width:48%; }
+.sc-block{ display:none; opacity:0; transition:opacity .5s ease; }
+.sc-block.active{ display:block; opacity:1; }
+.sc-quote{ font-size:clamp(1rem,2.2vw,1.2rem); line-height:2; color:var(--text-body); }
+.sc-quote strong{ color:var(--brown); border-bottom:2px solid var(--caramel); }
+.sc-chart-wrap .chart-label{ font-family:'Noto Sans TC',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.16em; color:var(--caramel); text-transform:uppercase; margin-bottom:.6rem; }
+.sc-chart-wrap .chart-desc{ font-family:'Noto Serif TC',serif; font-size:1.05rem; font-weight:700; color:var(--brown); margin-bottom:.8rem; }
+
+.sc-spacer{ height:320vh; }
+
+.flourish-frame{ position:relative; width:100%; background:var(--warm-white); border:1px solid var(--pearl); border-radius:6px; overflow:hidden; }
+.flourish-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+.chart-source{ margin-top:.5rem; font-family:'Noto Sans TC',sans-serif; font-size:.68rem; color:var(--text-muted); }
+
+
+/* 12億杯換算：店員引言 + 雙圖並排 */
+.body-copy p{ margin-bottom:2rem; line-height:2; }
+.cup-compare-block{ margin:3rem auto; max-width:var(--max-w-wide); }
+.cup-compare-row{ display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+@media(max-width:680px){ .cup-compare-row{ grid-template-columns:1fr; } }
+.cup-compare-img{
+  background:var(--warm-white); border:1px solid var(--pearl); border-radius:8px;
+  overflow:hidden; display:flex; align-items:center; justify-content:center;
+}
+.cup-compare-img img{ width:100%; height:auto; display:block; object-fit:contain; }
+
+.expert-box{ margin:1.5rem 0; padding:1rem 1.2rem; background:rgba(59,37,7,.06); border-left:3px solid var(--caramel); border-radius:0 4px 4px 0; font-size:.88rem; font-family:'Noto Sans TC',sans-serif; line-height:1.75; }
+.expert-box .expert-name{ font-weight:700; color:var(--brown); font-size:.8rem; margin-bottom:.3rem; }
+
+/* ════════════════════════════════════════
+   PART 3：但是這些手搖飲健康嗎？
+   背景統一繼承 body 的飲料.png（不額外設色、不視差位移）
+════════════════════════════════════════ */
+#drink-health-chapter{
+  background:transparent;
+  position:relative;
+}
+
+/* 視差滑動子區（已移除視差位移，純捲動內容切換） */
+#drink-parallax{
+  position:relative;
+}
+
+.dp-sticky{
+  position:sticky; top:0; height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:0 1.5rem;
+}
+
+/* 固定置中文字方塊 */
+.dp-text-fixed{
+  position:relative; z-index:5;
+  max-width:680px; width:100%;
+  display:none;
+  opacity:0; transition:opacity .4s ease;
+}
+.dp-text-fixed.active{ display:block; opacity:1; }
+.dp-textbox{
+  border:2.5px solid #b5530f;
+  border-radius:4px;
+  background:rgba(255,253,245,.94);
+  padding:1.6rem 1.8rem;
+  text-align:left;
+  font-size:clamp(.92rem,1.8vw,1.1rem);
+  line-height:1.95;
+  color:var(--text-body);
+}
+.dp-textbox strong{ color:#b5530f; }
+
+.dp-spacer{ height:960vh; }
+
+/* 大標問句（內容區1，與其他文字方塊一樣置中） */
+.dp-question{
+  font-weight:700; color:#111; font-size:clamp(1.3rem,3.2vw,1.9rem);
+  font-family:'Noto Serif TC',serif;
+  text-align:center;
+}
+
+/* 散點圖卡片（內容區3）：完整比例呈現，不可切到 */
+.dp-chart-block{
+  background:rgba(255,253,245,.96);
+  border:2.5px solid #b5530f;
+  border-radius:4px;
+  padding:1.6rem 1.8rem;
+  max-width:760px;
+}
+.dp-chart-block .chart-label{ font-family:'Noto Sans TC',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.16em; color:#b5530f; text-transform:uppercase; margin-bottom:.6rem; }
+.dp-chart-block .chart-desc{ font-family:'Noto Serif TC',serif; font-size:1.05rem; font-weight:700; color:var(--brown); margin-bottom:.8rem; }
+.dp-chart-block .flourish-frame{ position:relative; width:100%; padding-bottom:62%; background:var(--warm-white); border:1px solid var(--pearl); border-radius:6px; overflow:hidden; }
+.dp-chart-block .flourish-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+.dp-chart-block .chart-source{ margin-top:.5rem; font-family:'Noto Sans TC',sans-serif; font-size:.68rem; color:var(--text-muted); }
+
+/* 王先生資料卡（內容區6）：完整比例呈現，不可切到 */
+.dp-card-block{ max-width:560px; text-align:center; }
+.dp-card-block img{ width:100%; height:auto; display:block; border-radius:8px; box-shadow:0 12px 40px rgba(0,0,0,.12); }
+/* ════════════════════════════════════════
+   PART 4：所以手搖為何有害？
+   背景同上一章節（飲料.png 視差捲動）
+════════════════════════════════════════ */
+#harm-chapter{
+  background:transparent;
+  position:relative;
+}
+
+#harm-parallax{ position:relative; }
+.hp-sticky{
+  position:sticky; top:0; height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:0 1.5rem;
+}
+.hp-spacer{ height:1800vh; } /* 對應32個內容區段，每段約56vh捲動距離 */
+
+/* 內容文字方塊：跟Part3共用視覺風格（深橘框線置左文字） */
+.hp-block{
+  position:relative; z-index:5;
+  max-width:680px; width:100%;
+  display:none;
+  opacity:0; transition:opacity .4s ease;
+}
+.hp-block.active{ display:block; opacity:1; }
+.hp-textbox{
+  border:2.5px solid #b5530f;
+  border-radius:4px;
+  background:rgba(255,253,245,.94);
+  padding:1.6rem 1.8rem;
+  text-align:left;
+  font-size:clamp(.92rem,1.8vw,1.1rem);
+  line-height:1.95;
+  color:var(--text-body);
+}
+.hp-textbox strong{ color:#b5530f; }
+
+/* 大標問句／灰色粗體子標 */
+.hp-question{
+  font-weight:700; color:#111; font-size:clamp(1.3rem,3.2vw,1.9rem);
+  font-family:'Noto Serif TC',serif; text-align:center;
+}
+.hp-subheading{
+  font-weight:700; color:#555; font-size:clamp(1.1rem,2.6vw,1.5rem);
+  font-family:'Noto Serif TC',serif; text-align:center;
+}
+
+/* 邱少宸資料卡：固定顯示在畫面左邊，跟隨其所屬文字段一起出現 */
+.hp-with-card{
+  display:flex; align-items:center; gap:2rem; justify-content:center;
+  max-width:960px; margin:0 auto;
+}
+.hp-card-side{
+  flex-shrink:0; width:240px;
+}
+.hp-card-side img{
+  width:100%; height:auto; display:block;
+  border-radius:8px; box-shadow:0 12px 36px rgba(0,0,0,.14);
+}
+.hp-with-card .hp-textbox{ flex:1; max-width:480px; }
+@media(max-width:760px){
+  .hp-with-card{ flex-direction:column; }
+  .hp-card-side{ width:180px; }
+}
+
+/* 完整圖片呈現（不可切到）：發炎圖、脂肪堆積圖、脂肪肝圖 */
+.hp-fullimg{
+  max-width:560px; text-align:center;
+}
+.hp-fullimg img{ width:100%; height:auto; display:block; border-radius:8px; }
+
+/* Flourish圖表（不可切到，完整比例） */
+.hp-chart-block{
+  background:rgba(255,253,245,.96);
+  border:2.5px solid #b5530f;
+  border-radius:4px;
+  padding:1.6rem 1.8rem;
+  max-width:760px;
+}
+.hp-chart-block .chart-label{ font-family:'Noto Sans TC',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.16em; color:#b5530f; text-transform:uppercase; margin-bottom:.6rem; }
+.hp-chart-block .chart-desc{ font-family:'Noto Serif TC',serif; font-size:1.05rem; font-weight:700; color:var(--brown); margin-bottom:.8rem; }
+.hp-chart-block .flourish-frame{ position:relative; width:100%; padding-bottom:62%; background:var(--warm-white); border:1px solid var(--pearl); border-radius:6px; overflow:hidden; }
+.hp-chart-block .flourish-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+.hp-chart-block .chart-source{ margin-top:.5rem; font-family:'Noto Sans TC',sans-serif; font-size:.68rem; color:var(--text-muted); }
+
+/* 專家對話框：圓形頭像 + 對話泡泡（精緊卡片風格） */
+.expert-bubble-block{
+  display:flex; align-items:center; gap:.85rem;
+  max-width:520px; margin:0 auto;
+  background:#fff;
+  border:1px solid rgba(181,83,15,.35);
+  border-radius:10px;
+  padding:.9rem 1.1rem;
+  box-shadow:0 4px 16px rgba(59,37,7,.08);
+}
+.expert-avatar-wrap{
+  flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:.35rem;
+  width:58px;
+}
+.expert-avatar-wrap svg{ width:52px; height:52px; }
+.expert-name-tag{
+  font-family:'Noto Sans TC',sans-serif; font-size:.56rem; font-weight:700;
+  color:var(--text-muted); text-align:center; line-height:1.3;
+}
+.expert-bubble{
+  position:relative;
+  background:rgba(181,83,15,.05);
+  border-left:2.5px solid #b5530f;
+  border-radius:0 8px 8px 0;
+  padding:.7rem .9rem;
+  font-size:.84rem; line-height:1.6; color:var(--text-body);
+  flex:1;
+}
+@media(max-width:600px){
+  .expert-bubble-block{ padding:.8rem .9rem; gap:.7rem; }
+  .expert-avatar-wrap{ width:46px; }
+  .expert-avatar-wrap svg{ width:42px; height:42px; }
+  .expert-bubble{ font-size:.8rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     PART 0：開場 LINE 群組動畫
+════════════════════════════════════════ -->
+<section id="opening">
+  <div class="phone-frame">
+    <div class="phone-status"><span>16:25</span><span>📶 🔋</span></div>
+    <div class="chat-header" id="chat-header">
+      <div class="group-name">＜ 專案企劃一組（10）</div>
+      <div class="member-count">10位成員</div>
+    </div>
+    <div class="chat-body-wrap">
+      <div class="chat-body" id="chat-body"></div>
+    </div>
+
+    <!-- 候選字列 -->
+    <div class="candidate-bar" id="candidate-bar"></div>
+    <!-- 注音組字列 -->
+    <div class="compose-bar" id="compose-bar"></div>
+
+    <div class="chat-input">
+      <div class="input-box" id="input-box"><span id="input-text"></span><span class="input-cursor"></span></div>
+    </div>
+
+    <!-- 模擬鍵盤 -->
+    <div class="keyboard" id="keyboard">
+      <div class="kb-row">
+        <div class="kb-key">ㄅ</div><div class="kb-key">ㄉ</div><div class="kb-key">ˇ</div><div class="kb-key">ˋ</div><div class="kb-key">ㄓ</div><div class="kb-key">ˊ</div><div class="kb-key">˙</div><div class="kb-key">ㄚ</div><div class="kb-key">ㄞ</div><div class="kb-key">ㄢ</div>
+      </div>
+      <div class="kb-row">
+        <div class="kb-key">ㄆ</div><div class="kb-key">ㄊ</div><div class="kb-key">ㄍ</div><div class="kb-key">ㄐ</div><div class="kb-key">ㄔ</div><div class="kb-key">ㄗ</div><div class="kb-key">ㄧ</div><div class="kb-key">ㄛ</div><div class="kb-key">ㄟ</div><div class="kb-key">ㄣ</div>
+      </div>
+      <div class="kb-row">
+        <div class="kb-key">ㄇ</div><div class="kb-key">ㄋ</div><div class="kb-key">ㄎ</div><div class="kb-key">ㄑ</div><div class="kb-key">ㄕ</div><div class="kb-key">ㄘ</div><div class="kb-key">ㄨ</div><div class="kb-key">ㄜ</div><div class="kb-key">ㄠ</div><div class="kb-key">ㄤ</div>
+      </div>
+      <div class="kb-row">
+        <div class="kb-key">ㄈ</div><div class="kb-key">ㄌ</div><div class="kb-key">ㄏ</div><div class="kb-key">ㄒ</div><div class="kb-key">ㄖ</div><div class="kb-key">ㄙ</div><div class="kb-key">ㄩ</div><div class="kb-key">ㄝ</div><div class="kb-key">ㄡ</div><div class="kb-key">ㄥ</div>
+      </div>
+      <div class="kb-row">
+        <div class="kb-key func wide">123</div><div class="kb-key">,</div><div class="kb-key space">空格</div><div class="kb-key">。</div><div class="kb-key func wide">送出</div>
+      </div>
+    </div>
+
+    <div id="freeze-overlay">
+      <div class="freeze-text">這樣的訊息，<br>幾乎每天都在<br>我們的生活中出現。</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     PART 1：標題淡入（兩行固定）
+════════════════════════════════════════ -->
+<section id="title-reveal">
+  <div class="big-title" id="big-title">
+    <h1><span class="line1">一杯手搖飲的代價</span><span class="line2">台灣人糖分攝取超標的甜蜜危機</span></h1>
+    <div class="scroll-cue">向下閱讀</div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     PART 2：台灣人常喝手搖
+════════════════════════════════════════ -->
+
+<!-- 大標問句 -->
+<section class="section" style="padding-bottom:2vh;">
+  <p class="bold-question fade-up">究竟台灣人有多愛喝手搖？</p>
+</section>
+
+<!-- 飲料街圖(左) + 文字→圖表(右)：同一捲動軸視差同步 -->
+<section id="street-and-content">
+  <div class="sc-sticky">
+
+    <!-- 左：飲料街疊圖 -->
+    <div class="sc-left" id="sc-left">
+      <div class="street-img" data-street="0" style="background-image:url('飲料街圖(1).JPG');"></div>
+      <div class="street-img" data-street="1" style="background-image:url('飲料街圖(2).JPG');"></div>
+      <div class="street-img" data-street="2" style="background-image:url('飲料街圖(3).JPG');"></div>
+      <div class="street-img" data-street="3" style="background-image:url('飲料街圖(4).JPG');"></div>
+    </div>
+
+    <!-- 右：文字→圖表 -->
+    <div class="sc-right">
+      <div class="sc-block active" id="sc-text">
+        <p class="sc-quote">
+          「幾乎走兩步就是一家飲料店，無論是下班時間還是中午休息，隨時隨地都能叫到飲料，這已經變成國人生活中的一種習慣。」，立法委員郭昱晴曾經參與無糖飲料貨物稅減免倡議，她精準地評價台灣人的飲用習慣。
+        </p>
+        <p class="sc-quote">
+          根據財政部最新統計，台灣手搖飲產業年營業額已突破新台幣<strong>560億元</strong>，展現驚人的消費動能。截至2024年，全台手搖飲店家數更超過<strong>1萬6千家</strong>，數量不僅逐年攀升，更已正式超越四大超商的門市總數。
+        </p>
+      </div>
+
+      <div class="sc-block" id="sc-chart">
+        <div class="sc-chart-wrap">
+          <p class="chart-label">圖表一</p>
+          <p class="chart-desc">飲料店，比超商還多</p>
+          <div class="flourish-frame" style="padding-bottom:75%;">
+            <iframe src="https://flo.uri.sh/visualisation/29171492/embed" title="手搖飲店家數對比" frameborder="0" scrolling="no" allowfullscreen></iframe>
+          </div>
+          <p class="chart-source">資料來源：財政部統計資料庫。圖例分類已調整間距，避免擠在一起。</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="sc-spacer"></div>
+</section>
+
+
+<!-- 12億杯換算 -->
+<section class="section">
+  <div class="body-copy fade-up">
+    <p>曾在多家連鎖手搖飲店任職的店員王先生（化名）表示：「生意好的時候，一家店一天就能賣出三、四百杯，大家對手搖飲的依賴真的很高。」</p>
+    <p>以2025年的手搖飲店總營業額推估，一年台灣人就可以喝掉超過<strong>12億杯</strong>手搖飲，換算下來平均每秒就喝了<strong>38杯</strong>。</p>
+  </div>
+
+  <div class="cup-compare-block fade-up">
+    <div class="cup-compare-row">
+      <div class="cup-compare-img">
+        <img src="12億飲料換算圖(1).png" alt="12億杯手搖飲換算圖一">
+      </div>
+      <div class="cup-compare-img">
+        <img src="12億飲料換算圖(2).png" alt="12億杯手搖飲換算圖二">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     PART 3：但是這些手搖飲健康嗎？
+     背景統一繼承 body 的飲料.png，從視差區一路延伸到
+     大標問句、散點圖、王先生資料卡
+════════════════════════════════════════ -->
+<section id="drink-health-chapter">
+
+  <!-- 視差滑動子區：飲料(1)~(7)背景＋固定置中內容，依序切換 -->
+  <div id="drink-parallax">
+    <div class="dp-sticky">
+
+      <!-- 內容區1：大標問句 -->
+      <div class="dp-text-fixed active" id="dp-text-1">
+        <p class="dp-question">但是這些手搖飲健康嗎？</p>
+      </div>
+
+      <!-- 內容區2：品類統計文字 -->
+      <div class="dp-text-fixed" id="dp-text-2">
+        <div class="dp-textbox">
+          統計全台八大連鎖手搖飲品牌的熱賣前五名品項，共計 40 款熱門飲品。從品類分布來看，果茶與調味茶類占 <strong>35%</strong>，奶類飲品（包含奶茶與鮮奶拿鐵類）占 <strong>30%</strong>，加入珍珠、粉粿等配料的特調類飲品占 <strong>17.5%</strong>，其餘則為原茶類飲品。
+        </div>
+      </div>
+
+      <!-- 內容區3：散點圖（完整比例呈現，不可切到） -->
+      <div class="dp-text-fixed dp-chart-block" id="dp-text-3">
+        <p class="chart-label">圖表二</p>
+        <p class="chart-desc">前10名飲料店品項散點圖</p>
+        <div class="flourish-frame">
+          <iframe src="https://flo.uri.sh/visualisation/28595723/embed" title="前10名飲料店品項散點圖" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
+        <p class="chart-source">資料來源：各品牌官方營養標示。</p>
+      </div>
+
+      <!-- 內容區4：WHO建議文字 -->
+      <div class="dp-text-fixed" id="dp-text-4">
+        <div class="dp-textbox">
+          根據世界衛生組織（WHO）建議，每日精緻糖攝取量應低於總熱量的 10%。以成人每天攝取 2000 大卡計算，則糖攝取量不應超過 <strong>50 克</strong>。然而，市售手搖飲的含糖量往往輕易突破這個健康紅線，例如50嵐的大杯全糖的四季春珍波椰，就大約含有<strong>65g</strong>的糖。
+        </div>
+      </div>
+
+      <!-- 內容區5：拉糖公式文字 -->
+      <div class="dp-text-fixed" id="dp-text-5">
+        <div class="dp-textbox">
+          有多年飲料店打工經驗的王先生（匿名）表示，以50嵐訓練員工量測糖量的「拉糖」邏輯與甜度級距計算方式推估，大杯全糖飲料的基本添加糖量為「兩湯匙」，以每匙約 <strong>27 克</strong>計算，光是添加糖就佔了 <strong>54 克</strong>，另外 <strong>11 克</strong>則是來自珍珠、波霸與椰果等配料在蜜製與浸泡過程中所吸附的糖分。
+        </div>
+      </div>
+
+      <!-- 內容區6：王先生店員資料卡（完整比例呈現，不可切到） -->
+      <div class="dp-text-fixed dp-card-block" id="dp-text-6">
+        <img src="王先生店員資料卡.png" alt="王先生店員資料卡">
+      </div>
+
+      <!-- 內容區7：半糖微糖文字 -->
+      <div class="dp-text-fixed" id="dp-text-7">
+        <div class="dp-textbox">
+          那如果消費者是點半糖或微糖呢？根據店內以基本單數乘以甜度比例（半糖為 0.5，微糖為 0.3）的公式推估，半糖實際上仍會喝下 <strong>27 克</strong>添加糖，即便選擇微糖也含有約 <strong>16.2 克</strong>。而光是這杯微糖飲料的糖分，就已經佔掉每日精緻糖建議攝取上限（50克）的 <strong>32.4%</strong>，幾乎耗盡了一餐正餐應有的糖分配額，如果又攝取了含糖的麵包、醬料或甜點，糖分攝取便會立刻超標。
+        </div>
+      </div>
+
+      <!-- 內容區8：配料文字 -->
+      <div class="dp-text-fixed" id="dp-text-8">
+        <div class="dp-textbox">
+          成大醫院糖尿病防治中心主任歐弘毅也提醒，手搖飲點微糖就幾乎不甜的迷思常讓消費者放鬆戒心，因為除了茶湯本身添加的糖漿，手搖飲中的配料更堆疊了額外的糖量。蔡佳穎也指出，配料也是影響糖分含量的關鍵因素：「像是珍珠本身在製作與烹煮過程中就會用到糖，有些店家更標榜用黑糖去炒，糖量會一直往上堆疊。」
+        </div>
+      </div>
+
+    </div>
+    <div class="dp-spacer"></div>
+  </div>
+
+</section>
+
+
+<!-- ════════════════════════════════════════
+     PART 4：所以手搖為何有害？
+     背景統一繼承 body 的飲料.png（不額外視差位移）
+════════════════════════════════════════ -->
+<section id="harm-chapter">
+  <div id="harm-parallax">
+    <div class="hp-sticky">
+
+      <!-- 內容區1：大標問句 -->
+      <div class="hp-block active" id="hp-1">
+        <p class="hp-question">所以手搖為何有害？</p>
+      </div>
+
+      <!-- 內容區2：開場破題 -->
+      <div class="hp-block" id="hp-2">
+        <div class="hp-textbox">
+          長期攝取高糖，身體究竟會發生什麼變化？答案或許不只在健檢數字裡，也藏在一杯又一杯手搖飲累積的日常之中。
+        </div>
+      </div>
+
+      <!-- 內容區3：邱少宸故事①（含資料卡，固定顯示在左邊） -->
+      <div class="hp-block" id="hp-3">
+        <div class="hp-with-card">
+          <div class="hp-card-side">
+            <img src="邱少宸資料卡.png" alt="邱少宸資料卡">
+          </div>
+          <div class="hp-textbox">
+            在基隆長大的邱少宸，從小就不愛喝水，他說基隆的水總帶著一股揮之不去的土味。後來到新竹和台北求學，自來水裡濃重的消毒水味又讓他難以接受，於是在經歷重考和轉學的大學七年間，他幾乎每天都會喝一到兩杯手搖飲，而且甜度通常從半糖起跳。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區4：邱少宸故事②（含資料卡） -->
+      <div class="hp-block" id="hp-4">
+        <div class="hp-with-card">
+          <div class="hp-card-side">
+            <img src="邱少宸資料卡.png" alt="邱少宸資料卡">
+          </div>
+          <div class="hp-textbox">
+            「喝第一口的時候真的會有一種活過來的感覺。」邱少宸回憶，「因為很冰、很甜，整個人好像瞬間被喚醒。」
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區5：邱少宸故事③（含資料卡） -->
+      <div class="hp-block" id="hp-5">
+        <div class="hp-with-card">
+          <div class="hp-card-side">
+            <img src="邱少宸資料卡.png" alt="邱少宸資料卡">
+          </div>
+          <div class="hp-textbox">
+            早餐配一杯鮮奶綠加珍珠椰果、下午再來一杯全糖鮮橙綠，成為邱少宸再熟悉不過的日常。對當時的他而言，手搖飲不只是飲料，更是一種情緒寄託。熬夜趕報告時要來一杯，心情低落時要來一杯，甚至和另一半吵架後，也會特地跑到較遠的店家買自己最喜歡的品項。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區6：邱少宸故事④（含資料卡） -->
+      <div class="hp-block" id="hp-6">
+        <div class="hp-with-card">
+          <div class="hp-card-side">
+            <img src="邱少宸資料卡.png" alt="邱少宸資料卡">
+          </div>
+          <div class="hp-textbox">
+            「我那時候幾乎不喝水，口渴的時候，腦中第一個念頭不是喝水，而是是不是該再去買一杯飲料了。」他說。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區7：邱少宸故事⑤（含資料卡） -->
+      <div class="hp-block" id="hp-7">
+        <div class="hp-with-card">
+          <div class="hp-card-side">
+            <img src="邱少宸資料卡.png" alt="邱少宸資料卡">
+          </div>
+          <div class="hp-textbox">
+            然而，這些看似微不足道的日常選擇，卻在長年累月之中悄悄改變了他的身體。七年間，邱少宸的體重從大學入學時的66公斤一路增加到77公斤。更讓他震驚的是，喝手搖飲還累積了一筆不小的開銷：「我有一天突然算了一下，發現自己一個月竟然花了四、五千塊在手搖飲上。」
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區8：糖分對身體的影響（不含資料卡） -->
+      <div class="hp-block" id="hp-8">
+        <div class="hp-textbox">
+          當糖分成為生活裡無法缺席的存在，對身體的影響，往往緩慢且不易察覺。即使外表看起來不胖，也不代表身體沒有受到影響。過量糖分除了增加熱量攝取，更會對肝臟代謝、血管健康與血壓調節造成負擔，提高肥胖、糖尿病與心血管疾病風險。
+        </div>
+      </div>
+
+      <!-- 內容區9：三大危害子標 -->
+      <div class="hp-block" id="hp-9">
+        <p class="hp-subheading">長期高糖攝取的三大危害</p>
+      </div>
+
+      <!-- 內容區10：吃太多糖會身體發炎圖片 -->
+      <div class="hp-block" id="hp-10">
+        <div class="hp-fullimg">
+          <img src="吃太多糖會身體發炎圖片.png" alt="吃太多糖會身體發炎圖片">
+        </div>
+      </div>
+
+      <!-- 內容區11：發炎反應文字 -->
+      <div class="hp-block" id="hp-11">
+        <div class="hp-textbox">
+          第一條路徑是發炎反應。過量糖分會刺激身體釋放更多發炎物質，使血管長期處於輕微發炎的狀態。當血管內壁因發炎反覆受到刺激與損傷時，血管會逐漸失去原本的彈性與功能，變得比較脆弱。這種慢性發炎雖然平時不容易察覺，卻被認為是許多心血管疾病的重要根源之一。
+        </div>
+      </div>
+
+      <!-- 內容區12：嚴愛文專家對話框 -->
+      <div class="hp-block" id="hp-12">
+        <div class="expert-bubble-block">
+          <div class="expert-avatar-wrap">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="48" fill="#f4e4d4"/>
+              <circle cx="50" cy="42" r="20" fill="#e8c39e"/>
+              <path d="M 18 88 Q 50 60 82 88 L 82 100 L 18 100 Z" fill="#b5530f"/>
+              <path d="M 30 32 Q 30 18 50 18 Q 70 18 70 32 Q 70 26 50 26 Q 30 26 30 32 Z" fill="#3a2a1a"/>
+              <path d="M 28 30 Q 26 50 32 58 L 30 35 Z" fill="#3a2a1a"/>
+              <path d="M 72 30 Q 74 50 68 58 L 70 35 Z" fill="#3a2a1a"/>
+              <circle cx="42" cy="44" r="2" fill="#3a2a1a"/>
+              <circle cx="58" cy="44" r="2" fill="#3a2a1a"/>
+              <path d="M 44 52 Q 50 56 56 52" stroke="#a06840" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <p class="expert-name-tag">糖尿病學會<br>秘書長<br>嚴愛文</p>
+          </div>
+          <div class="expert-bubble">
+            「細胞如果吃太飽就會壞死，讓免疫細胞釋出發炎物質來清除它們。釋出這些發炎物質後，全身的發炎指數都會提升。」
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區13：吃太多糖會血壓調節圖片 -->
+      <div class="hp-block" id="hp-13">
+        <div class="hp-fullimg">
+          <img src="吃太多糖會血壓調節圖片.png" alt="吃太多糖會血壓調節圖片">
+        </div>
+      </div>
+
+      <!-- 內容區14：血壓調節文字 -->
+      <div class="hp-block" id="hp-14">
+        <div class="hp-textbox">
+          第二條路徑則是影響血壓調節。研究發現，過量糖分可能促使腎臟保留更多鈉離子，也就是俗稱的鹽分。當身體留住過多鈉和水分時，血液量會增加，血壓自然容易升高。此外，糖分還可能刺激交感神經系統，使血管收縮、心跳加快，進一步提高血壓。所以不只是「吃太鹹」才會影響血壓，糖本身也可能成為高血壓的推手。
+        </div>
+      </div>
+
+      <!-- 內容區15：歐弘毅專家對話框 -->
+      <div class="hp-block" id="hp-15">
+        <div class="expert-bubble-block">
+          <div class="expert-avatar-wrap">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="48" fill="#e6eef2"/>
+              <circle cx="50" cy="43" r="20" fill="#d9b896"/>
+              <path d="M 16 90 Q 50 64 84 90 L 84 100 L 16 100 Z" fill="#2c5f7c"/>
+              <path d="M 32 30 Q 32 16 50 16 Q 68 16 68 30 L 68 36 Q 60 28 50 28 Q 40 28 32 36 Z" fill="#555"/>
+              <circle cx="42" cy="45" r="2" fill="#2a2a2a"/>
+              <circle cx="58" cy="45" r="2" fill="#2a2a2a"/>
+              <path d="M 44 54 Q 50 57 56 54" stroke="#8a5a3a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <rect x="38" y="30" width="24" height="8" rx="2" fill="#777" opacity="0.3"/>
+            </svg>
+            <p class="expert-name-tag">成大醫院<br>防治中心主任<br>歐弘毅</p>
+          </div>
+          <div class="expert-bubble">
+            這些代謝問題最終可能會連動到「冠狀動脈心臟病、中風、腎臟病」等嚴重併發症。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區15：吃太多糖會脂質新生圖片 -->
+      <div class="hp-block" id="hp-16">
+        <div class="hp-fullimg">
+          <img src="吃太多糖會脂質新生圖片.png" alt="吃太多糖會脂質新生圖片">
+        </div>
+      </div>
+
+      <!-- 內容區16：脂質新生文字 -->
+      <div class="hp-block" id="hp-17">
+        <div class="hp-textbox">
+          第三條路徑是脂質新生（DNL）。果糖會繞過身體原本控制糖分利用的重要關卡，直接進入肝臟代謝。當肝臟來不及消耗這些多餘的糖分時，就會把它們轉換成脂肪儲存起來。長期下來，脂肪會堆積在肝臟形成脂肪肝，同時血液中的三酸甘油酯也會升高，讓血脂異常，增加肥胖、動脈粥狀硬化與心血管疾病的風險。
+        </div>
+      </div>
+
+      <!-- 內容區17：蔡佳穎專家對話框 -->
+      <div class="hp-block" id="hp-18">
+        <div class="expert-bubble-block">
+          <div class="expert-avatar-wrap">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="48" fill="#fbe8ec"/>
+              <circle cx="50" cy="42" r="20" fill="#ecc9a8"/>
+              <path d="M 18 92 Q 50 66 82 92 L 82 100 L 18 100 Z" fill="#c0577a"/>
+              <path d="M 28 28 Q 30 14 50 14 Q 70 14 72 28 Q 72 40 68 46 Q 70 30 50 24 Q 30 30 32 46 Q 28 40 28 28 Z" fill="#4a3220"/>
+              <circle cx="42" cy="44" r="2" fill="#3a2a1a"/>
+              <circle cx="58" cy="44" r="2" fill="#3a2a1a"/>
+              <path d="M 44 52 Q 50 56 56 52" stroke="#a06840" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <p class="expert-name-tag">日日營養<br>營養師<br>蔡佳穎</p>
+          </div>
+          <div class="expert-bubble">
+            「很多人不喝酒，但還是會有脂肪肝，就是因為攝取太多果糖。」也就是說，喝進去的過量糖分，最終很可能變成囤積在肝臟和血管裡的脂肪。
+          </div>
+        </div>
+      </div>
+
+      <!-- 內容區18：脂肪堆積圖片 -->
+      <div class="hp-block" id="hp-19">
+        <div class="hp-fullimg">
+          <img src="脂肪堆積圖片.png" alt="脂肪堆積圖片">
+        </div>
+      </div>
+
+      <!-- 內容區20：體位變化開場 -->
+      <div class="hp-block" id="hp-20">
+        <div class="hp-textbox">
+          這樣的健康風險，其實也逐漸反映在台灣民眾的體位變化上。從近十年的統計來看，台灣18歲以上人口的過重與肥胖率呈現明顯上升趨勢，而且幾乎是一路增加。
+        </div>
+      </div>
+
+      <!-- 內容區21：肥胖率數據① -->
+      <div class="hp-block" id="hp-21">
+        <div class="hp-textbox">
+          2013至2016年間，台灣成人過重與肥胖率約為44.7%，代表不到兩人就有一人體重超標；但到了2020至2024年間，比例已上升至51.3%，等於全台超過一半的成年人都有過重或肥胖問題。<br><br>如果觀察性別差異，可以發現男性的過重與肥胖情況比女性更明顯。男性從2013至2016年的51.9%，一路上升到2020至2024年的61.2%，代表平均每10位成年男性中，就有超過6人體重超標。
+        </div>
+      </div>
+
+      <!-- 內容區22：肥胖率數據② -->
+      <div class="hp-block" id="hp-22">
+        <div class="hp-textbox">
+          女性雖然比例相對比較低，但也從37.5%上升到41.5%，仍呈現增加趨勢。顯示肥胖不只是個人生活習慣問題，而是逐漸成為全民健康議題。
+        </div>
+      </div>
+
+      <!-- 內容區23：惡性循環文字 -->
+      <div class="hp-block" id="hp-23">
+        <div class="hp-textbox">
+          當高糖飲食、含糖飲料攝取增加，再加上久坐、外食比例提高與運動不足等生活型態改變，身體便更容易進入「脂肪堆積、慢性發炎、代謝異常」的惡性循環。
+        </div>
+      </div>
+
+      <!-- 內容區24：肥胖率Flourish圖表 -->
+      <div class="hp-block" id="hp-24">
+        <div class="hp-chart-block">
+          <p class="chart-label">圖表三</p>
+          <p class="chart-desc">台灣18歲以上人口的過重及肥胖率</p>
+          <div class="flourish-frame">
+            <iframe src="https://flo.uri.sh/visualisation/29184527/embed" title="台灣18歲以上人口過重及肥胖率" frameborder="0" scrolling="no" allowfullscreen></iframe>
+          </div>
+          <p class="chart-source">資料來源：國民健康署。</p>
+        </div>
+      </div>
+
+      <!-- 內容區25：胰島素阻抗文字 -->
+      <div class="hp-block" id="hp-25">
+        <div class="hp-textbox">
+          而體內脂肪持續堆積，除了會造成肥胖外，過度膨脹的脂肪細胞還會引發免疫系統的修復機制，釋放發炎物質。長期下來，身體處於慢性低度發炎，導致細胞對胰島素的反應變差，就容易形成「胰島素阻抗」。
+        </div>
+      </div>
+
+      <!-- 內容區26：歐弘毅引言（胰臟潰敗過程） -->
+      <div class="hp-block" id="hp-26">
+        <div class="hp-textbox">
+          歐弘毅生動地描述胰臟的潰敗過程：「為了維持血糖正常，身體會分泌更多、更多的胰島素。長期負荷下，胰島細胞再也撐不住了，它『過勞』了、停擺了，糖尿病就跑出來了。」。這也是為什麼即便年輕時體感無礙，長期的高糖習慣仍會加速細胞老化，增加罹患第二型糖尿病的風險。
+        </div>
+      </div>
+
+      <!-- 內容區27：歐弘毅引言（無症狀風險） -->
+      <div class="hp-block" id="hp-27">
+        <div class="hp-textbox">
+          另外許多高血糖患者在初期並無明顯症狀。歐弘毅指出，正常人分泌胰島素是立即反應，但糖尿病前期患者的第一段反應已經消失，血糖會持續在高檔波動。「身體包在糖水裡面，對所有的組織器官都產生傷害。」他說。如果患者因缺乏明顯症狀而不知道自己血糖過高，就會錯失早期治療的機會，進而增加心血管疾病、腎臟病甚至失明的風險。
+        </div>
+      </div>
+
+      <!-- 內容區28：年輕化趨勢① -->
+      <div class="hp-block" id="hp-28">
+        <div class="hp-textbox">
+          值得注意的是，糖尿病已不再只是專屬中高齡族群的疾病。過去第2型糖尿病因多發生於40歲以上成人，曾被稱為「成年型糖尿病」，但近年臨床上卻出現愈來愈多年輕患者。歐弘毅就觀察到一個令人憂心的趨勢：「在過去 5 年，我們統計健保資料庫發現，40 歲以下發病之年輕人增加 25%，這是非常可怕的。」。他進一步指出，這群年輕患者通常在工作場域中動得少、吃得多，且對添加糖的攝取缺乏自覺。
+        </div>
+      </div>
+
+      <!-- 內容區29：蔡佳穎引言（手搖飲推波助瀾） -->
+      <div class="hp-block" id="hp-29">
+        <div class="hp-textbox">
+          蔡佳穎則分析了手搖飲的推波助瀾作用：「手搖飲佔台灣人精緻糖來源可能有到四、五十趴，它是一個攝取進去很『無感』的食物，讓人沒有意識到自己在超量攝取。」。這種液態糖的快速吸收，導致血糖劇烈波動，也加速了糖尿病年輕化的進程。
+        </div>
+      </div>
+
+      <!-- 內容區30：糖尿病統計數字 -->
+      <div class="hp-block" id="hp-30">
+        <div class="hp-textbox">
+          從糖尿病死亡統計人數來看，過量糖分所造成的肥胖問題，也進一步推升了糖尿病的發生風險。根據國民健康署統計，目前全台約有超過200萬名糖尿病患者，且每年仍以約2萬5千人的速度持續增加，其中九成以上屬於與肥胖、飲食及生活型態密切相關的第二型糖尿病。
+        </div>
+      </div>
+
+      <!-- 內容區31：糖尿病死亡趨勢Flourish圖表 -->
+      <div class="hp-block" id="hp-31">
+        <div class="hp-chart-block">
+          <p class="chart-label">圖表四</p>
+          <p class="chart-desc">台灣糖尿病死亡人數趨勢</p>
+          <div class="flourish-frame">
+            <iframe src="https://flo.uri.sh/visualisation/28678688/embed" title="台灣糖尿病死亡人數趨勢" frameborder="0" scrolling="no" allowfullscreen></iframe>
+          </div>
+          <p class="chart-source">資料來源：衛生福利部死因統計。</p>
+        </div>
+      </div>
+
+      <!-- 內容區32：死亡趨勢結尾文字 -->
+      <div class="hp-block" id="hp-32">
+        <div class="hp-textbox">
+          民國97年至113年間，台灣糖尿病死亡人數整體呈現上升趨勢，且男性死亡人數長期略高於女性。97年糖尿病死亡人數約8千餘人，至111年已攀升至超過1萬2千人，創下近年高峰，即使後續略有下降，整體死亡規模仍明顯高於十多年前。
+        </div>
+      </div>
+
+    </div>
+    <div class="hp-spacer"></div>
+  </div>
+</section>
+
+
+
+
+<script>
+/* ════════════════════════════════════════
+   LINE 群組動畫：3秒內完成
+════════════════════════════════════════ */
+const messages = [
+  { side:'left', name:'主管Sophia', text:'大家今天辛苦了！下午茶我請客！來點飲料！' },
+  { side:'left', name:'主管Sophia', text:'📋 手搖店家菜單', isMenu:true },
+  { side:'left', name:'Rachel', text:'謝謝主管！我要招牌珍奶 大杯 半糖少冰' },
+  { side:'left', name:'邱少宸', text:'多多綠茶 L 微糖微冰❤️' },
+  { side:'left', name:'王先生', text:'奶蓋烏龍加珍珠 大杯 微糖少冰 謝謝~' },
+  { side:'left', name:'A先生', text:'紅茶拿鐵 半糖微冰 大杯👍👍' },
+];
+
+const chatBody = document.getElementById('chat-body');
+const chatHeader = document.getElementById('chat-header');
+const inputText = document.getElementById('input-text');
+const keyboard = document.getElementById('keyboard');
+const candidateBar = document.getElementById('candidate-bar');
+const composeBar = document.getElementById('compose-bar');
+
+function makeBubble(msg){
+  const wrap=document.createElement('div'); wrap.className='bubble-wrap';
+  if(msg.side==='left'){ const sn=document.createElement('div'); sn.className='sender-name'; sn.textContent=msg.name; wrap.appendChild(sn); }
+  const b=document.createElement('div');
+  b.className = 'bubble ' + (msg.side==='right' ? 'you' : (msg.isMenu ? 'menu-img' : 'white'));
+  b.textContent = msg.text;
+  wrap.appendChild(b); return wrap;
+}
+
+function addMessage(msg){
+  const row=document.createElement('div');
+  row.className = 'msg' + (msg.side==='right' ? ' right' : '');
+  row.appendChild(makeBubble(msg));
+  chatBody.appendChild(row);
+  requestAnimationFrame(()=>row.classList.add('show'));
+
+  // 訊息一多，第一則被推走，群組名稱列也滑走
+  if (chatBody.children.length > 4) {
+    chatHeader.classList.add('scrolled');
+  }
+}
+
+// 注音輸入模擬：每個字對應的鍵位序列（簡化示意，不需真正注音正確）
+const typingSequence = [
+  { char:'翡', keys:['ㄈ','ㄟ','ˋ'] },
+  { char:'翠', keys:['ㄘ','ㄨ','ㄟ','ˋ'] },
+  { char:'檸', keys:['ㄋ','ㄧ','ㄥ','ˊ'] },
+  { char:'檬', keys:['ㄇ','ㄥ','ˊ'] },
+  { char:' ', keys:['空格'] },
+  { char:'大', keys:['ㄉ','ㄚ','ˋ'] },
+  { char:'杯', keys:['ㄅ','ㄟ'] },
+  { char:' ', keys:['空格'] },
+  { char:'無', keys:['ㄨ','ˊ'] },
+  { char:'糖', keys:['ㄊ','ㄤ','ˊ'] },
+  { char:'微', keys:['ㄨ','ㄟ'] },
+  { char:'冰', keys:['ㄅ','ㄧ','ㄥ'] },
+];
+
+function flashKey(label){
+  document.querySelectorAll('.kb-key').forEach(k=>{
+    if(k.textContent === label) k.classList.add('active-key');
+  });
+  setTimeout(()=>{
+    document.querySelectorAll('.kb-key').forEach(k=>k.classList.remove('active-key'));
+  }, 70);
+}
+
+async function typeChar(charObj, currentText){
+  return new Promise(resolve=>{
+    let i=0;
+    const keys = charObj.keys;
+    composeBar.classList.add('show');
+    composeBar.textContent = '';
+    function step(){
+      if(i < keys.length){
+        flashKey(keys[i]);
+        composeBar.textContent += keys[i] === '空格' ? '' : keys[i];
+        i++;
+        setTimeout(step, 68);
+      } else {
+        // 顯示候選字（簡化：直接顯示該字）
+        candidateBar.classList.add('show');
+        candidateBar.innerHTML = `<span class="selected">${charObj.char}</span><span>　</span><span>　</span>`;
+        setTimeout(()=>{
+          composeBar.classList.remove('show');
+          candidateBar.classList.remove('show');
+          inputText.textContent = currentText + charObj.char;
+          resolve();
+        }, 90);
+      }
+    }
+    step();
+  });
+}
+
+async function runChat(){
+  // 訊息接龍：每則約420ms
+  for(let i=0;i<messages.length;i++){
+    addMessage(messages[i]);
+    await new Promise(r=>setTimeout(r, 420));
+  }
+
+  await new Promise(r=>setTimeout(r, 330));
+
+  // 鍵盤跳出
+  keyboard.classList.add('show');
+  await new Promise(r=>setTimeout(r, 450));
+
+  // 逐字輸入「翡翠檸檬 大杯 無糖微冰」
+  let typed = '';
+  for(const charObj of typingSequence){
+    if(charObj.char === ' '){
+      typed += ' ';
+      inputText.textContent = typed;
+      await new Promise(r=>setTimeout(r, 60));
+      continue;
+    }
+    await typeChar(charObj, typed);
+    typed += '';
+    typed = inputText.textContent;
+  }
+
+  await new Promise(r=>setTimeout(r, 180));
+
+  // 刪除「無糖」
+  for(let i=0;i<2;i++){
+    typed = typed.slice(0,-1);
+    inputText.textContent = typed;
+    await new Promise(r=>setTimeout(r, 85));
+  }
+
+  // 停頓0.1秒（依指令保留0.1秒，不放大）
+  await new Promise(r=>setTimeout(r, 100));
+
+  // 改成「半糖」
+  const replaceChars = ['半','糖'];
+  for(const ch of replaceChars){
+    typed += ch;
+    inputText.textContent = typed;
+    await new Promise(r=>setTimeout(r, 105));
+  }
+
+  await new Promise(r=>setTimeout(r, 200));
+
+  // 送出
+  keyboard.classList.remove('show');
+  inputText.textContent = '';
+  addMessage({ side:'right', name:'你', text:'翡翠檸檬 大杯 半糖微冰' });
+
+  await new Promise(r=>setTimeout(r, 300));
+
+  // 畫面定格
+  document.getElementById('freeze-overlay').classList.add('active');
+}
+
+window.addEventListener('load', ()=>setTimeout(runChat, 300));
+
+
+/* ════════════════════════════════════════
+   標題淡入
+════════════════════════════════════════ */
+const bigTitle = document.getElementById('big-title');
+new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) bigTitle.classList.add('show'); });
+}, { threshold:0.3 }).observe(document.getElementById('title-reveal'));
+
+
+/* ════════════════════════════════════════
+   通用 fade-up
+════════════════════════════════════════ */
+const fadeObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); fadeObserver.unobserve(e.target); } });
+}, { threshold:0.1 });
+document.querySelectorAll('.fade-up').forEach(el=>fadeObserver.observe(el));
+
+
+/* ════════════════════════════════════════
+   飲料街圖(左) + 文字→圖表(右)：同一捲動軸同步
+   進度 0~0.7：單張切換顯示圖1→圖4（不疊圖、無淡入淡出），文字維持顯示
+   進度 0.7~1.0：文字切換成圖表（圖4持續保留在左側）
+════════════════════════════════════════ */
+const scSection = document.getElementById('street-and-content');
+const scStreetImgs = document.querySelectorAll('.sc-left .street-img');
+const scText = document.getElementById('sc-text');
+const scChart = document.getElementById('sc-chart');
+
+function updateStreetAndContent(){
+  const rect = scSection.getBoundingClientRect();
+  const total = scSection.offsetHeight - window.innerHeight;
+  const scrolled = Math.min(Math.max(-rect.top, 0), total);
+  const progress = total > 0 ? scrolled / total : 0; // 0~1
+
+  // 左側：依進度只顯示「當前那一張」，其餘隱藏（單純換圖，無動畫）
+  const imgPhase = Math.min(progress / 0.75, 1);
+  const stepCount = scStreetImgs.length;
+  const currentIndex = Math.min(Math.floor(imgPhase * stepCount), stepCount - 1);
+  scStreetImgs.forEach((img, i)=>{
+    if(i === currentIndex) img.classList.add('show');
+    else img.classList.remove('show');
+  });
+
+  // 右側：0~0.7文字顯示；0.7~1.0切換成圖表（與圖4出現的時間點銜接）
+  if(progress < 0.7){
+    scText.classList.add('active');
+    scChart.classList.remove('active');
+  } else {
+    scText.classList.remove('active');
+    scChart.classList.add('active');
+  }
+}
+window.addEventListener('scroll', updateStreetAndContent, { passive:true });
+updateStreetAndContent();
+
+
+/* ════════════════════════════════════════
+   PART 3：但是這些手搖飲健康嗎？（捲動內容切換區）
+   - 背景：繼承 body 的飲料.png，固定不位移
+   - 內容區：固定置中，依捲動進度（8段）依序切換
+     順序：大標問句→品類統計→散點圖→WHO建議→拉糖公式→資料卡→半糖微糖→配料文字
+════════════════════════════════════════ */
+const dpSection = document.getElementById('drink-parallax');
+const dpTextBlocks = [
+  document.getElementById('dp-text-1'),
+  document.getElementById('dp-text-2'),
+  document.getElementById('dp-text-3'),
+  document.getElementById('dp-text-4'),
+  document.getElementById('dp-text-5'),
+  document.getElementById('dp-text-6'),
+  document.getElementById('dp-text-7'),
+  document.getElementById('dp-text-8'),
+];
+
+function updateDrinkParallax(){
+  const rect = dpSection.getBoundingClientRect();
+  const total = dpSection.offsetHeight - window.innerHeight;
+  const scrolled = Math.min(Math.max(-rect.top, 0), total);
+  const progress = total > 0 ? scrolled / total : 0; // 0~1
+
+  // 內容區：依進度切八段顯示對應內容（0~1平均分配）
+  const segCount = dpTextBlocks.length;
+  const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
+  dpTextBlocks.forEach((block, i)=>{
+    if(i === currentSeg) block.classList.add('active');
+    else block.classList.remove('active');
+  });
+}
+window.addEventListener('scroll', updateDrinkParallax, { passive:true });
+updateDrinkParallax();
+
+
+/* ════════════════════════════════════════
+   PART 4：所以手搖為何有害？
+   - 背景統一繼承 body 的飲料.png（不額外視差位移）
+   - 內容區：固定置中，依捲動進度（31段）依序切換
+════════════════════════════════════════ */
+const hpSection = document.getElementById('harm-parallax');
+const hpBlocks = [];
+for(let i=1;i<=32;i++){
+  hpBlocks.push(document.getElementById('hp-'+i));
+}
+
+function updateHarmParallax(){
+  const rect = hpSection.getBoundingClientRect();
+  const total = hpSection.offsetHeight - window.innerHeight;
+  const scrolled = Math.min(Math.max(-rect.top, 0), total);
+  const progress = total > 0 ? scrolled / total : 0; // 0~1
+
+  const segCount = hpBlocks.length;
+  const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
+  hpBlocks.forEach((block, i)=>{
+    if(i === currentSeg) block.classList.add('active');
+    else block.classList.remove('active');
+  });
+}
+window.addEventListener('scroll', updateHarmParallax, { passive:true });
+updateHarmParallax();
+
+
+</script>
+</body>
+</html>
