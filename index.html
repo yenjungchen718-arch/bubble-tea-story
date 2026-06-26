@@ -598,6 +598,79 @@ body{
 .qd-tab-btn.active{ background:#b5530f; color:#fff; }
 .qd-tab-panel{ display:none; }
 .qd-tab-panel.active{ display:block; }
+
+/* ════════════════════════════════════════
+   PART 7：互動遊戲嵌入（手搖飲糖分與熱量計算器）
+   背景延續飲料.png，作為報導結尾互動體驗
+════════════════════════════════════════ */
+#game-chapter{
+  background:transparent;
+  position:relative;
+  padding:8vh 1.5rem 10vh;
+}
+
+/* 整體淡入容器：跟標題（big-title）一樣的呈現邏輯，
+   捲動到底部自動觸發，不需逐項分別fade-up */
+.game-reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity 1.1s ease, transform 1.1s ease;
+}
+.game-reveal.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.game-intro{
+  max-width:680px; margin:0 auto 2.5rem; text-align:center;
+}
+.game-intro .game-label{
+  font-family:'Noto Sans TC',sans-serif; font-size:.78rem; font-weight:700;
+  letter-spacing:.28em; color:var(--caramel); text-transform:uppercase; margin-bottom:1rem;
+}
+.game-intro h2{
+  font-family:'Noto Serif TC',serif; font-weight:700;
+  font-size:clamp(1.3rem,3.2vw,1.9rem); color:#111; line-height:1.5;
+  background:rgba(255,253,245,.9);
+  border-radius:10px; padding:1.4rem 2rem;
+  box-shadow:0 8px 30px rgba(59,37,7,.12);
+  display:inline-block;
+}
+.game-intro p{
+  margin-top:1.3rem; font-size:1rem; line-height:1.9; color:var(--text-body);
+  background:rgba(255,253,245,.82);
+  border-radius:8px; padding:1rem 1.4rem;
+}
+
+.game-embed-wrap{
+  max-width:480px; margin:0 auto;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 20px 60px rgba(59,37,7,.25);
+  border:3px solid var(--pearl);
+  background:#000;
+}
+.game-embed-wrap iframe{
+  display:block; width:100%; height:780px; border:none;
+}
+@media(max-width:600px){
+  .game-embed-wrap iframe{ height:680px; }
+}
+
+.game-source-note{
+  text-align:center; margin-top:1.2rem;
+  font-family:'Noto Sans TC',sans-serif; font-size:.72rem; color:var(--text-muted);
+}
+.game-source-note a{ color:var(--caramel); text-decoration:none; border-bottom:1px solid var(--caramel); }
+
+/* Footer */
+footer{
+  background:var(--brown); color:var(--pearl);
+  text-align:center; padding:4rem 1.5rem 3rem;
+  font-family:'Noto Sans TC',sans-serif; font-size:.82rem; line-height:2;
+}
+footer .team{ color:var(--caramel); font-weight:700; margin-bottom:.3rem; }
+footer .small{ color:rgba(232,213,163,.4); font-size:.7rem; margin-top:1rem; }
 </style>
 </head>
 <body>
@@ -1657,6 +1730,44 @@ body{
 </section>
 
 
+<!-- ════════════════════════════════════════
+     PART 7：互動遊戲嵌入（報導結尾互動體驗）
+════════════════════════════════════════ -->
+<section id="game-chapter">
+  <div class="game-reveal" id="game-reveal">
+    <div class="game-intro">
+      <p class="game-label">互動體驗</p>
+      <h2>看完這些數字，<br>換你親自上場考驗一次</h2>
+      <p>下午茶時間，同事又來揪團訂手搖了——這次，換你自己決定怎麼選。<br>玩玩看這個互動小遊戲，測試自己在「辦公室揪團」情境下，能不能守住健康底線。</p>
+    </div>
+
+    <div class="game-embed-wrap">
+      <iframe
+        src="https://lovely-blini-8fbd45.netlify.app/"
+        title="手搖飲糖分與熱量計算器 - 辦公室揪團篇"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <p class="game-source-note">
+      互動遊戲：<a href="https://lovely-blini-8fbd45.netlify.app/" target="_blank" rel="noopener">手搖飲糖分與熱量計算器 - 辦公室揪團篇</a>
+    </p>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer>
+  <p class="team">製作團隊</p>
+  <p>文字｜林岳雋　圖表｜林宸宇・陳彥蓉</p>
+  <p>監製｜待補　網頁製作｜待補</p>
+  <p class="small">資料來源：財政部統計資料庫・國民健康署・台灣健康聯盟・WHO Global Sugar Report・衛生福利部死因統計</p>
+</footer>
+
+
 <script>
 /* ════════════════════════════════════════
    LINE 群組動畫：3秒內完成
@@ -1839,6 +1950,23 @@ const fadeObserver = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); fadeObserver.unobserve(e.target); } });
 }, { threshold:0.1 });
 document.querySelectorAll('.fade-up').forEach(el=>fadeObserver.observe(el));
+
+
+/* ════════════════════════════════════════
+   PART 7：互動遊戲區塊 — 滑到最底自動浮現
+   跟標題（big-title）一樣的呈現邏輯：整體淡入+輕微上移，
+   不需逐項分別觸發，捲動到此區塊即自動完整顯示。
+════════════════════════════════════════ */
+const gameReveal = document.getElementById('game-reveal');
+const gameObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      gameReveal.classList.add('show');
+      gameObserver.unobserve(e.target);
+    }
+  });
+}, { threshold:0.15 });
+gameObserver.observe(gameReveal);
 
 
 /* ════════════════════════════════════════
