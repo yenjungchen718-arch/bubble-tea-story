@@ -33,12 +33,17 @@ body{
    3秒內完成、寬高固定、訊息上滑沒入群組名稱列
 ════════════════════════════════════════ */
 #opening{
+  position:fixed; inset:0; z-index:100;
   min-height:100vh;
   background:#1a1a1a;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:3rem 1rem;
-  position:relative; overflow:hidden;
+  overflow:hidden;
+  opacity:1;
+  transition:opacity 1s ease;
 }
+#opening.fade-out{ opacity:0; pointer-events:none; }
+#opening.hidden{ display:none; }
 
 /* 寬高固定不變 */
 .phone-frame{
@@ -174,9 +179,14 @@ body{
   min-height:100vh;
   display:flex; align-items:center; justify-content:center;
   padding:8vh 2rem;
-  background:linear-gradient(160deg,#3B2507 0%,#5c3a10 60%,#2a1800 100%);
+  position:relative;
+  background-image:
+    linear-gradient(160deg, rgba(20,12,2,.72) 0%, rgba(30,18,2,.78) 60%, rgba(15,9,0,.85) 100%),
+    url('飲料街圖(1).JPG');
+  background-size:cover;
+  background-position:center;
 }
-.big-title{ text-align:center; max-width:100%; width:100%; margin:0 auto; opacity:0; transition:opacity 1.8s ease; padding:0 1rem; }
+.big-title{ text-align:center; max-width:100%; width:100%; margin:0 auto; opacity:0; transition:opacity 1.8s ease; padding:0 1rem; position:relative; z-index:2; }
 .big-title.show{ opacity:1; }
 .big-title h1{
   font-weight:700; color:#f0ece4;
@@ -222,10 +232,12 @@ body{
   position:absolute; left:0; top:0; width:100%; height:100%;
   background-size:cover; background-position:center;
   border-radius:8px;
-  display:none;
+  opacity:0; visibility:hidden;
+  transition:opacity .5s cubic-bezier(.22,.61,.36,1);
+  will-change:opacity;
   box-shadow:0 20px 50px rgba(0,0,0,.15);
 }
-.sc-left .street-img.show{ display:block; }
+.sc-left .street-img.show{ opacity:1; visibility:visible; }
 .sc-left .img-placeholder-label{
   position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
   font-family:'Noto Sans TC',sans-serif; font-size:.8rem; color:rgba(201,123,42,.5);
@@ -237,6 +249,12 @@ body{
 .sc-right{ flex:1; max-width:48%; }
 .sc-block{ display:none; opacity:0; transition:opacity .5s ease; }
 .sc-block.active{ display:block; opacity:1; }
+#sc-text{
+  background:rgba(255,253,245,.82);
+  border-radius:10px;
+  padding:1.6rem 1.8rem;
+  box-shadow:0 8px 30px rgba(59,37,7,.1);
+}
 .sc-quote{ font-size:clamp(1rem,2.2vw,1.2rem); line-height:2; color:var(--text-body); }
 .sc-quote strong{ color:var(--brown); border-bottom:2px solid var(--caramel); }
 .sc-chart-wrap .chart-label{ font-family:'Noto Sans TC',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.16em; color:var(--caramel); text-transform:uppercase; margin-bottom:.6rem; }
@@ -288,7 +306,8 @@ body{
   position:relative; z-index:5;
   max-width:680px; width:100%;
   display:none;
-  opacity:0; transition:opacity .4s ease;
+  opacity:0; transition:opacity .45s ease;
+  will-change:opacity;
 }
 .dp-text-fixed.active{ display:block; opacity:1; }
 .dp-textbox{
@@ -310,7 +329,14 @@ body{
   font-weight:700; color:#111; font-size:clamp(1.3rem,3.2vw,1.9rem);
   font-family:'Noto Serif TC',serif;
   text-align:center;
+  background:rgba(255,253,245,.88);
+  border-radius:10px;
+  padding:1.4rem 2rem;
+  box-shadow:0 8px 30px rgba(59,37,7,.12);
+  transform:translateY(24px);
+  transition:transform .6s ease;
 }
+.dp-block.active .dp-question{ transform:translateY(0); }
 
 /* 散點圖卡片（內容區3）：完整比例呈現，不可切到 */
 .dp-chart-block{
@@ -351,7 +377,8 @@ body{
   position:relative; z-index:5;
   max-width:680px; width:100%;
   display:none;
-  opacity:0; transition:opacity .4s ease;
+  opacity:0; transition:opacity .45s ease;
+  will-change:opacity;
 }
 .hp-block.active{ display:block; opacity:1; }
 .hp-textbox{
@@ -370,11 +397,25 @@ body{
 .hp-question{
   font-weight:700; color:#111; font-size:clamp(1.3rem,3.2vw,1.9rem);
   font-family:'Noto Serif TC',serif; text-align:center;
+  background:rgba(255,253,245,.88);
+  border-radius:10px;
+  padding:1.4rem 2rem;
+  box-shadow:0 8px 30px rgba(59,37,7,.12);
+  transform:translateY(24px);
+  transition:transform .6s ease;
 }
 .hp-subheading{
   font-weight:700; color:#555; font-size:clamp(1.1rem,2.6vw,1.5rem);
   font-family:'Noto Serif TC',serif; text-align:center;
+  background:rgba(255,253,245,.88);
+  border-radius:10px;
+  padding:1.1rem 1.8rem;
+  box-shadow:0 8px 30px rgba(59,37,7,.12);
+  transform:translateY(24px);
+  transition:transform .6s ease;
 }
+.hp-block.active .hp-question,
+.hp-block.active .hp-subheading{ transform:translateY(0); }
 
 /* 邱少宸資料卡：固定顯示在畫面左邊，跟隨其所屬文字段一起出現 */
 .hp-with-card{
@@ -473,7 +514,8 @@ body{
   position:relative; z-index:5;
   max-width:680px; width:100%;
   display:none;
-  opacity:0; transition:opacity .4s ease;
+  opacity:0; transition:opacity .45s ease;
+  will-change:opacity;
 }
 .qd-block.active{ display:block; opacity:1; }
 .qd-textbox{
@@ -492,11 +534,25 @@ body{
 .qd-question{
   font-weight:700; color:#111; font-size:clamp(1.3rem,3.2vw,1.9rem);
   font-family:'Noto Serif TC',serif; text-align:center;
+  background:rgba(255,253,245,.88);
+  border-radius:10px;
+  padding:1.4rem 2rem;
+  box-shadow:0 8px 30px rgba(59,37,7,.12);
+  transform:translateY(24px);
+  transition:transform .6s ease;
 }
 .qd-subheading{
   font-weight:700; color:#555; font-size:clamp(1.1rem,2.6vw,1.5rem);
   font-family:'Noto Serif TC',serif; text-align:center;
+  background:rgba(255,253,245,.88);
+  border-radius:10px;
+  padding:1.1rem 1.8rem;
+  box-shadow:0 8px 30px rgba(59,37,7,.12);
+  transform:translateY(24px);
+  transition:transform .6s ease;
 }
+.qd-block.active .qd-question,
+.qd-block.active .qd-subheading{ transform:translateY(0); }
 
 /* 資料卡：固定顯示在畫面左邊，跟隨其所屬文字段一起出現 */
 .qd-with-card{
@@ -601,7 +657,6 @@ body{
 <section id="title-reveal">
   <div class="big-title" id="big-title">
     <h1><span class="line1">一杯手搖飲的代價</span><span class="line2">台灣人糖分攝取超標的甜蜜危機</span></h1>
-    <div class="scroll-cue">向下閱讀</div>
   </div>
 </section>
 
@@ -657,7 +712,7 @@ body{
 
 <!-- 12億杯換算 -->
 <section class="section">
-  <div class="body-copy fade-up">
+  <div class="body-copy fade-up" style="background:rgba(255,253,245,.82); border-radius:10px; padding:1.6rem 1.8rem; box-shadow:0 8px 30px rgba(59,37,7,.1);">
     <p>曾在多家連鎖手搖飲店任職的店員王先生（化名）表示：「生意好的時候，一家店一天就能賣出三、四百杯，大家對手搖飲的依賴真的很高。」</p>
     <p>以2025年的手搖飲店總營業額推估，一年台灣人就可以喝掉超過<strong>12億杯</strong>手搖飲，換算下來平均每秒就喝了<strong>38杯</strong>。</p>
   </div>
@@ -1698,6 +1753,9 @@ async function typeChar(charObj, currentText){
 }
 
 async function runChat(){
+  // 動畫播放期間鎖定捲動，避免使用者提前看到後續內容
+  document.body.style.overflow = 'hidden';
+
   // 訊息接龍：每則約420ms
   for(let i=0;i<messages.length;i++){
     addMessage(messages[i]);
@@ -1753,20 +1811,25 @@ async function runChat(){
 
   await new Promise(r=>setTimeout(r, 300));
 
-  // 畫面定格
+  // 畫面定格：浮現「這樣的訊息，幾乎每天都在我們的生活中出現。」
   document.getElementById('freeze-overlay').classList.add('active');
+
+  // 讓讀者看清楚這句話，停留約2秒
+  await new Promise(r=>setTimeout(r, 2000));
+
+  // 這句話浮現後，接續：開場手機畫面整體淡出
+  document.getElementById('opening').classList.add('fade-out');
+
+  // 等待淡出動畫完成，緊接著標題與背景淡入
+  await new Promise(r=>setTimeout(r, 700));
+  document.getElementById('opening').classList.add('hidden');
+  document.getElementById('big-title').classList.add('show');
+
+  // 解鎖捲動，讀者可以開始往下閱讀
+  document.body.style.overflow = '';
 }
 
 window.addEventListener('load', ()=>setTimeout(runChat, 300));
-
-
-/* ════════════════════════════════════════
-   標題淡入
-════════════════════════════════════════ */
-const bigTitle = document.getElementById('big-title');
-new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting) bigTitle.classList.add('show'); });
-}, { threshold:0.3 }).observe(document.getElementById('title-reveal'));
 
 
 /* ════════════════════════════════════════
@@ -1780,7 +1843,7 @@ document.querySelectorAll('.fade-up').forEach(el=>fadeObserver.observe(el));
 
 /* ════════════════════════════════════════
    飲料街圖(左) + 文字→圖表(右)：同一捲動軸同步
-   進度 0~0.7：單張切換顯示圖1→圖4（不疊圖、無淡入淡出），文字維持顯示
+   進度 0~0.7：單張切換顯示圖1→圖4（柔和淡入淡出），文字維持顯示
    進度 0.7~1.0：文字切換成圖表（圖4持續保留在左側）
 ════════════════════════════════════════ */
 const scSection = document.getElementById('street-and-content');
@@ -1788,32 +1851,45 @@ const scStreetImgs = document.querySelectorAll('.sc-left .street-img');
 const scText = document.getElementById('sc-text');
 const scChart = document.getElementById('sc-chart');
 
-function updateStreetAndContent(){
-  const rect = scSection.getBoundingClientRect();
-  const total = scSection.offsetHeight - window.innerHeight;
-  const scrolled = Math.min(Math.max(-rect.top, 0), total);
-  const progress = total > 0 ? scrolled / total : 0; // 0~1
+// 快取版位資訊，避免每次捲動都觸發強制重排（getBoundingClientRect）
+let scCache = { top:0, total:1 };
+function cacheScMetrics(){
+  scCache.top = scSection.offsetTop;
+  scCache.total = Math.max(scSection.offsetHeight - window.innerHeight, 1);
+}
 
-  // 左側：依進度只顯示「當前那一張」，其餘隱藏（單純換圖，無動畫）
+let scLastIndex = -1;
+let scLastChartActive = null;
+
+function updateStreetAndContent(){
+  const scrolled = Math.min(Math.max(window.scrollY - scCache.top, 0), scCache.total);
+  const progress = scrolled / scCache.total; // 0~1
+
+  // 左側：依進度只顯示「當前那一張」，其餘隱藏（柔和淡入淡出）
   const imgPhase = Math.min(progress / 0.75, 1);
   const stepCount = scStreetImgs.length;
   const currentIndex = Math.min(Math.floor(imgPhase * stepCount), stepCount - 1);
-  scStreetImgs.forEach((img, i)=>{
-    if(i === currentIndex) img.classList.add('show');
-    else img.classList.remove('show');
-  });
+  if(currentIndex !== scLastIndex){
+    scStreetImgs.forEach((img, i)=>{
+      if(i === currentIndex) img.classList.add('show');
+      else img.classList.remove('show');
+    });
+    scLastIndex = currentIndex;
+  }
 
   // 右側：0~0.7文字顯示；0.7~1.0切換成圖表（與圖4出現的時間點銜接）
-  if(progress < 0.7){
-    scText.classList.add('active');
-    scChart.classList.remove('active');
-  } else {
-    scText.classList.remove('active');
-    scChart.classList.add('active');
+  const chartActive = progress >= 0.7;
+  if(chartActive !== scLastChartActive){
+    if(!chartActive){
+      scText.classList.add('active');
+      scChart.classList.remove('active');
+    } else {
+      scText.classList.remove('active');
+      scChart.classList.add('active');
+    }
+    scLastChartActive = chartActive;
   }
 }
-window.addEventListener('scroll', updateStreetAndContent, { passive:true });
-updateStreetAndContent();
 
 
 /* ════════════════════════════════════════
@@ -1833,23 +1909,27 @@ const dpTextBlocks = [
   document.getElementById('dp-text-7'),
   document.getElementById('dp-text-8'),
 ];
+let dpCache = { top:0, total:1 };
+function cacheDpMetrics(){
+  dpCache.top = dpSection.offsetTop;
+  dpCache.total = Math.max(dpSection.offsetHeight - window.innerHeight, 1);
+}
+let dpLastSeg = -1;
 
 function updateDrinkParallax(){
-  const rect = dpSection.getBoundingClientRect();
-  const total = dpSection.offsetHeight - window.innerHeight;
-  const scrolled = Math.min(Math.max(-rect.top, 0), total);
-  const progress = total > 0 ? scrolled / total : 0; // 0~1
+  const scrolled = Math.min(Math.max(window.scrollY - dpCache.top, 0), dpCache.total);
+  const progress = scrolled / dpCache.total;
 
-  // 內容區：依進度切八段顯示對應內容（0~1平均分配）
   const segCount = dpTextBlocks.length;
   const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
-  dpTextBlocks.forEach((block, i)=>{
-    if(i === currentSeg) block.classList.add('active');
-    else block.classList.remove('active');
-  });
+  if(currentSeg !== dpLastSeg){
+    dpTextBlocks.forEach((block, i)=>{
+      if(i === currentSeg) block.classList.add('active');
+      else block.classList.remove('active');
+    });
+    dpLastSeg = currentSeg;
+  }
 }
-window.addEventListener('scroll', updateDrinkParallax, { passive:true });
-updateDrinkParallax();
 
 
 /* ════════════════════════════════════════
@@ -1862,22 +1942,27 @@ const hpBlocks = [];
 for(let i=1;i<=32;i++){
   hpBlocks.push(document.getElementById('hp-'+i));
 }
+let hpCache = { top:0, total:1 };
+function cacheHpMetrics(){
+  hpCache.top = hpSection.offsetTop;
+  hpCache.total = Math.max(hpSection.offsetHeight - window.innerHeight, 1);
+}
+let hpLastSeg = -1;
 
 function updateHarmParallax(){
-  const rect = hpSection.getBoundingClientRect();
-  const total = hpSection.offsetHeight - window.innerHeight;
-  const scrolled = Math.min(Math.max(-rect.top, 0), total);
-  const progress = total > 0 ? scrolled / total : 0; // 0~1
+  const scrolled = Math.min(Math.max(window.scrollY - hpCache.top, 0), hpCache.total);
+  const progress = scrolled / hpCache.total;
 
   const segCount = hpBlocks.length;
   const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
-  hpBlocks.forEach((block, i)=>{
-    if(i === currentSeg) block.classList.add('active');
-    else block.classList.remove('active');
-  });
+  if(currentSeg !== hpLastSeg){
+    hpBlocks.forEach((block, i)=>{
+      if(i === currentSeg) block.classList.add('active');
+      else block.classList.remove('active');
+    });
+    hpLastSeg = currentSeg;
+  }
 }
-window.addEventListener('scroll', updateHarmParallax, { passive:true });
-updateHarmParallax();
 
 
 /* ════════════════════════════════════════
@@ -1889,22 +1974,27 @@ const qdBlocks = [];
 for(let i=1;i<=25;i++){
   qdBlocks.push(document.getElementById('qd-'+i));
 }
+let qdCache = { top:0, total:1 };
+function cacheQdMetrics(){
+  qdCache.top = qdSection.offsetTop;
+  qdCache.total = Math.max(qdSection.offsetHeight - window.innerHeight, 1);
+}
+let qdLastSeg = -1;
 
 function updateQuitParallax(){
-  const rect = qdSection.getBoundingClientRect();
-  const total = qdSection.offsetHeight - window.innerHeight;
-  const scrolled = Math.min(Math.max(-rect.top, 0), total);
-  const progress = total > 0 ? scrolled / total : 0;
+  const scrolled = Math.min(Math.max(window.scrollY - qdCache.top, 0), qdCache.total);
+  const progress = scrolled / qdCache.total;
 
   const segCount = qdBlocks.length;
   const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
-  qdBlocks.forEach((block, i)=>{
-    if(i === currentSeg) block.classList.add('active');
-    else block.classList.remove('active');
-  });
+  if(currentSeg !== qdLastSeg){
+    qdBlocks.forEach((block, i)=>{
+      if(i === currentSeg) block.classList.add('active');
+      else block.classList.remove('active');
+    });
+    qdLastSeg = currentSeg;
+  }
 }
-window.addEventListener('scroll', updateQuitParallax, { passive:true });
-updateQuitParallax();
 
 
 /* ════════════════════════════════════════
@@ -1916,22 +2006,80 @@ const solBlocks = [];
 for(let i=1;i<=32;i++){
   solBlocks.push(document.getElementById('sol-'+i));
 }
+let solCache = { top:0, total:1 };
+function cacheSolMetrics(){
+  solCache.top = solSection.offsetTop;
+  solCache.total = Math.max(solSection.offsetHeight - window.innerHeight, 1);
+}
+let solLastSeg = -1;
 
 function updateSolutionParallax(){
-  const rect = solSection.getBoundingClientRect();
-  const total = solSection.offsetHeight - window.innerHeight;
-  const scrolled = Math.min(Math.max(-rect.top, 0), total);
-  const progress = total > 0 ? scrolled / total : 0;
+  const scrolled = Math.min(Math.max(window.scrollY - solCache.top, 0), solCache.total);
+  const progress = scrolled / solCache.total;
 
   const segCount = solBlocks.length;
   const currentSeg = Math.min(Math.floor(progress * segCount), segCount - 1);
-  solBlocks.forEach((block, i)=>{
-    if(i === currentSeg) block.classList.add('active');
-    else block.classList.remove('active');
-  });
+  if(currentSeg !== solLastSeg){
+    solBlocks.forEach((block, i)=>{
+      if(i === currentSeg) block.classList.add('active');
+      else block.classList.remove('active');
+    });
+    solLastSeg = currentSeg;
+  }
 }
-window.addEventListener('scroll', updateSolutionParallax, { passive:true });
-updateSolutionParallax();
+
+
+/* ════════════════════════════════════════
+   統一的捲動節流引擎（取代分散的5個scroll監聽器）
+   核心優化：
+   1. 所有區塊的版位（offsetTop/offsetHeight）只在初始化與resize時計算一次，
+      捲動過程中完全不觸發 getBoundingClientRect / 強制重排
+   2. 用 window.scrollY 做唯一的捲動位置讀取來源
+   3. 用 requestAnimationFrame 確保每個畫面刷新週期只執行一次計算
+   4. 只在「目前段落真正改變」時才操作 DOM class，避免無意義的重複寫入
+════════════════════════════════════════ */
+function cacheAllMetrics(){
+  cacheScMetrics();
+  cacheDpMetrics();
+  cacheHpMetrics();
+  cacheQdMetrics();
+  cacheSolMetrics();
+}
+
+let scrollTicking = false;
+
+function runAllScrollUpdates(){
+  updateStreetAndContent();
+  updateDrinkParallax();
+  updateHarmParallax();
+  updateQuitParallax();
+  updateSolutionParallax();
+  scrollTicking = false;
+}
+
+function onScrollRequestTick(){
+  if(!scrollTicking){
+    scrollTicking = true;
+    requestAnimationFrame(runAllScrollUpdates);
+  }
+}
+
+let resizeDebounce;
+function onResize(){
+  clearTimeout(resizeDebounce);
+  resizeDebounce = setTimeout(()=>{
+    cacheAllMetrics();
+    runAllScrollUpdates();
+  }, 120);
+}
+
+window.addEventListener('scroll', onScrollRequestTick, { passive:true });
+window.addEventListener('resize', onResize, { passive:true });
+
+// 初始化：先量測所有區塊版位，再執行一次完整更新
+cacheAllMetrics();
+
+runAllScrollUpdates();
 
 
 /* ════════════════════════════════════════
