@@ -178,8 +178,8 @@ body{
    共用：章節標題與內容樣式
 ════════════════════════════════════════ */
 .chapter-section{
-  display:flex; align-items:center; justify-content:center;
-  padding:8vh 1.5rem;
+  display:flex; align-items:flex-start; justify-content:center;
+  padding:10vh 1.5rem;
 }
 .chapter-inner{ max-width:var(--max-w); width:100%; margin:0 auto; }
 .chapter-inner-wide{ max-width:var(--max-w-wide); width:100%; margin:0 auto; }
@@ -1262,8 +1262,20 @@ const fadeObserver = new IntersectionObserver((entries)=>{
       fadeObserver.unobserve(e.target);
     }
   });
-}, { threshold:0.15 });
+}, { threshold:0.05, rootMargin:'0px 0px -10% 0px' });
 document.querySelectorAll('.fade-up').forEach(el=>fadeObserver.observe(el));
+
+// 保險機制：避免極端情況下 IntersectionObserver 未觸發，
+// 內容永久停留在 opacity:0 看不到。3秒後強制顯示所有尚未顯示的 fade-up 元素。
+setTimeout(()=>{
+  document.querySelectorAll('.fade-up:not(.show)').forEach(el=>{
+    const rect = el.getBoundingClientRect();
+    // 只強制顯示已經在文件流中、且不是離視窗極遠處的元素
+    if(rect.top < window.innerHeight * 3){
+      el.classList.add('show');
+    }
+  });
+}, 3000);
 
 
 /* ════════════════════════════════════════
