@@ -197,12 +197,17 @@ body{
 .body-copy strong{ color:var(--brown); border-bottom:2px solid var(--caramel); }
 
 .chart-block{ margin:2.5rem 0; }
-.chart-block .flourish-frame{
-  position:relative; width:100%; padding-bottom:62%;
+.flourish-frame{
+  position:relative; width:100%;
+  padding-bottom:75%;
+  min-height:420px;
   background:#fff; border-radius:8px; overflow:hidden;
   box-shadow:0 8px 30px rgba(0,0,0,.08);
 }
-.chart-block .flourish-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+.flourish-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:none; }
+@media(max-width:760px){
+  .flourish-frame{ min-height:380px; padding-bottom:95%; }
+}
 
 /* ════════════════════════════════════════
    第三頁：究竟台灣人有多愛喝手搖？
