@@ -1241,7 +1241,7 @@ async function runChat(){
   await new Promise(r=>setTimeout(r, 300));
 
   // 畫面定格：逐標點換行的過場文字
-  const lines = ['下午兩點，', '一家公司的專案小組群組正在接龍點飲料。', '這樣的訊息，', '幾乎每天都在我們的生活中出現。'];
+  const lines = ['下午兩點，', '這則點飲料的接龍訊息，', '每天都在辦公室上演。', '但你點的，','究竟是下午茶的慰藉，','還是預支健康的慢性毒藥？'];
   const freezeText = document.getElementById('freeze-text');
   freezeText.innerHTML = lines.join('<br>');
   document.getElementById('freeze-overlay').classList.add('active');
