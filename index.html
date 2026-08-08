@@ -44,24 +44,29 @@ body{
    開頭動畫：LINE 群組（第一頁）
 ════════════════════════════════════════ */
 #opening{
-  /* 維持原本的淺色背景 */
   background: #fcf9cd; 
+  transition: background 1s ease; /* 新增：讓背景顏色變化時有平滑過渡效果 */
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:3rem 1rem;
   overflow:hidden;
 }
 
-/* 新增：定義整體亮度忽亮忽暗的閃爍動畫，並調慢速度 */
-@keyframes danger-flash {
-  0%   { filter: brightness(1); }
-  20%  { filter: brightness(0.4); } /* 亮度降至 40% */
-  40%  { filter: brightness(0.9); }
-  60%  { filter: brightness(0.3); } /* 亮度降至 30% */
-  80%  { filter: brightness(0.8); }
-  100% { filter: brightness(1); }   /* 恢復正常亮度 */
+/* 新增：結尾整個外層背景變暗的設定 */
+#opening.dark-mode {
+  background: #111111;
 }
 
-/* 新增：觸發亮度動畫，設定為 3.5 秒的緩慢漸變 */
+/* 定義整體亮度忽亮忽暗的閃爍動畫 */
+@keyframes danger-flash {
+  0%   { filter: brightness(1); }
+  20%  { filter: brightness(0.4); } 
+  40%  { filter: brightness(0.9); }
+  60%  { filter: brightness(0.3); } 
+  80%  { filter: brightness(0.8); }
+  100% { filter: brightness(1); }   
+}
+
+/* 觸發亮度動畫 */
 #opening.danger-flash {
   animation: danger-flash 3.5s ease-in-out;
 }
@@ -552,7 +557,7 @@ body{
 <!-- ════════════════════════════════════════
      第四頁：但為什麼我們會喝這麼多手搖飲？
      背景：純色 #e4eaf0
-════════════════════════════════════════ -->
+════════════════════════════════════════
 <section id="chapter-why" class="snap-section chapter-section">
   <div class="chapter-inner-wide">
 
@@ -1245,7 +1250,7 @@ async function runChat(){
       continue;
     }
 
-    // 新增：當輸入到「半」字時，將開場區塊加上 danger-flash 類別來閃爍背景
+    // 當輸入到「半」字時，將開場區塊加上 danger-flash 類別來閃爍背景
     if (charObj.char === '半') {
         document.getElementById('opening').classList.add('danger-flash');
     }
@@ -1267,6 +1272,9 @@ async function runChat(){
   const freezeText = document.getElementById('freeze-text');
   freezeText.innerHTML = lines.join('<br>');
   document.getElementById('freeze-overlay').classList.add('active');
+  
+  // 新增：讓整個大背景也一起變暗
+  document.getElementById('opening').classList.add('dark-mode');
 
   // 提示游標出現
   await new Promise(r=>setTimeout(r, 600));
