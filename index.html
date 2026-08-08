@@ -44,17 +44,27 @@ body{
    開頭動畫：LINE 群組（第一頁）
 ════════════════════════════════════════ */
 #opening{
-  /* 修改：加入過渡效果，並讓預設背景為淺色 */
+  /* 恢復為固定的淺色背景 */
   background: #fcf9cd; 
-  transition: background 1s ease;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:3rem 1rem;
   overflow:hidden;
 }
 
-/* 新增：當加入 .danger-mode 類別時，背景變暗 */
-#opening.danger-mode {
-  background: #1a1a1a;
+/* 新增：定義背景忽亮忽暗的閃爍動畫 */
+@keyframes danger-flash {
+  0%   { background: #fcf9cd; }
+  15%  { background: #1a1a1a; }
+  30%  { background: #fcf9cd; }
+  45%  { background: #333333; }
+  60%  { background: #fcf9cd; }
+  75%  { background: #000000; }
+  100% { background: #fcf9cd; } /* 最後恢復原本的淺色 */
+}
+
+/* 新增：當觸發 .danger-flash 類別時，執行閃爍動畫 */
+#opening.danger-flash {
+  animation: danger-flash 1.5s ease-in-out;
 }
 
 .phone-frame{
@@ -561,7 +571,7 @@ body{
           <p>「喝手搖飲已經變成我生活很重要的一部分，像是是常常早上我會先想我今天想喝哪一種飲料。」</p>
           <p>對黃蓁言而言，手搖飲早已不只是解渴的飲料，而是深深融入生活的一種日常儀式。</p>
           <p>來自澳門的她坦言，台灣的手搖飲價格與便利性，是自己養成天天喝飲料習慣的重要原因。「澳門買一杯珍奶換算台幣要120元以上，在台灣只要一半價格，這麼便宜我不可能不買。」再加上校園周邊飲料店林立，「我想喝，隨時都能夠喝得到，這也讓我更容易養成習慣。」</p>
-          <p>升上大二後，隨著課業壓力增加，她喝手搖飲的頻率也越來越高，從原本一週兩杯，逐漸變成一天一到二杯。久而久之，飲料不 নিষ্ঠ滿足口腹之慾，更承載著她的情緒。每當完成一件困難的事情，她便會把那杯手搖飲視為犒賞自己的獎勵。她覺得手搖飲就像是在安慰自己，「它存在就好像是在告訴我，我今天做得很好，或者是我今天其實不用對自己要求太高。」</p>
+          <p>升上大二後，隨著課業壓力增加，她喝手搖飲的頻率也越來越高，從原本一週兩杯，逐漸變成一天一到二杯。久而久之，飲料不只是滿足口腹之慾，更承載著她的情緒。每當完成一件困難的事情，她便會把那杯手搖飲視為犒賞自己的獎勵。她覺得手搖飲就像是在安慰自己，「它存在就好像是在告訴我，我今天做得很好，或者是我今天其實不用對自己要求太高。」</p>
           <p>然而，喝手搖飲的滿足感對她來說也非常短暫。她形容喝下第一口的瞬間，「當下就會覺得很滿足、很快樂，可能是感覺到多巴胺在釋放的感覺。」但那份快感很快就會消失，只留下下一次還想再喝的念頭。</p>
           <p>「甜的東西會讓心情變好，畢竟（血糖）會變高，就好像是可以再撐一下，撐到下班的那種感覺。」</p>
         </div>
@@ -1172,7 +1182,7 @@ const typingSequence = [
   { char:'大', keys:['ㄉ','ㄚ','ˋ'] },
   { char:'杯', keys:['ㄅ','ㄟ'] },
   { char:' ', keys:['空格'] },
-  { char:'半', keys:['ㄅ','ㄢ','ˋ'] }, // 新增：打到這個字元時，觸發背景變暗
+  { char:'半', keys:['ㄅ','ㄢ','ˋ'] }, // 新增：打到這個字元時，觸發動畫
   { char:'糖', keys:['ㄊ','ㄤ','ˊ'] },
   { char:'微', keys:['ㄨ','ㄟ'] },
   { char:'冰', keys:['ㄅ','ㄧ','ㄥ'] },
@@ -1236,9 +1246,9 @@ async function runChat(){
       continue;
     }
 
-    // 新增：當輸入到「半」字時，將開場區塊加上 danger-mode 類別
+    // 新增：當輸入到「半」字時，將開場區塊加上 danger-flash 類別來閃爍背景
     if (charObj.char === '半') {
-        document.getElementById('opening').classList.add('danger-mode');
+        document.getElementById('opening').classList.add('danger-flash');
     }
 
     await typeChar(charObj, typed);
