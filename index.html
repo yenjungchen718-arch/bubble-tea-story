@@ -44,27 +44,26 @@ body{
    開頭動畫：LINE 群組（第一頁）
 ════════════════════════════════════════ */
 #opening{
-  /* 恢復為固定的淺色背景 */
+  /* 維持原本的淺色背景 */
   background: #fcf9cd; 
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:3rem 1rem;
   overflow:hidden;
 }
 
-/* 新增：定義背景忽亮忽暗的閃爍動畫 */
+/* 新增：定義整體亮度忽亮忽暗的閃爍動畫，並調慢速度 */
 @keyframes danger-flash {
-  0%   { background: #fcf9cd; }
-  15%  { background: #1a1a1a; }
-  30%  { background: #fcf9cd; }
-  45%  { background: #333333; }
-  60%  { background: #fcf9cd; }
-  75%  { background: #000000; }
-  100% { background: #fcf9cd; } /* 最後恢復原本的淺色 */
+  0%   { filter: brightness(1); }
+  20%  { filter: brightness(0.4); } /* 亮度降至 40% */
+  40%  { filter: brightness(0.9); }
+  60%  { filter: brightness(0.3); } /* 亮度降至 30% */
+  80%  { filter: brightness(0.8); }
+  100% { filter: brightness(1); }   /* 恢復正常亮度 */
 }
 
-/* 新增：當觸發 .danger-flash 類別時，執行閃爍動畫 */
+/* 新增：觸發亮度動畫，設定為 3.5 秒的緩慢漸變 */
 #opening.danger-flash {
-  animation: danger-flash 1.5s ease-in-out;
+  animation: danger-flash 3.5s ease-in-out;
 }
 
 .phone-frame{
