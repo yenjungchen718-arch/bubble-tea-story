@@ -45,18 +45,16 @@ body{
 ════════════════════════════════════════ */
 #opening{
   background: #fcf9cd; 
-  transition: background 1s ease; /* 新增：讓背景顏色變化時有平滑過渡效果 */
+  transition: background 1s ease; 
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:3rem 1rem;
   overflow:hidden;
 }
 
-/* 新增：結尾整個外層背景變暗的設定 */
 #opening.dark-mode {
   background: #111111;
 }
 
-/* 定義整體亮度忽亮忽暗的閃爍動畫 */
 @keyframes danger-flash {
   0%   { filter: brightness(1); }
   20%  { filter: brightness(0.4); } 
@@ -66,7 +64,6 @@ body{
   100% { filter: brightness(1); }   
 }
 
-/* 觸發亮度動畫 */
 #opening.danger-flash {
   animation: danger-flash 3.5s ease-in-out;
 }
@@ -84,7 +81,6 @@ body{
 
 .phone-status{ background:#1c7c3b; color:#fff; font-family:'Noto Sans TC',sans-serif; font-size:.7rem; padding:6px 16px 4px; display:flex; justify-content:space-between; flex-shrink:0; }
 
-/* 群組名稱列：固定常駐顯示，不消失 */
 .chat-header{
   background:#1c7c3b; color:#fff; padding:9px 16px 11px;
   font-family:'Noto Sans TC',sans-serif; flex-shrink:0;
@@ -115,7 +111,6 @@ body{
 .bubble.white{ background:#fff; border-radius:16px 16px 16px 4px; }
 .bubble.you{ background:#b7eb8f; border-radius:16px 16px 4px 16px; }
 
-/* 菜單：實體照片 */
 .bubble.menu-photo{ padding:0; border-radius:12px; overflow:hidden; width:160px; }
 .bubble.menu-photo img{ width:100%; height:auto; display:block; }
 
@@ -143,7 +138,6 @@ body{
 .kb-key.space{ flex:5; }
 .kb-key.func{ background:#2a2a2c; color:#aaa; font-size:.6rem; }
 
-/* 畫面定格遮罩：黑底加深，白字加粗，逐標點換行 */
 #freeze-overlay{
   position:absolute; inset:0; background:rgba(0,0,0,0);
   pointer-events:none; transition:background .8s ease; z-index:10;
@@ -157,7 +151,6 @@ body{
 }
 #freeze-overlay.active .freeze-text{ opacity:1; }
 
-/* 提醒往下滑的雙層向下箭頭（畫面定格後出現在最下方） */
 .scroll-hint-cursor{
   position:absolute; bottom:1.6rem; left:50%; transform:translateX(-50%);
   z-index:20;
@@ -182,8 +175,6 @@ body{
 
 /* ════════════════════════════════════════
    第二頁：大標（圖片匯入）
-   與第一頁呈現「上下頁」關係：開頭動畫結束後可往下滑進入；
-   從這裡往上滑可回到開頭動畫。
 ════════════════════════════════════════ */
 #title-page{
   background:#000;
@@ -232,8 +223,6 @@ body{
 
 /* ════════════════════════════════════════
    第三頁：究竟台灣人有多愛喝手搖？
-   背景：純色 #fcf9cd
-   版面：左圖/圖表，右文字，左右並排
 ════════════════════════════════════════ */
 #chapter-volume{
   background:#fcf9cd;
@@ -250,13 +239,6 @@ body{
 .split-left{ min-width:0; }
 .split-right{ min-width:0; }
 
-/* ════════════════════════════════════════
-   視差滾動版本（有圖配文字的區塊適用）：
-   左側圖片在捲動進入時 sticky 固定在視窗內，
-   右側文字隨捲動往上推進，直到讀完整段文字、
-   區塊整體捲出畫面後，左側圖片才一起離開。
-   純文字合併欄不套用此效果，維持一般捲動閱讀。
-════════════════════════════════════════ */
 .split-row-sticky{
   display:grid; grid-template-columns:1fr 1fr; gap:2.5rem;
   margin-bottom:3.5rem;
@@ -275,7 +257,6 @@ body{
 }
 .split-row-sticky .split-right{ min-width:0; }
 
-/* 4張飲料街圖：自動播放，左滑進入（新圖從右邊滑入，不靠捲動） */
 .street-auto-wrap{
   position:relative; width:100%;
   aspect-ratio:4/3; border-radius:10px; overflow:hidden;
@@ -306,34 +287,29 @@ body{
 
 /* ════════════════════════════════════════
    第四頁：但為什麼我們會喝這麼多手搖飲？
-   背景：純色 #e4eaf0
 ════════════════════════════════════════ */
 #chapter-why{
   background:#e4eaf0;
   flex-direction:column;
 }
 
-/* 人物資料卡圖（黃蓁言、Rachel）：左欄固定圖 */
 .person-card-img{
   width:100%; border-radius:10px; overflow:hidden;
   box-shadow:0 12px 36px rgba(59,37,7,.14);
 }
 .person-card-img img{ width:100%; height:auto; display:block; }
 
-/* 純文字合併欄（過渡句、副標） */
 .full-text-block{ max-width:var(--max-w); margin:0 auto 3rem; }
 .full-text-block:last-child{ margin-bottom:0; }
 
 /* ════════════════════════════════════════
    第五頁：所以手搖為何有害？
-   背景：純色 #f8e6d3
 ════════════════════════════════════════ */
 #chapter-harm{
   background:#f8e6d3;
   flex-direction:column;
 }
 
-/* 專家對話框：圓形頭像 + 引言條（精緊風格） */
 .expert-bubble-block{
   display:flex; align-items:center; gap:.85rem;
   max-width:520px; margin-top:1.5rem;
@@ -370,14 +346,12 @@ body{
 
 /* ════════════════════════════════════════
    第六頁：戒掉解方？
-   背景：純色 #f0fce1
 ════════════════════════════════════════ */
 #chapter-solution{
   background:#f0fce1;
   flex-direction:column;
 }
 
-/* 人物資料卡（黃蓁言）+ 文字並排（小卡，非視差） */
 .with-card-row{
   display:flex; align-items:center; gap:2rem;
   max-width:var(--max-w-wide); margin:0 auto 3rem;
@@ -393,7 +367,6 @@ body{
   .with-card-row .card-side{ width:160px; }
 }
 
-/* 多圖表切換按鈕（tab），用於圖表五、六、七 */
 .tab-chart-block{ max-width:var(--max-w); margin:0 auto 3rem; }
 .tab-buttons{ display:flex; gap:.5rem; margin-bottom:1rem; flex-wrap:wrap; justify-content:center; }
 .tab-btn{
@@ -412,9 +385,6 @@ body{
 </head>
 <body>
 
-<!-- ════════════════════════════════════════
-     第一頁：開場 LINE 群組動畫
-════════════════════════════════════════ -->
 <section id="opening" class="snap-section">
   <div class="phone-frame">
     <div class="phone-status"><span>16:25</span><span>📶 🔋</span></div>
@@ -478,24 +448,15 @@ body{
 </section>
 
 
-<!-- ════════════════════════════════════════
-     第二頁：大標（圖片匯入）
-════════════════════════════════════════ -->
 <section id="title-page" class="snap-section">
   <img src="標題.png" alt="一杯手搖飲的代價：台灣人糖分攝取超標的甜蜜危機">
 </section>
 
-
-<!-- ════════════════════════════════════════
-     第三頁：究竟台灣人有多愛喝手搖？
-     背景：純色 #fcf9cd
-════════════════════════════════════════ -->
 <section id="chapter-volume" class="snap-section chapter-section">
   <div class="chapter-inner-wide">
 
     <p class="chapter-bigq fade-up">究竟台灣人有多愛喝手搖？</p>
 
-    <!-- 左：4張飲料街圖（自動播放、左滑進入） / 右：立委引言＋店員引言 -->
     <div class="split-row fade-up">
       <div class="split-left">
         <div class="street-auto-wrap" id="street-auto">
@@ -513,7 +474,6 @@ body{
       </div>
     </div>
 
-    <!-- 左：副標+圖表 / 右：財政部數據文字 -->
     <div class="split-row fade-up">
       <div class="split-left">
         <p class="chapter-subq" style="margin-top:0;">手搖飲店家數量早已超越超商</p>
@@ -530,7 +490,6 @@ body{
       </div>
     </div>
 
-    <!-- 左：副標+12億換算雙圖 / 右：推估文字 -->
     <div class="split-row fade-up" style="margin-bottom:0;">
       <div class="split-left">
         <p class="chapter-subq" style="margin-top:0;">12億杯是什麼概念？</p>
@@ -553,17 +512,11 @@ body{
   </div>
 </section>
 
-
-<!-- ════════════════════════════════════════
-     第四頁：但為什麼我們會喝這麼多手搖飲？
-     背景：純色 #e4eaf0
-════════════════════════════════════════
 <section id="chapter-why" class="snap-section chapter-section">
   <div class="chapter-inner-wide">
 
     <p class="chapter-bigq fade-up">究竟手搖飲有什麼魔力，能讓人喝了一杯又一杯？</p>
 
-    <!-- 左：黃蓁言資料卡 / 右：黃蓁言整段故事（視差滾動：圖片sticky固定） -->
     <div class="split-row-sticky fade-up">
       <div class="split-left">
         <div class="person-card-img">
@@ -582,7 +535,6 @@ body{
       </div>
     </div>
 
-    <!-- 左：Rachel資料卡 / 右：Rachel整段故事（視差滾動：圖片sticky固定） -->
     <div class="split-row-sticky fade-up">
       <div class="split-left">
         <div class="person-card-img">
@@ -598,7 +550,6 @@ body{
       </div>
     </div>
 
-    <!-- 合併欄：過渡文字 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>其實，黃蓁言與Rachel（化名）的故事並非個案。</p>
@@ -607,10 +558,8 @@ body{
       </div>
     </div>
 
-    <!-- 合併欄：副標 -->
     <p class="chapter-subq fade-up">手搖飲裡的糖有兩種獎勵機制</p>
 
-    <!-- 左：人體獎勵機制路線圖 / 右：李建宏/蔡佳穎說明（視差滾動：圖片sticky固定） -->
     <div class="split-row-sticky fade-up">
       <div class="split-left">
         <div class="person-card-img">
@@ -629,10 +578,8 @@ body{
       </div>
     </div>
 
-    <!-- 合併欄：副標 -->
     <p class="chapter-subq fade-up">但你在點手搖的時候會注意喝下什麼糖嗎？</p>
 
-    <!-- 合併欄：A先生整段故事＋HFS科普＋蔡佳穎引言（無對應圖片，縱向獨立） -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>然而，一般人在喝飲料的時後，很少思考自己喝下多少糖。</p>
@@ -648,10 +595,8 @@ body{
       </div>
     </div>
 
-    <!-- 合併欄：副標 -->
     <p class="chapter-subq fade-up">而且手搖飲裡的糖通常都嚴重超量</p>
 
-    <!-- 左：一杯手搖的公式.png / 右：WHO建議+拉糖公式+半糖微糖換算+專家引言（視差滾動：圖片sticky固定） -->
     <div class="split-row-sticky fade-up">
       <div class="split-left">
         <div class="person-card-img">
@@ -668,7 +613,6 @@ body{
       </div>
     </div>
 
-    <!-- 左：散點圖 / 右：品類分布統計+超標比例+警示文字（視差滾動：圖表sticky固定） -->
     <div class="split-row-sticky fade-up" style="margin-bottom:0;">
       <div class="split-left">
         <div class="chart-block" style="margin:0;">
@@ -689,24 +633,17 @@ body{
   </div>
 </section>
 
-
-<!-- ════════════════════════════════════════
-     第五頁：所以手搖為何有害？
-     背景：純色 #f8e6d3
-════════════════════════════════════════ -->
 <section id="chapter-harm" class="snap-section chapter-section">
   <div class="chapter-inner-wide">
 
     <p class="chapter-bigq fade-up">所以手搖為何有害？</p>
 
-    <!-- 合併欄：開場句 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>長期攝取高糖，身體究竟會發生什麼變化？答案或許不只在健檢數字裡，也藏在一杯又一杯手搖飲累積的日常之中。</p>
       </div>
     </div>
 
-    <!-- 左：邱少宸資料卡 / 右：邱少宸整段故事（視差滾動） -->
     <div class="split-row-sticky fade-up">
       <div class="split-left">
         <div class="person-card-img">
@@ -725,17 +662,14 @@ body{
       </div>
     </div>
 
-    <!-- 合併欄：過渡句 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>當糖分成為生活裡無法缺席的存在，對身體的影響，往往緩慢且不易察覺。過量糖分除了增加熱量攝取，更會對肝臟代謝、血管健康與血壓調節造成負擔，提高肥胖、糖尿病與心血管疾病風險。</p>
       </div>
     </div>
 
-    <!-- 合併欄：副標 -->
     <p class="chapter-subq fade-up">長期高糖攝取的三大危害</p>
 
-    <!-- 左：發炎圖片 / 右：發炎反應文字+嚴愛文專家框（視差滾動） -->
     <div class="split-row-sticky fade-up">
       <div class="split-left">
         <div class="person-card-img">
@@ -768,7 +702,6 @@ body{
       </div>
     </div>
 
-    <!-- 左：血壓調節圖片 / 右：血壓調節文字+歐弘毅專家框（視差滾動） -->
     <div class="split-row-sticky fade-up">
       <div class="split-left">
         <div class="person-card-img">
@@ -800,7 +733,6 @@ body{
       </div>
     </div>
 
-    <!-- 左：脂質新生圖片 / 右：脂質新生文字+蔡佳穎專家框（視差滾動） -->
     <div class="split-row-sticky fade-up">
       <div class="split-left">
         <div class="person-card-img">
@@ -831,7 +763,6 @@ body{
       </div>
     </div>
 
-    <!-- 左：肥胖率Flourish圖表 / 右：體位變化統計+惡性循環文字（視差滾動） -->
     <div class="split-row-sticky fade-up">
       <div class="split-left">
         <div class="chart-block" style="margin:0;">
@@ -851,7 +782,6 @@ body{
       </div>
     </div>
 
-    <!-- 左：糖尿病死亡趨勢Flourish圖表 / 右：胰島素阻抗到死亡趨勢的整段文字（視差滾動） -->
     <div class="split-row-sticky fade-up" style="margin-bottom:0;">
       <div class="split-left">
         <div class="chart-block" style="margin:0;">
@@ -876,17 +806,11 @@ body{
   </div>
 </section>
 
-
-<!-- ════════════════════════════════════════
-     第六頁：戒掉解方？
-     背景：純色 #f0fce1
-════════════════════════════════════════ -->
 <section id="chapter-solution" class="snap-section chapter-section">
   <div class="chapter-inner-wide">
 
     <p class="chapter-bigq fade-up">戒掉解方？</p>
 
-    <!-- 合併欄：根源改善的疑問 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>說了這麼多高糖飲食的危害，我們究竟該如何從根源改善台灣人愛喝高糖手搖飲的飲食習慣？</p>
@@ -894,14 +818,12 @@ body{
       </div>
     </div>
 
-    <!-- 合併欄：知道與做到的鴻溝 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>在台灣，幾乎沒有人不知道喝太多手搖飲對身體不好。從飲料杯上的熱量標示、新聞媒體的健康報導，到學校與醫院的衛教宣導，多數民眾都聽過「少糖比較健康」這句話。然而，知道與做到之間，卻存在一道難以跨越的鴻溝。</p>
       </div>
     </div>
 
-    <!-- 合併欄：認知調查數據 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>根據台灣健康聯盟114年「食安五環2.0政策暨減糖新生活」網路問卷調查，在全國22縣市、1113位年滿20歲以上受訪者中，高達<strong>92.3%</strong>的受訪者認為含糖飲料對健康「有點危害」或「非常危害」，代表大多數民眾其實已經意識到含糖飲料可能帶來的健康風險。</p>
@@ -910,7 +832,6 @@ body{
       </div>
     </div>
 
-    <!-- 圖表五：認知調查三圖tab切換 -->
     <div class="tab-chart-block fade-up">
       <p class="chart-label">圖表五</p>
       <p class="chart-desc">民眾對糖分危害的認知調查</p>
@@ -937,7 +858,6 @@ body{
       <p class="chart-source">資料來源：台灣健康聯盟114年食安五環2.0減糖新生活問卷（n=1,113）。</p>
     </div>
 
-    <!-- 合併欄：飲用習慣與半糖偏好統計 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>但還是有近<strong>40%</strong>的受訪者每週喝3次以上含糖飲料，且有<strong>57.2%</strong>的受訪者購買含糖飲料時偏好購買手搖飲。</p>
@@ -946,7 +866,6 @@ body{
       </div>
     </div>
 
-    <!-- 圖表六：飲用習慣三圖tab切換 -->
     <div class="tab-chart-block fade-up">
       <p class="chart-label">圖表六</p>
       <p class="chart-desc">含糖飲料飲用習慣</p>
@@ -973,10 +892,8 @@ body{
       <p class="chart-source">資料來源：台灣健康聯盟114年食安五環2.0減糖新生活問卷（n=1,113）。</p>
     </div>
 
-    <!-- 合併欄：副標 -->
     <p class="chapter-subq fade-up">知道與做到的鴻溝：罪惡感下的逃避心理</p>
 
-    <!-- 合併欄：店員視角開場 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>這種知道有害但選擇忽視的矛盾，那些每天與客人們打交道的手搖飲店員，有著最深刻的體會。</p>
@@ -984,7 +901,6 @@ body{
       </div>
     </div>
 
-    <!-- Leo故事段落（純文字合併欄，無資料卡圖片） -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>同樣曾在飲料店工作約半年的Leo（化名）也有相同的經驗。</p>
@@ -994,7 +910,6 @@ body{
       </div>
     </div>
 
-    <!-- 黃蓁言資料卡 + 逃避心理段落 -->
     <div class="with-card-row fade-up">
       <div class="card-side">
         <img src="黃蓁言資料卡.png" alt="黃蓁言資料卡">
@@ -1006,10 +921,8 @@ body{
       </div>
     </div>
 
-    <!-- 合併欄：副標 -->
     <p class="chapter-subq fade-up">個人自由還是公共負擔？政策介入的正當性</p>
 
-    <!-- 合併欄：吳玉琴引言＋郭昱晴233億元 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>既然手搖飲的甜蜜誘惑讓人如此難以抗拒，那麼是否要用政策強制改變民眾高添加糖攝取的飲食習慣呢？台灣健康聯盟理事長吳玉琴給出了肯定的答案。她認為高添加糖飲食不只是個人自由，更是公共衛生議題，「個人的選擇卻對身體產生不好的影響，接下來就是公共衛生的問題，社會的醫療支出、健康的支出就增加。如果是不健康的行為，政策是有責任要來導引的。」</p>
@@ -1017,20 +930,16 @@ body{
       </div>
     </div>
 
-    <!-- 合併欄：副標 -->
     <p class="chapter-subq fade-up">各國管制策略：從糖稅到分級標示</p>
 
-    <!-- 合併欄：各國糖稅做法 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>而如果要限制民眾攝取添加糖，政策該如何設計？近年來許多國家開始推動「糖稅」（含糖飲料稅），希望透過提高含糖飲料價格，降低民眾的購買量，同時促使業者調整配方、減少糖分。吳玉琴指出，英國的經驗證明課稅能有效改變廠商行為：「英國依含糖量課稅，廠商為了避開最高稅率，會主動調整配方減糖。」。除了英國與泰國的分級課稅，墨西哥採取固定比例稅，新加坡則透過飲料健康分級與廣告限制，都試圖降低高糖飲品的市場吸引力。</p>
       </div>
     </div>
 
-    <!-- 合併欄：副標 -->
     <p class="chapter-subq fade-up">台灣的現狀：無糖免稅的誘因與侷限</p>
 
-    <!-- 合併欄：台灣無糖免稅政策＋吳玉琴觀察 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>相較之下，台灣目前尚未正式開徵針對手搖飲或市售含糖飲料的「糖稅」，而是從民國115年開始，先推行針對包裝飲料的「無糖飲品免徵貨物稅」政策。郭昱晴解釋，「先用所謂的無糖飲料免稅的方向，可能會比較溫和，大家比較不會有心理上的抗拒。」希望透過無糖飲料免稅的價格誘因，能引導民眾逐步改變選擇。</p>
@@ -1038,7 +947,6 @@ body{
       </div>
     </div>
 
-    <!-- 合併欄：價格與獎勵誘因效果 -->
     <div class="full-text-block fade-up">
       <div class="body-copy">
         <p>除了健康教育之外，「價格」其實也是影響民眾飲食選擇的重要因素。從調查結果來看，如果含糖飲料價格提高5至10元，有高達<strong>83.6%</strong>的受訪者表示會「一定會」或「可能會」減少購買，代表價格調整確實可能影響消費行為，也顯示透過糖稅或價格機制來降低含糖飲料攝取，具有一定可行性。</p>
@@ -1047,7 +955,6 @@ body{
       </div>
     </div>
 
-    <!-- 圖表七：糖稅購買意願四圖tab切換 -->
     <div class="tab-chart-block fade-up">
       <p class="chart-label">圖表七</p>
       <p class="chart-desc">糖稅、購買意願</p>
@@ -1080,10 +987,8 @@ body{
       <p class="chart-source">資料來源：台灣健康聯盟114年食安五環2.0減糖新生活問卷（n=1,113）。</p>
     </div>
 
-    <!-- 合併欄：副標 -->
     <p class="chapter-subq fade-up">手搖飲規管的技術高牆：客製化與隱形糖分</p>
 
-    <!-- 合併欄：技術高牆與收尾 -->
     <div class="full-text-block fade-up" style="margin-bottom:0;">
       <div class="body-copy">
         <p>然而，要限制手搖飲的購買，仍面臨技術上的困難。</p>
@@ -1104,7 +1009,6 @@ body{
    - 角色名稱：主管Sophia、Alan、Belle、Carl、Denise
    - 頭像：以顏色圓形代替照片佔位（之後可替換成 cloud 圖檔）
    - 菜單：實體照片
-   - 打字內容：翡翠檸檬 大杯 半糖微冰（無刪除無糖改半糖的橋段，直接打半糖微冰）
 ════════════════════════════════════════ */
 const messages = [
   { side:'left', name:'主管Sophia', avatarColor:'#25a244', text:'大家今天辛苦了！下午茶我請客！來點飲料！' },
@@ -1121,9 +1025,6 @@ const keyboard = document.getElementById('keyboard');
 const candidateBar = document.getElementById('candidate-bar');
 const composeBar = document.getElementById('compose-bar');
 
-// 頭像目前以顏色圓圈佔位（尚無實際圖檔）。
-// 之後若有頭像圖片，只需在 messages 裡加入 avatar:'檔名.png'，
-// 此函式會自動優先使用圖片，否則退回顏色佔位。
 function makeAvatar(msg){
   const el = document.createElement('div');
   el.className = 'avatar';
@@ -1176,8 +1077,8 @@ function addMessage(msg){
   requestAnimationFrame(()=>row.classList.add('show'));
 }
 
-// 注音輸入模擬：翡翠檸檬 大杯 半糖微冰
-const typingSequence = [
+// 注音輸入模擬分成兩段：第一段打到無糖，第二段打半糖微冰
+const typingSequencePart1 = [
   { char:'翡', keys:['ㄈ','ㄟ','ˋ'] },
   { char:'翠', keys:['ㄘ','ㄨ','ㄟ','ˋ'] },
   { char:'檸', keys:['ㄋ','ㄧ','ㄥ','ˊ'] },
@@ -1186,10 +1087,15 @@ const typingSequence = [
   { char:'大', keys:['ㄉ','ㄚ','ˋ'] },
   { char:'杯', keys:['ㄅ','ㄟ'] },
   { char:' ', keys:['空格'] },
-  { char:'半', keys:['ㄅ','ㄢ','ˋ'] }, // 新增：打到這個字元時，觸發動畫
+  { char:'無', keys:['ㄨ','ˊ'] },
+  { char:'糖', keys:['ㄊ','ㄤ','ˊ'] }
+];
+
+const typingSequencePart2 = [
+  { char:'半', keys:['ㄅ','ㄢ','ˋ'] },
   { char:'糖', keys:['ㄊ','ㄤ','ˊ'] },
   { char:'微', keys:['ㄨ','ㄟ'] },
-  { char:'冰', keys:['ㄅ','ㄧ','ㄥ'] },
+  { char:'冰', keys:['ㄅ','ㄧ','ㄥ'] }
 ];
 
 function flashKey(label){
@@ -1242,19 +1148,37 @@ async function runChat(){
   await new Promise(r=>setTimeout(r, 300));
 
   let typed = '';
-  for(const charObj of typingSequence){
+
+  // 1. 先打出「翡翠檸檬 大杯 無糖」
+  for(const charObj of typingSequencePart1){
     if(charObj.char === ' '){
       typed += ' ';
       inputText.textContent = typed;
       await new Promise(r=>setTimeout(r, 169));
       continue;
     }
+    await typeChar(charObj, typed);
+    typed = inputText.textContent;
+  }
 
-    // 當輸入到「半」字時，將開場區塊加上 danger-flash 類別來閃爍背景
+  // 2. 停頓 1.5 秒 (猶豫的心理掙扎)
+  await new Promise(r=>setTimeout(r, 1500));
+
+  // 3. 刪除「無糖」兩個字
+  for (let k = 0; k < 2; k++) {
+    typed = typed.slice(0, -1);
+    inputText.textContent = typed;
+    await new Promise(r=>setTimeout(r, 250)); // 模擬按下刪除鍵的間隔速度
+  }
+
+  // 刪除完稍微停頓一下再繼續打
+  await new Promise(r=>setTimeout(r, 400));
+
+  // 4. 改打「半糖微冰」，並在打到「半」時觸發閃爍與變暗動畫
+  for(const charObj of typingSequencePart2){
     if (charObj.char === '半') {
         document.getElementById('opening').classList.add('danger-flash');
     }
-
     await typeChar(charObj, typed);
     typed = inputText.textContent;
   }
@@ -1273,14 +1197,14 @@ async function runChat(){
   freezeText.innerHTML = lines.join('<br>');
   document.getElementById('freeze-overlay').classList.add('active');
   
-  // 新增：讓整個大背景也一起變暗
+  // 讓整個大背景也一起變暗
   document.getElementById('opening').classList.add('dark-mode');
 
   // 提示游標出現
   await new Promise(r=>setTimeout(r, 600));
   document.getElementById('scroll-hint').classList.add('show');
 
-  // 解鎖捲動：讀者可自由往下滑進入大標頁，往上滑可回到此頁
+  // 解鎖捲動
   document.body.style.overflow = '';
 }
 
@@ -1300,12 +1224,10 @@ const fadeObserver = new IntersectionObserver((entries)=>{
 }, { threshold:0.05, rootMargin:'0px 0px -10% 0px' });
 document.querySelectorAll('.fade-up').forEach(el=>fadeObserver.observe(el));
 
-// 保險機制：避免極端情況下 IntersectionObserver 未觸發，
-// 內容永久停留在 opacity:0 看不到。3秒後強制顯示所有尚未顯示的 fade-up 元素。
+// 保險機制：避免極端情況下 IntersectionObserver 未觸發
 setTimeout(()=>{
   document.querySelectorAll('.fade-up:not(.show)').forEach(el=>{
     const rect = el.getBoundingClientRect();
-    // 只強制顯示已經在文件流中、且不是離視窗極遠處的元素
     if(rect.top < window.innerHeight * 3){
       el.classList.add('show');
     }
@@ -1315,8 +1237,6 @@ setTimeout(()=>{
 
 /* ════════════════════════════════════════
    4張飲料街圖：自動播放、左滑進入
-   不靠捲動觸發，進入視窗後開始自動輪播；
-   新圖從右側滑入，舊圖往左滑出。
 ════════════════════════════════════════ */
 const streetAutoWrap = document.getElementById('street-auto');
 if(streetAutoWrap){
