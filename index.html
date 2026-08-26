@@ -899,10 +899,10 @@ body{
       <div class="body-copy">
         <p>當高糖飲食增加肥胖、糖尿病與心血管疾病風險，問題便不再只涉及個人口味，也可能轉化為醫療與公共衛生負擔。</p>
 
-        <!-- 專家框開始：加入 max-width: 100% 讓它撐滿整個文字段落的寬度 -->
-        <div class="expert-bubble-block" style="max-width: 100%; margin: 2.5rem 0;">
-          <div class="expert-avatar-wrap">
-            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- 專家框開始 -->
+        <div class="expert-bubble-block" style="max-width: 100%; margin: 2.5rem 0; padding: 1.2rem 1.5rem;">
+          <div class="expert-avatar-wrap" style="width: auto; min-width: 90px; gap: 0.5rem;">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 65px; height: 65px;">
               <!-- 圓形背景 -->
               <circle cx="50" cy="50" r="48" fill="#e8e1f0"/>
               <!-- 衣服 -->
@@ -921,9 +921,11 @@ body{
               <!-- 嘴巴 -->
               <path d="M 45 52 Q 50 56 55 52" stroke="#bc6a56" stroke-width="1.8" fill="none" stroke-linecap="round"/>
             </svg>
-            <p class="expert-name-tag">台灣健康聯盟<br>理事長<br>吳玉琴</p>
+            <!-- 加上 white-space: nowrap 強制不換行，並將字體放大 -->
+            <p class="expert-name-tag" style="white-space: nowrap; font-size: 0.72rem; line-height: 1.5;">台灣健康聯盟<br>理事長<br>吳玉琴</p>
           </div>
-          <div class="expert-bubble">
+          <!-- 對話框字體與內距放大，適應滿版設計 -->
+          <div class="expert-bubble" style="font-size: 1.05rem; padding: 1.2rem 1.5rem; line-height: 1.8;">
             「個人的選擇如果對身體產生不好的影響，接下來就是公共衛生問題，社會的醫療與健康支出也會增加。如果是不健康的行為，政策有責任加以引導。」
           </div>
         </div>
